@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Mabinogi MML Emulatorについて</title>
+	</head>
+	<body>
+		<h1 class="hide">Mabinogi MML Emulatorについて</h1>
+		<p>このプログラムは以下の４つのプログラムを使用して実装しています。
+		まず、LZMAで圧縮されたmusic.jsonに含まれる音楽データーをlzma.jsで解凍し、フォームにデーターを展開します。
+		次に、PSGConverter.jsでMIDIに変換し、それをsmfplayer.jsを用いて再生します。
+		smfplayer.jsは、あらかじめ読み込んでおいたsf2synth.jsをIFRAME越しに叩きここで音が鳴ります。</p>
+		<h3>MML→MIDI変換プログラム（PSGConverter.js）について</h3>
+		<p>これは2007年頃、私がネット上に存在したプログラムを参考に作ったプログラムで、MMLをMIDIデーターに変換します。
+		仕組みとして、MMLデーターを正規表現で命令単位に分解し、それをMIDIデーターに変換し出力します。</p>
+		<p>ここで生成されたMIDIデーターは、dataスキーマ（アドレスがdata:audio/midi;base64,AZ65...という感じになる。ファイルをURLに埋め込むものと考えてください。）で出力され、
+		これをQuickTimeプラグインなどで再生することが本来の使い方です。しかし、最近QuickTimeがMIDIを認識しなくなったため、今回のプログラムを作ることにしました。</p>
+		<h3>lzma.jsについて</h3>
+		<p>これは、nmrugg氏の作ったJavaScriptによるLZMA圧縮/解凍プログラムです。LZMAは7zで使われていることで有名なもので負荷はかかるものの最も圧縮率が高い圧縮アルゴリズムです。
+		今回は、フォームのデーターを保存するのに使用しました。ロスが多いですがフォーム内のデーターをサニタイズしたものをLZMAで圧縮し、MMLを読み込むときこのデーターを読み込むことで、データーサイズを節約しました。
+		ポイントとして、Web Workerという技術を使用しています。これは、バックグラウンドで処理を行うことによりブラウザをロックさせることなく実行されるため、複数に同時進行で処理を実行することができます。</p>
+		<p>もっとも、今回使用されてるプログラムでは、大した容量はないため体感上気になることはありません。</p>
+		<h3>smfplayer.js、sf2synth.js</h3>
+		<p>これらは、今年（2013年）の5月ごろGreeのImaya氏の作ったライブラリで、SMFをサウンドフォントを用いて再生するライブラリです。
+		大きく分けて、サウンドフォントを解析し鳴らすsf2synth.jsと、MIDIデーターを解析するsmfplayer.jsの２つからできており、Web MIDI Linkと呼ばれる技術を用いてこの２つをつないでいます。
+		Web MIDI Linkとは、去年の6月ごろにg200kg氏が提唱した規格で、JavaScriptのwindow.postMessage()命令を利用したWeb上でMIDIデーターをやり取りするためのものです。
+		今回、MIDIプレイヤー部分はほぼ、サンプルのソースをベタ移植して作りました。</p>
+		<p>いずれも、HTML5のHTML5 Audio APIをフルに生かして作っているため、Webkit系以外のブラウザでは動作しません。</p>
+		<h3>苦労した点</h3>
+		<p>MMLからMIDIに変換するプログラムはかけていたので、問題なのはどうやってsmfplayer.jsに読み込ませるかというところでした。
+		smfplayer.jsは、ajaxでMIDIファイルをarrayBuffer配列というデーター形式にして読み込む方式だったので、dataスキーマで生成されたMIDIファイルを直接読んでくれません。
+		このdataスキーマをarrayBufferに変換する処理でかなり躓きました。</p>
+		<p>結局、Googleで検索したところ、gistで<code>convertDataURIToBinary</code>という関数を作ってあるのを見かけ、これを用いてarrayBuffer配列に変換しました。これにより変換したMIDIが無事再生されるようになりました。</p>
+		<p>次に躓いたのは、曲の終了の検知です。
+		再生中の曲が終了したら、次の曲を再生するという実装が望ましい動きです。
+		しかし、smfplayer.jsは、現在再生している曲の位置を調べる関数はありますが、曲の終了時の位置を調べる関数がありません。
+		幸い、曲の位置を調べる関数は、曲の末尾に行き演奏が止まると、この値は変化しません。
+		この性質を利用して、別途２つのインターバル関数を用意し、この曲の位置を調べる関数の値が変化しなくなったかを調べます。
+		あとは、その時に次の曲がかかるようにするだけです。ここは、結構苦労しました。</p>
+		<h3>今回使用したもの</h3>
+		<ul>
+			<li><a href="http://getbootstrap.com/" rel="external">Twitter Bootstrap v3</a></li>
+			<li><a href="http://jquery.com/" rel="external">jQuery</a></li>
+			<li><a href="http://logue.github.io/PSGConverter" rel="external">PSGConverter.js</a></li>
+			<li><a href="http://nmrugg.github.io/LZMA-JS/" rel="external">lzma.js</a></li>
+			<li><a href="https://github.com/gree/smfplayer.js" rel="external">smfplayer.js</a></li>
+			<li><a href="https://github.com/gree/sf2synth.js" rel="external">sf2synth.js</a></li>
+			<li><a href="https://gist.github.com/borismus/1032746" rel="external">convertDataURIToBinary</a></li>
+		</ul>
+		<p>なお、このプログラムに含まれるMMLはすべて、私の自作です。</p>
+		<hr class="hide" />
+		<p class="hide">[ <a href="./index.html">戻る</a> ]</p>
+	</body>
+</html>
