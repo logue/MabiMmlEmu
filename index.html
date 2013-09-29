@@ -24,10 +24,15 @@ iframe {
 		<div class="container">
 			<section id="info">
 			<h1>Mabinogi MML Emulator</h1>
+			<div style="float:right;">
+				<a href="https://twitter.com/share" class="twitter-share-button" data-count="vertical" data-via="logue256" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+				<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+				<g:plusone size="tall"></g:plusone>
+			</div>
 			<p>このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。ほぼ実際のゲーム上の音と同じ音が出ます。
 			画面上に表示されるMMLをリアルタイムにMIDIファイルに変換し、それをsmfplayer.jsとsf2synth.jsを用いてマビノギの音源を使用して再生しています。</p>
 			<p><a href="info.html" data-toggle="modal" class="btn btn-primary">詳細解説を見る</a></p>
-			<div class="fb-like" data-href="http://developers.facebook.com/docs/reference/plugins/like" data-width="450" data-show-faces="true" data-send="true"></div>
+			<iframe src="http://www.facebook.com/widgets/like.php?href=http://logue.github.io/MabiMmlEmu" scrolling="no" frameborder="0" style="border:none; width:450px; height:80px"></iframe>
 			</section>
 			<section>
 				<form>
@@ -749,28 +754,7 @@ iframe {
 			pageTracker._trackPageview();
 		} catch(err) {}
 	});
-	
-	$.getScript('https://apis.google.com/js/plusone.js');
-	$.getScript('http://platform.twitter.com/widgets.js');
-	$('#info h1').after([
-		'<div style="float:right;">',
-		// Tweet Button
-		// http://twitter.com/about/resources/tweetbutton
-		'<a class="twitter-share-button" data-count="vertical" data-lang="'+$('html').attr('lang')+'"></a>',
-		// Google +1 button
-		// http://www.google.com/webmasters/+1/button/index.html
-		'<div class="g-plusone" data-size="tall" data-count="true"></div>',
-		'</div>'].join("\n")
-	);
 //});
 /*]]>*/</script>
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=134361973262019";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 	</body>
 </html>
