@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<title>Mabinogi MML Emulator</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="description" content="PSGConverter Demo." />
+		<meta name="description" content="このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。" />
 		<meta name="author" content="Logue" />
 
 		<!-- Le styles -->
@@ -23,51 +23,66 @@ iframe {
 	<body>
 		<div class="container">
 			<section id="info">
-			<h1>Mabinogi MML Emulator</h1>
-			<div style="float:right;">
-				<a href="https://twitter.com/share" class="twitter-share-button" data-count="vertical" data-via="logue256" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-				<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
-				<g:plusone size="tall"></g:plusone>
-			</div>
-			<p>このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。ほぼ実際のゲーム上の音と同じ音が出ます。
-			画面上に表示されるMMLをリアルタイムにMIDIファイルに変換し、それをsmfplayer.jsとsf2synth.jsを用いてマビノギの音源を使用して再生しています。</p>
-			<p><a href="info.html" data-toggle="modal" class="btn btn-primary">詳細解説を見る</a></p>
-			<iframe src="http://www.facebook.com/widgets/like.php?href=http://logue.github.io/MabiMmlEmu" scrolling="no" frameborder="0" style="border:none; width:450px; height:80px"></iframe>
+				<h1>Mabinogi MML Emulator</h1>
+				<div style="float:right;">
+					<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://logue.github.io/MabiMmlEmu" data-count="vertical" data-via="logue256" data-lang="ja">ツイート</a>
+					<div class="g-plusone" data-size="tall" data-href="http://logue.github.io/MabiMmlEmu"></div>
+					<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Freference%2Fplugins%2Flike&amp;width=70&amp;height=65&amp;colorscheme=light&amp;layout=box_count&amp;action=like&amp;show_faces=true&amp;send=true&amp;appId=249014621810580" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:70px; height:65px;" allowTransparency="true"></iframe>
+				</div>
+				<p>このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。ほぼ実際のゲーム上の音と同じ音が出ます。
+				画面上に表示されるMMLをリアルタイムにMIDIファイルに変換し、それをsmfplayer.jsとsf2synth.jsを用いてマビノギの音源を使用して再生しています。</p>
+				<p>
+					<a href="info.html" data-toggle="modal" class="btn btn-primary">詳細解説を見る</a>
+					<a href="https://github.com/logue/MabiMmlEmu" class="btn btn-default" target="_blank">Githubのページへ</a>
+				</p>
 			</section>
 			<section>
 				<form>
-					<div class="well">
-						<div class="form-inline">
-							<button class="btn btn-info" value="prev" id="prev" disabled="disabled" title="前の曲へ"><span class="glyphicon glyphicon-chevron-left"></span></button>
-							<button class="btn btn-primary" value="play" id="play" disabled="disabled" title="再生/一時停止"><span class="glyphicon glyphicon-play"></span></button>
-							<button class="btn btn-danger" value="stop" id="stop" disabled="disabled" title="停止"><span class="glyphicon glyphicon-stop"></span></button>
-							<button class="btn btn-warning" value="eject" id="eject" disabled="disabled" title="MML読み込み"><span class="glyphicon glyphicon-eject"></span></button>
-							<button class="btn btn-info" value="next" id="next" disabled="disabled" title="次の曲へ"><span class="glyphicon glyphicon-chevron-right"></span></button>
-							<!--a class="btn btn-default" value="stop" href="" id="debug"><span class="glyphicon glyphicon-floppy-save"></span></a-->
-							<div class="form-group">
-								<select id="music" class="form-control input-lg">
-									<option>音源データーを読み込んでいます…。しばらくお待ちください。</option>
-								</select>
-							</div>
-							<button class="btn btn-default" id="reload"><span class="glyphicon glyphicon-retweet"></span></button>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							MMLプレイヤー
 						</div>
-						<div class="row">
-							<div class="col-xs-6">
-								<div class="form-group">
-									<label for="tempo">テンポ：<span id="tempo_value" style="width: 5em;">1.0</span>倍速</label>
-									<div class="input-group">
-										<span class="input-group-addon"><span class="glyphicon glyphicon-dashboard"></span></span>
-										<input id="tempo" type="range" class="form-control input-sm" min="0.1" max="5.0" step="0.1" value="1.0" />
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-inline">
+										<button class="btn btn-info btn-lg" value="prev" id="prev" disabled="disabled" title="前の曲へ"><span class="glyphicon glyphicon-chevron-left"></span></button>
+										<button class="btn btn-primary btn-lg" value="play" id="play" disabled="disabled" title="再生/一時停止"><span class="glyphicon glyphicon-play"></span></button>
+										<button class="btn btn-danger btn-lg" value="stop" id="stop" disabled="disabled" title="停止"><span class="glyphicon glyphicon-stop"></span></button>
+										<button class="btn btn-warning btn-lg" value="eject" id="eject" disabled="disabled" title="フォームからMMLデーター読み込み"><span class="glyphicon glyphicon-eject"></span></button>
+										<button class="btn btn-info btn-lg" value="next" id="next" disabled="disabled" title="次の曲へ"><span class="glyphicon glyphicon-chevron-right"></span></button>
+										<!--a class="btn btn-default" value="stop" href="" id="debug"><span class="glyphicon glyphicon-floppy-save"></span></a-->
 									</div>
 								</div>
-							</div>
-							<div class="col-xs-6">
-								<div class="form-group">
-									<label for="volume">マスターボリューム：<span id="volume_value" style="width: 5em;">0.5</span></label>
-									<div class="input-group">
-										<span class="input-group-addon"><span class="glyphicon glyphicon-volume-down"></span></span>
-										<input id="volume" type="range" class="form-control input-sm" min="0" max="1" step="0.01" value="0.5" />
-										<span class="input-group-addon"><span class="glyphicon glyphicon-volume-up"></span></span>
+								<div class="col-md-8">
+									<div class="form-group has-info">
+										<div class="input-group input-group-lg">
+											<select id="music" class="form-control" title="楽曲を選ぶと自動再生されます。">
+												<option>音源データーを読み込んでいます…。しばらくお待ちください。</option>
+											</select>
+											<span class="input-group-btn">
+												<button class="btn btn-default" id="reload" title="シャッフル"><span class="glyphicon glyphicon-retweet"></span></button>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="tempo">テンポ：<span id="tempo_value" class="badge">1.0</span>倍速</label>
+										<div class="input-group">
+											<span class="input-group-addon"><span class="glyphicon glyphicon-dashboard"></span></span>
+											<input id="tempo" type="range" class="form-control input-sm" min="0.1" max="5.0" step="0.1" value="1.0" />
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="volume">マスターボリューム：<span id="volume_value" class="badge">0.5</span></label>
+										<div class="input-group">
+											<span class="input-group-addon"><span class="glyphicon glyphicon-volume-down"></span></span>
+											<input id="volume" type="range" class="form-control input-sm" min="0" max="1" step="0.01" value="0.5" />
+											<span class="input-group-addon"><span class="glyphicon glyphicon-volume-up"></span></span>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -116,7 +131,7 @@ iframe {
 									<div class="form-group">
 										<label for="mml1" class="col-md-2 control-label">MML</label>
 										<div class="col-md-10">
-											<textarea id="mml1" name="mml1" class="mml form-control" rows="5"></textarea>
+											<textarea id="mml1" name="mml1" class="mml form-control" rows="5" placeholder="MML@...,...,...;"></textarea>
 										</div>
 									</div>
 								</div>
@@ -164,7 +179,7 @@ iframe {
 									<div class="form-group">
 										<label for="mml2" class="col-md-2 control-label">MML</label>
 										<div class="col-md-10">
-											<textarea name="mml2" id="mml2" class="mml form-control" rows="5"></textarea>
+											<textarea name="mml2" id="mml2" class="mml form-control" rows="5" placeholder="MML@...,...,...;"></textarea>
 										</div>
 									</div>
 								</div>
@@ -212,7 +227,7 @@ iframe {
 									<div class="form-group">
 										<label for="mml3" class="col-md-2 control-label">MML</label>
 										<div class="col-md-10">
-											<textarea name="mml3" id="mml3" class="mml form-control" rows="5"></textarea>
+											<textarea name="mml3" id="mml3" class="mml form-control" rows="5" placeholder="MML@...,...,...;"></textarea>
 										</div>
 									</div>
 								</div>
@@ -260,7 +275,7 @@ iframe {
 									<div class="form-group">
 										<label for="mml4" class="col-md-2 control-label">MML</label>
 										<div class="col-md-10">
-											<textarea name="mml4" id="mml4" class="mml form-control" rows="5"></textarea>
+											<textarea name="mml4" id="mml4" class="mml form-control" rows="5" placeholder="MML@...,...,...;"></textarea>
 										</div>
 									</div>
 								</div>
@@ -308,16 +323,16 @@ iframe {
 									<div class="form-group">
 										<label for="mml5" class="col-md-2 control-label">MML</label>
 										<div class="col-md-10">
-											<textarea name="mml5" id="mml5" class="mml form-control" rows="5"></textarea>
+											<textarea name="mml5" id="mml5" class="mml form-control" rows="5" placeholder="MML@...,...,...;"></textarea>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="col-md-6">
-							<button id="serialize" class="btn btn-default">シリアライズ</button>
-							<button id="unserialize" class="btn btn-default">アンシリアライズ</button>
-							<textarea id="str" class="form-control" rows="7"></textarea>
+							<button id="serialize" class="btn btn-default" title="フォームの内容をサニタイズしLZMAで圧縮して出力"><span class="glyphicon glyphicon-floppy-save"></span>シリアライズ</button>
+							<button id="unserialize" class="btn btn-default" title="LZMA圧縮したデーターを解凍しフォームに復元"><span class="glyphicon glyphicon-floppy-open"></span>アンシリアライズ</button>
+							<textarea id="str" class="form-control" rows="10" placeholder="LZMAデーター。ここのデーターに圧縮されたデーターが表示されます。"></textarea>
 						</div>
 					</div>
 				</form>
@@ -426,7 +441,7 @@ iframe {
 	/**
 	 * ajaxでMMLデーターを読み込む
 	 */
-	var loadData = function(){
+	var loadData = function(shuffle){
 		$('input, select, textarea, .btn').attr('disabled','disabled');
 		var $music = $('#music');
 		$music.append('<option>MMLデーターセットを読み込んでいます…。</option>');
@@ -437,13 +452,16 @@ iframe {
 			cache:false,
 			success: function( data ) {
 				console.info(data.length," musics ready.");
-				// 配列をランダムソートする
-				// http://raining.bear-life.com/javascript/javascript%E3%81%A7%E9%85%8D%E5%88%97%E3%81%AE%E4%B8%AD%E8%BA%AB%E3%82%92%E3%83%A9%E3%83%B3%E3%83%80%E3%83%A0%E3%81%AB%E4%B8%A6%E3%81%B3%E6%9B%BF%E3%81%88%E3%82%8B
-				data.sort(
-					function() {
-						return Math.random() - 0.5;
-					}
-				);
+				if (shuffle) {
+					// 配列をランダムソートする
+					// http://raining.bear-life.com/javascript/javascript%E3%81%A7%E9%85%8D%E5%88%97%E3%81%AE%E4%B8%AD%E8%BA%AB%E3%82%92%E3%83%A9%E3%83%B3%E3%83%80%E3%83%A0%E3%81%AB%E4%B8%A6%E3%81%B3%E6%9B%BF%E3%81%88%E3%82%8B
+					data.sort(
+						function() {
+							return Math.random() - 0.5;
+						}
+					);
+				}
+
 				$('#music option').remove();
 				$music.append('<option selected="selected" value="93,0,0,1,0,109,0,0,0,0,0,0,0,0,52,-101,-118,-50,29,-90,-87,84,-34,28,67,-37,22,-42,11,6,66,32,-33,31,-88,71,14,58,77,-79,58,-30,50,-105,89,-113,-29,-24,50,-96,81,-20,68,-117,-19,-19,-114,-43,53,-65,-40,-109,-47,72,127,-1,-43,124,64,0">楽曲を選択</option>');
 				var i = 0;
@@ -456,6 +474,7 @@ iframe {
 			error:function(result,e){
 				// たぶんJSONのエラー
 				console.error(result,e);
+				$('input, select, textarea, .btn').removeAttr('disabled');
 			}
 		});
 	}
@@ -463,19 +482,24 @@ iframe {
 	/**
 	 * 楽曲を変更
 	 */
-	function changeMusic(){
+	function changeMusic(autoplay){
 		past_position = 0;
+		player.stop();
+		isPlay = false;
+		$('#play').
+			html('<span class="glyphicon glyphicon-play"></span>').
+			removeClass('btn-success').
+			addClass('btn-primary');
 		lzma2mml($('#music').val(), function(){
 			var midi = generateMIDI(true);
 			$('#debug').attr('href',midi);
 			player.loadMidiFile(convertDataURIToBinary(midi));
-			$('#play').
-				html('<span class="glyphicon glyphicon-pause"></span>').
-				removeClass('btn-info').
-				addClass('btn-success');
-			player.play();
 			isLoaded = true;
-			isPlay = true;
+			if (autoplay) {
+				player.play();
+			}else{
+				player.stop();
+			}
 		});
 	}
 	
@@ -527,21 +551,34 @@ iframe {
 			}
 		});
 	}
+	var isReady = false;
 
 	/**
 	 * メイン処理
 	 */
 	$(document).ready(function(){
 		// フォームを無効化
-		$('input, select, textarea, .btn').attr('disabled','disabled');
+		$('input, select, textarea, button.btn').attr('disabled','disabled');
 		
 		setAnchor('');
 		
-		if ( typeof(window.webkitAudioContext) !== 'function'){
-			$('#info').append('<p class="alert alert-warning">お使いのブラウザはWeb Audioをサポートしていないため再生できません。SafariかChromeを使用してください。</p>');
+		window.AudioContext = window.AudioContext||window.webkitAudioContext||window.mozAudioContext;
+		if ( typeof(window.AudioContext) === 'undefined'){
+			$('#info').append('<p class="alert alert-danger">お使いのブラウザはWeb Audioをサポートしていないため再生できません。SafariかChromeを使用してください。</p>');
+			$('#music option').remove();
+			$('#music').append('<option>再生できません。</option>');
 			return;
 		}
 		
+		if (location.protocol !== 'http:') {
+			$('#info').append('<p class="alert alert-warning">このプログラムはajaxを多用しているため、サーバーを立てないと動きません。</p>');
+			$('#music option').remove();
+			$('#music').append('<option>再生できません。</option>');
+			return;
+		}
+
+		isReady = true;
+
 		// モーダルダイアログのDOMを生成
 		$('body').append([
 			'<article class="modal fade" id="modal">',
@@ -605,13 +642,24 @@ iframe {
 				html('<span class="glyphicon glyphicon-play"></span>').
 				removeClass('btn-success').
 				addClass('btn-primary');
-			player.loadMidiFile(convertDataURIToBinary(generateMIDI(true)));
+			var midi;
+			try{
+				midi = generateMIDI(true);
+			}catch(e){
+				alert('MMLの解析に失敗しました。\n※変換プログラムの仕様上、不正な文字列が含まれたり、空欄のチャンネルが含まれるMMLは変換できません。例：MML@aaaa,,;');
+				return;
+			}
+			player.loadMidiFile(convertDataURIToBinary(midi));
+			player.play();
 			alert('読み込みました。');
 		});
+		
 		// 楽曲選択メニュー
-		$('#music').change(function(){ changeMusic(); });
+		$('#music').change(function(){ changeMusic(true); });
+		
 		// formは無効化
 		$('form').submit(function(){return false;});
+		
 		// パンポッドを編集したときにバーを変化させる
 		$('.pan').each(function(){
 			var $this = $(this);
@@ -622,22 +670,24 @@ iframe {
 				$bar.css('width',(($this.val()/127)*100)+'%');
 			});
 		});
-		// 楽曲バンクをリロード
-		$('#reload').click(function(){loadData();});
 		
+		// 楽曲バンクをリロード
+		$('#reload').click(function(){loadData(true);});
+
 		// テンポ設定
 		$('#tempo').change(function(){
 			var value = $(this).val();
 			player.setTempoRate(value);
 			$('#tempo_value').text(value);
 		});
+
 		// マスターボリューム
 		$('#volume').change(function(){
 			var value = $(this).val();
 			player.setMasterVolume(value * 16383);
 			$('#volume_value').text(value);
 		});
-		
+
 		// デバッグ用
 		// シリアライズ（画面のMMLデーター一式をシリアライズしてlzmaで圧縮）
 		$('#serialize').click(function(){
@@ -645,55 +695,55 @@ iframe {
 				$('#str').val(result);
 			});
 		});
+
 		// アンシリアライズ（lzma圧縮されたＭＭＬデーターを画面に展開する
 		$('#unserialize').click(function(){
 			lzma2mml($('#str').val(), function(){});
 		});
-	});
-
-	// 再生／一時停止ボタン
-	$('#play').click(function(){
-		if (player.pause || isPlay == false) {			// 停止中
-			// 再生
-			player.play();
-			// 再生中フラグを立てる
-			isPlay = true;
-		}else{			// 再生中
-			// 停止
+		
+		// 再生／一時停止ボタン
+		$('#play').click(function(){
+			if (player.pause) {			// 停止中
+				// 再生
+				player.play();
+			}else{			// 再生中
+				// 停止
+				player.stop();
+			}
+		});
+		// 前に戻るボタン
+		$('#prev').click(function(){
+			// 現在選択中の項目を取得
+			var selected_music = $('#music').prop('selectedIndex');
+			if (selected_music == $('#music option').length){
+				// 末尾の場合、最後の曲へ
+				$('#music').prop('selectedIndex',$('#music option').length);
+			}else{
+				// 選択されている項目の前の項目を選択
+				$('#music').prop('selectedIndex',selected_music-1);
+			}
+			changeMusic(true);
+		});
+		// 次に進むボタン
+		$('#next').click(function(){
+			var selected_music = $('#music').prop('selectedIndex');
+			if (selected_music == $('#music option').length){
+				// 末尾の場合最初に戻る
+				$('#music').prop('selectedIndex',1);
+			}else{
+				// 今選択されてる項目の次の項目を選択
+				$('#music').prop('selectedIndex',selected_music+1);
+			}
+			changeMusic(true);
+		});
+		// 停止ボタン
+		$('#stop').click(function(){
 			player.stop();
-			// 再生中フラグを消す
 			isPlay = false;
-		}
-	});
-	// 前に戻るボタン
-	$('#prev').click(function(){
-		// 現在選択中の項目を取得
-		var selected_music = $('#music').prop('selectedIndex');
-		if (selected_music == $('#music option').length){
-			// 末尾の場合、最後の曲へ
-			$('#music').prop('selectedIndex',$('#music option').length);
-		}else{
-			// 選択されている項目の前の項目を選択
-			$('#music').prop('selectedIndex',selected_music-1);
-		}
-		changeMusic();
-	});
-	// 次に進むボタン
-	$('#next').click(function(){
-		var selected_music = $('#music').prop('selectedIndex');
-		if (selected_music == $('#music option').length){
-			// 末尾の場合最初に戻る
-			$('#music').prop('selectedIndex',1);
-		}else{
-			// 今選択されてる項目の次の項目を選択
-			$('#music').prop('selectedIndex',selected_music+1);
-		}
-		changeMusic();
-	});
-	// 停止ボタン
-	$('#stop').click(function(){
-		isPlay = false;
-		player.stop();
+			changeMusic(false);
+		});
+		
+		$('*[title]').tooltip();
 	});
 
 	// sf2.jsはインラインフレームで呼び出される。
@@ -701,29 +751,42 @@ iframe {
 	// そこで、タイマを使ってインラインフレーム内の状態をチェックすることで、判断する。
 	var wml_ready = false;
 	setInterval(function(){
-		// プレイヤーが読み込み中かをWebMidiLinkフレーム内のテーブルタグ（鍵盤のアレ）が存在するかで判断
-		if (!wml_ready && $('iframe').contents().find('table').length !== 0){
-			// データー読み込み
-			loadData();
-			// 複数回実行されるのを防ぐため
-			wml_ready = true;
-		}else{
-			// player.positionを更新
-			past_position = player.position;
+		if (isReady) {
+			// プレイヤーが読み込み中かをWebMidiLinkフレーム内のテーブルタグ（鍵盤のアレ）が存在するかで判断
+			if (!wml_ready && $('iframe[src="./wml.html"]').contents().find('table').length !== 0){
+				// データー読み込み
+				loadData(false);
+				// 複数回実行されるのを防ぐためフラグを立てる
+				wml_ready = true;
+			}else{
+				// player.positionを更新
+				past_position = player.position;
+			}
 		}
 	},1000);
 	
 	setInterval(function(){
-		// smfplayer.jsには停止イベントを取得するAPIがないため、ループしたときにplayer.positionがpast_positionよりも
-		// 値が低くなるのを利用して曲の停止を検知する。
-		if (isPlay || player.pause){
-			if (player.position < past_position) {
+		if (isReady) {
+			// player.pauseの値で再生/一時停止ボタンを変化させる
+			// ただし、smfplayer.jsのバグでplayer.loadMidiFile()が実行された直後、
+			// 再生していない状態でもplayer.pauseの値がtrueになってしまうので、
+			// もう一工夫いる。
+			if (player.pause){
 				$play.
 					html('<span class="glyphicon glyphicon-play"></span>').
 					removeClass('btn-success').
 					addClass('btn-primary');
-				// ループで最初に戻るため停止する。
-				isPlay = false;
+			}else{
+				$play.
+					html('<span class="glyphicon glyphicon-pause"></span>').
+					removeClass('btn-primary').
+					addClass('btn-success');
+			}
+
+			// smfplayer.jsには停止イベントを取得するAPIがないため、ループしたときにplayer.positionがpast_positionよりも
+			// 値が低くなるのを利用して曲の停止を検知する。
+			if (player.position < past_position) {
+				// ループで最初に戻った場合（player.positionがリセットされた場合）
 				// 次の曲を選択
 				var selected_music = $('#music').prop('selectedIndex');
 				if (selected_music == $('#music option').length){
@@ -732,22 +795,16 @@ iframe {
 				}else{
 					$('#music').prop('selectedIndex',selected_music+1);
 				}
-				changeMusic();
-			}else{
-				$play.
-					html('<span class="glyphicon glyphicon-pause"></span>').
-					removeClass('btn-primary').
-					addClass('btn-success');
-				isPlay = true;
+				changeMusic(true);
 			}
-		}else{
-			$play.
-				html('<span class="glyphicon glyphicon-play"></span>').
-				removeClass('btn-success').
-				addClass('btn-primary');
 		}
 	},200);
 	
+	$.getScript('//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=129144050466298',function(){
+		$('body').append('<div id="fb-root"></div>');
+	});
+	$.getScript('https://apis.google.com/js/plusone.js');
+	$.getScript(('https:' == document.location.protocol ? 'https' : 'http') + '://platform.twitter.com/widgets.js');
 	$.getScript(('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js',function(){
 		try {
 			var pageTracker = _gat._getTracker("UA-33600926-1");
