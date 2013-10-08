@@ -431,8 +431,8 @@
 
 	//			if (nMin == nMax){
 				if (inst >= 65) {
-					// ドラムの場合、メロディ→和音１→和音２という順にMMLが再生される。
-					var d_mml = p.mml[0] + p.mml[1] + p.mml[2];
+					// ドラムの場合、メロディ→和音１という順にMMLが再生される。和音２は無視
+					var d_mml = p.mml[0] + p.mml[1];
 					ret += genTrack(d_mml, i, inst, pan, effect, nMin, nMax, track, p.inst_name , true);
 					track++;
 				}else{
@@ -461,7 +461,7 @@
 	//MMLを正規化
 	function mml_sanitize(str) {
 		var mml = str.replace(/\r\n|\n\r|\n|\r|\s|/g, '');	// Remove line break and space
-		var ret = mml.match(/MML\@([0-9A-GLNORTV#<>.&+-]*),([0-9A-GLNORTV#<>.&+-]*),([0-9A-GLNORTV#<>.&+-]*);/i);
+		var ret = mml.match(/MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;/i);
 		if (ret !== null && typeof(ret) == 'object'){
 			ret.shift();	// 一番先頭の配列は削除
 			return ret;

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Mabinogi MML Emulator for FLMML</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをFLMMLで再現したものです。" />
+		<meta name="author" content="Logue" />
+
+		<!-- Le styles -->
+		<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css" rel="stylesheet" />
+
+		<style>/*<![CDATA[*/
+iframe {
+	width: 100%;
+	height:600px;
+	border:thin;
+}
+/*]]>*/</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<section id="info">
+				<h1>Mabinogi MML Emulator for FLMML</h1>
+				<div style="float:right;">
+					<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://logue.github.io/MabiMmlEmu/flmml.html" data-count="vertical" data-via="logue256" data-lang="ja">ツイート</a>
+					<div class="g-plusone" data-size="tall" data-href="http://logue.github.io/MabiMmlEmu/flmml.html"></div>
+					<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Flogue.github.io%2FMabiMmlEmu%2Fflmml.html&amp;width=70&amp;height=65&amp;colorscheme=light&amp;layout=box_count&amp;action=like&amp;show_faces=true&amp;send=true&amp;appId=249014621810580" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:70px; height:65px;" allowTransparency="true"></iframe>
+				</div>
+				<p>このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをおー氏のFlashによるアナログシンセサイザ「FLMML」を用いて再生するプログラムです。※自動再生されません。</p>
+				<p>
+					<a href="index.html" class="btn btn-info">サウンドフォント版</a>
+					<a href="jsmml.html" class="btn btn-info">JSMML版へ</a>
+					<a href="https://github.com/logue/MabiMmlEmu" class="btn btn-default" target="_blank">Githubのページへ</a>
+				</p>
+			</section>
+			<section>
+				<form>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							MMLプレイヤー
+						</div>
+						<div class="panel-body">
+							
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-inline">
+										<button class="btn btn-info btn-lg" value="prev" id="prev" disabled="disabled" title="前の曲へ"><span class="glyphicon glyphicon-chevron-left"></span></button>
+										<button class="btn btn-default btn-lg" value="play" id="play" disabled="disabled" title="再生/一時停止">　</button>
+										<button class="btn btn-default btn-lg" value="stop" id="stop" disabled="disabled" title="停止">　</button>
+										<button class="btn btn-warning btn-lg" value="eject" id="eject" disabled="disabled" title="フォームからMMLデーター読み込み"><span class="glyphicon glyphicon-eject"></span></button>
+										<button class="btn btn-info btn-lg" value="next" id="next" disabled="disabled" title="次の曲へ"><span class="glyphicon glyphicon-chevron-right"></span></button>
+										<!--a class="btn btn-default" value="stop" href="" id="debug"><span class="glyphicon glyphicon-floppy-save"></span></a-->
+									</div>
+								</div>
+								<div class="col-md-8">
+									<div class="form-group has-info">
+										<div class="input-group input-group-lg">
+											<select id="music" class="form-control" title="楽曲を選ぶと自動再生されます。">
+												<option>音源データーを読み込んでいます…。しばらくお待ちください。</option>
+											</select>
+											<span class="input-group-btn">
+												<button class="btn btn-default" id="reload" title="シャッフル"><span class="glyphicon glyphicon-retweet"></span></button>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="flmml"></div>
+							<div class="form-group">
+								<label for="url">このMMLのアドレス</label>
+								<input type="text" id="url" class="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-horizontal panel panel-default">
+								<div class="panel-heading">トラック１</div>
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="inst1" class="col-md-2 control-label" name="inst1">楽器</label>
+										<div class="col-md-10">
+											<select id="inst1" name="inst1" class="form-control inst">
+												<option value="0" selected="selected">リュート</option>
+												<option value="1">ウクレレ</option>
+												<option value="2">マンドリン</option>
+												<option value="3">ホイッスル</option>
+												<option value="4">ロンカドーラ</option>
+												<option value="5">フルート</option>
+												<option value="6">シャリューモ</option>
+												<option value="18">チューバ</option>
+												<option value="19">リラ</option>
+												<option value="20">エレキギター</option>
+												<option value="21">ピアノ</option>
+												<option value="22">バイオリン</option>
+												<option value="23">チェロ</option>
+												<option value="66">大太鼓</option>
+												<option value="67">小太鼓</option>
+												<option value="68">シンバル</option>
+												<option value="77">シロフォン</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="pan1" class="col-md-2 control-label">パン</label>
+										<div class="col-md-3">
+											<input type="number" name="pan1" id="pan1" min="0" max="127" value="64" class="pan form-control" />
+										</div>
+										<div class="col-md-7">
+											<div class="progress" style="margin-bottom:0;" id="bar1">
+												<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="mml1" class="col-md-2 control-label">MML</label>
+										<div class="col-md-10">
+											<textarea id="mml1" name="mml1" class="mml form-control" rows="5" placeholder="MML@...,...,...;"></textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-horizontal panel panel-default">
+								<div class="panel-heading">トラック２</div>
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="inst2" class="col-md-2 control-label">楽器</label>
+										<div class="col-md-10">
+											<select id="inst2"  name="inst2" class="form-control inst">
+												<option value="0" selected="selected">リュート</option>
+												<option value="1">ウクレレ</option>
+												<option value="2">マンドリン</option>
+												<option value="3">ホイッスル</option>
+												<option value="4">ロンカドーラ</option>
+												<option value="5">フルート</option>
+												<option value="6">シャリューモ</option>
+												<option value="18">チューバ</option>
+												<option value="19">リラ</option>
+												<option value="20">エレキギター</option>
+												<option value="21">ピアノ</option>
+												<option value="22">バイオリン</option>
+												<option value="23">チェロ</option>
+												<option value="66">大太鼓</option>
+												<option value="67">小太鼓</option>
+												<option value="68">シンバル</option>
+												<option value="77">シロフォン</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="pan2" class="col-md-2 control-label">パン</label>
+										<div class="col-md-3">
+											<input type="number" name="pan2" id="pan2" min="0" max="127" value="64" class="pan form-control" />
+										</div>
+										<div class="col-md-7">
+											<div class="progress" style="margin-bottom:0;" id="bar2">
+												<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="mml2" class="col-md-2 control-label">MML</label>
+										<div class="col-md-10">
+											<textarea name="mml2" id="mml2" class="mml form-control" rows="5" placeholder="MML@...,...,...;"></textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-horizontal panel panel-default">
+								<div class="panel-heading">トラック３</div>
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="inst3" class="col-md-2 control-label">楽器</label>
+										<div class="col-md-10">
+											<select id="inst3" name="inst3" class="form-control inst">
+												<option value="0" selected="selected">リュート</option>
+												<option value="1">ウクレレ</option>
+												<option value="2">マンドリン</option>
+												<option value="3">ホイッスル</option>
+												<option value="4">ロンカドーラ</option>
+												<option value="5">フルート</option>
+												<option value="6">シャリューモ</option>
+												<option value="18">チューバ</option>
+												<option value="19">リラ</option>
+												<option value="20">エレキギター</option>
+												<option value="21">ピアノ</option>
+												<option value="22">バイオリン</option>
+												<option value="23">チェロ</option>
+												<option value="66">大太鼓</option>
+												<option value="67">小太鼓</option>
+												<option value="68">シンバル</option>
+												<option value="77">シロフォン</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="pan3" class="col-md-2 control-label">パン</label>
+										<div class="col-md-3">
+											<input type="number" name="pan3" id="pan3" min="0" max="127" value="64" class="pan form-control" />
+										</div>
+										<div class="col-md-7">
+											<div class="progress" style="margin-bottom:0;" id="bar3">
+												<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="mml3" class="col-md-2 control-label">MML</label>
+										<div class="col-md-10">
+											<textarea name="mml3" id="mml3" class="mml form-control" rows="5" placeholder="MML@...,...,...;"></textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-horizontal panel panel-default">
+								<div class="panel-heading">トラック４</div>
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="inst4" class="col-md-2 control-label">楽器</label>
+										<div class="col-md-10">
+											<select id="inst4" name="inst4" class="form-control inst">
+												<option value="0" selected="selected">リュート</option>
+												<option value="1">ウクレレ</option>
+												<option value="2">マンドリン</option>
+												<option value="3">ホイッスル</option>
+												<option value="4">ロンカドーラ</option>
+												<option value="5">フルート</option>
+												<option value="6">シャリューモ</option>
+												<option value="18">チューバ</option>
+												<option value="19">リラ</option>
+												<option value="20">エレキギター</option>
+												<option value="21">ピアノ</option>
+												<option value="22">バイオリン</option>
+												<option value="23">チェロ</option>
+												<option value="66">大太鼓</option>
+												<option value="67">小太鼓</option>
+												<option value="68">シンバル</option>
+												<option value="77">シロフォン</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="pan4" class="col-md-2 control-label">パン</label>
+										<div class="col-md-3">
+											<input type="number" name="pan4" id="pan4" min="0" max="127" value="64" class="pan form-control" />
+										</div>
+										<div class="col-md-7">
+											<div class="progress" style="margin-bottom:0;" id="bar4">
+												<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="mml4" class="col-md-2 control-label">MML</label>
+										<div class="col-md-10">
+											<textarea name="mml4" id="mml4" class="mml form-control" rows="5" placeholder="MML@...,...,...;"></textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-horizontal panel panel-default">
+								<div class="panel-heading">トラック５</div>
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="inst5" class="col-md-2 control-label">楽器</label>
+										<div class="col-md-10">
+											<select id="inst5" name="inst5" class="form-control inst">
+												<option value="0" selected="selected">リュート</option>
+												<option value="1">ウクレレ</option>
+												<option value="2">マンドリン</option>
+												<option value="3">ホイッスル</option>
+												<option value="4">ロンカドーラ</option>
+												<option value="5">フルート</option>
+												<option value="6">シャリューモ</option>
+												<option value="18">チューバ</option>
+												<option value="19">リラ</option>
+												<option value="20">エレキギター</option>
+												<option value="21">ピアノ</option>
+												<option value="22">バイオリン</option>
+												<option value="23">チェロ</option>
+												<option value="66">大太鼓</option>
+												<option value="67">小太鼓</option>
+												<option value="68">シンバル</option>
+												<option value="77">シロフォン</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="pan5" class="col-md-2 control-label">パン</label>
+										<div class="col-md-3">
+											<input type="number" name="pan5" id="pan5" min="0" max="127" value="64" class="pan form-control" />
+										</div>
+										<div class="col-md-7">
+											<div class="progress" style="margin-bottom:0;" id="bar5">
+												<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="mml5" class="col-md-2 control-label">MML</label>
+										<div class="col-md-10">
+											<textarea name="mml5" id="mml5" class="mml form-control" rows="5" placeholder="MML@...,...,...;"></textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<button id="serialize" class="btn btn-default" title="フォームの内容をサニタイズしLZMAで圧縮して出力"><span class="glyphicon glyphicon-floppy-save"></span>シリアライズ</button>
+							<button id="unserialize" class="btn btn-default" title="LZMA圧縮したデーターを解凍しフォームに復元"><span class="glyphicon glyphicon-floppy-open"></span>アンシリアライズ</button>
+							<textarea id="str" class="form-control" rows="10" placeholder="LZMAデーター。ここのデーターに圧縮されたデーターが表示されます。"></textarea>
+						</div>
+					</div>
+				</form>
+			</section>
+
+			<footer>
+				<p>&#169; 2009,2013 by Masashi Yoshikawa</p>
+			</footer>
+		</div> <!-- /container -->
+		
+		
+
+		<!-- Le javascript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+		<script src="./js/swfobject.js"></script>
+		<!-- midi.js package -->
+		<script src="./js/PSGConverter.js"></script>
+		<script src="./js/MabiMml2FLMML.js"></script>
+		<script src="./js/lzma.js"></script>
+		<script type="text/javascript" defer="defer">/*<![CDATA[*/
+//(function ($, window, document) {
+	// MMLのDOMを取得し、MML→MIDI変換を行う
+	function generateFLMML(){
+		var param = [
+			{ inst:$('#inst1').val(), mml:mml_sanitize($('#mml1').val()), pan:$('#pan1').val()},
+			{ inst:$('#inst2').val(), mml:mml_sanitize($('#mml2').val()), pan:$('#pan2').val()},
+			{ inst:$('#inst3').val(), mml:mml_sanitize($('#mml3').val()), pan:$('#pan3').val()},
+			{ inst:$('#inst4').val(), mml:mml_sanitize($('#mml4').val()), pan:$('#pan4').val()},
+			{ inst:$('#inst5').val(), mml:mml_sanitize($('#mml5').val()), pan:$('#pan5').val()},
+		];
+		return mabimml2flmml(param);
+	}
+
+	/**
+	 * LZMA圧縮のMMLデーターを展開
+	 * @param string lzmastr 圧縮データー
+	 * @param function callback コールバック
+	 */
+	var lzma = new LZMA("./js/lzma_worker.min.js");
+	function lzma2mml(lzmastr, callback){
+		lzma.decompress(eval('[' + lzmastr + ']'), function(result){	// オイ
+			var str = decodeURI(result);
+			var pairs = str.split('&');
+			var obj = {}, p, idx, val;
+			for (var i=0, n=pairs.length; i < n; i++) {
+				p = pairs[i].split('=');
+				idx = p[0];
+				if (idx.indexOf("[]") == (idx.length - 2)) {
+					// Eh um vetor
+					var ind = idx.substring(0, idx.length-2)
+					if (obj[ind] === undefined) {
+						obj[ind] = [];
+					}
+					obj[ind].push(p[1]);
+				}
+				else {
+					obj[idx] = p[1];
+				}
+			}
+			for (var line in obj){
+				$('#'+line).val(decodeURIComponent(obj[line]));
+			}
+			$('.pan').each(function(){
+				var $this = $(this);
+				var $bar = $('#'+$this.attr('name').replace('pan','bar')+' .progress-bar');
+				$bar.css('width',(($this.val()/127)*100)+'%');
+			});
+			callback();
+		});
+	}
+	
+	/**
+	 * ajaxでMMLデーターを読み込む
+	 */
+	var loadData = function(shuffle){
+		$('input, select, textarea, .btn').attr('disabled','disabled');
+		var $music = $('#music');
+		$music.append('<option>MMLデーターセットを読み込んでいます…。</option>');
+		$.ajax( {
+			type: "GET",
+			dataType:'json',
+			url: './music.json',
+			cache:false,
+			success: function( data ) {
+				console.info(data.length," musics ready.");
+				if (shuffle) {
+					// 配列をランダムソートする
+					// http://raining.bear-life.com/javascript/javascript%E3%81%A7%E9%85%8D%E5%88%97%E3%81%AE%E4%B8%AD%E8%BA%AB%E3%82%92%E3%83%A9%E3%83%B3%E3%83%80%E3%83%A0%E3%81%AB%E4%B8%A6%E3%81%B3%E6%9B%BF%E3%81%88%E3%82%8B
+					data.sort(
+						function() {
+							return Math.random() - 0.5;
+						}
+					);
+				}
+
+				$('#music option').remove();
+				$music.append('<option selected="selected" value="93,0,0,1,0,109,0,0,0,0,0,0,0,0,52,-101,-118,-50,29,-90,-87,84,-34,28,67,-37,22,-42,11,6,66,32,-33,31,-88,71,14,58,77,-79,58,-30,50,-105,89,-113,-29,-24,50,-96,81,-20,68,-117,-19,-19,-114,-43,53,-65,-40,-109,-47,72,127,-1,-43,124,64,0">楽曲を選択</option>');
+				var i = 0;
+				for (var line in data) {
+					$music.append('<option value="'+data[i].value+'">'+data[i].name+'</option>');
+					i++;
+				}
+				$('input, select, textarea, .btn').removeAttr('disabled');
+				$('#play, #stop').attr('disabled','disabled');
+			},
+			error:function(result,e){
+				// たぶんJSONのエラー
+				console.error(result,e);
+				$('input, select, textarea, .btn').removeAttr('disabled');
+			}
+		});
+	}
+
+	/**
+	 * 楽曲を変更
+	 */
+	function changeMusic(){
+		lzma2mml($('#music').val(), function(){
+			$('#url').val(location.href + '#' + $('#music').val());
+			swfobject.embedSWF("./js/flmml.swf", "flmml", "100%", "320", "10.0.12", "./js/expressInstall.swf", {mml: encodeURIComponent(generateFLMML())}, {bgcolor: "#b2bfc6"}, {});
+		});
+	}
+	
+	/**
+	 * アンカータグに割り当てる処理
+	 */
+	function setAnchor(prefix){
+		$(prefix+' a').each(function(elem){
+			var $this = $(this);	// DOMをキャッシュ
+			var href = $this.attr('href');	// href属性を取得
+			
+			// 外部リンク（rel="external"）は新しいウィンドウで開く
+			if ($this.attr('rel') == 'external'){
+				$this.unbind('click').bind('click', function(){
+					window.open(href);
+					return false;
+				});
+				// 地球アイコンを追加
+				$this.prepend('<span class="glyphicon glyphicon-globe"></span>');
+			}
+			/**
+			 * アンカースクロール
+			 * クラスが含まれている場合、Twitter Bootstrapのプラグインで使用する場合があるため、
+			 * data-toggle属性が含まれていない場合に限り実行する（不十分）
+			 */
+			if ( href.match('#') && typeof $this.data('toggle') === "undefined" ){
+				$this.unbind('click').bind('click', function(){
+					var $body;
+					if ($(window).scrollTop() === 0) {
+						// Webkit系ブラウザでスクロールが0の時エラーになる問題を1ピクセルスクロールさせることでごまかす
+						$(window).scrollTop(1);
+					}
+					// ブラウザによって、htmlタグ基準かbodyタグ基準かが違うためのおまじない
+					if ( $('html').scrollTop() > 0 ) {
+						$body = $('html');
+					} else if ( $('body').scrollTop() > 0 ) {
+						$body = $('body');
+					}else{
+						return;
+					}
+					$body.stop().animate({
+						// #しか含まれていない場合は、ページのトップ（0）にスクロールさせる
+						scrollTop: href !== '#' ? $(href).offset().top : 0
+					},{
+						duration : 800
+					});
+					return false;
+				});
+			}
+		});
+	}
+	var isReady = false;
+
+	/**
+	 * メイン処理
+	 */
+	$(document).ready(function(){
+		// フォームを無効化
+		$('input, select, textarea, button.btn').attr('disabled','disabled');
+		
+		setAnchor('');
+
+		// モーダルダイアログのDOMを生成
+		$('body').append([
+			'<article class="modal fade" id="modal">',
+				'<div class="modal-dialog">',
+					'<div class="modal-content">',
+						'<header class="modal-header">',
+							'<button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="閉じる">&#215;</button>',
+							'<h2 class="modal-title"></h2>',
+						'</header>',
+						'<section class="modal-body"></section>',
+						'<footer class="modal-footer">',
+							'<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>',
+						'</footer>',
+					'</div><!-- /.modal-content -->',
+				'</div><!-- /.modal-dialog -->',
+			'</article><!-- /.modal -->'
+		].join("\n"));
+
+		// Bootstrapのモーダルダイアログでajaxを通じてHTMLを表示
+		$('[data-toggle="modal"]').click(function(e) {
+			e.preventDefault();
+			var url = $(this).attr('href');
+			if (url.indexOf('#') == 0) {
+				$(url).modal('open');
+			} else {
+				$.ajax({
+					type: "GET",
+					url: url,
+					dataType: "xml",
+					cache:false,
+					success: function(result){
+						$('#modal .modal-header .modal-title').html($(result).find('title').text());
+						$('#modal .modal-body').html($(result).find('body').children());
+						$('#modal').modal();
+						setAnchor('#modal');
+						$('input:text:visible:first').focus();
+					},
+					error:function(result,e){
+						console.error(e);
+					}
+				});
+			}
+			return false;
+		});
+		
+		// MMLのリロードボタン
+		$('#eject').click(function(){
+			lzma.compress($('form').serialize(), 1, function(result){
+				$('#url').val(location.href + '#' + result);
+			});
+			swfobject.embedSWF("./js/flmml.swf", "flmml", "100%", "320", "10.0.12", "./js/expressInstall.swf", {mml: encodeURIComponent(generateFLMML())}, {bgcolor: "#b2bfc6"}, {});
+			alert('読み込みました。');
+		});
+
+		// 楽曲選択メニュー
+		$('#music').change(function(){ changeMusic(); });
+		
+		// formは無効化
+		$('form').submit(function(){return false;});
+		
+		// パンポッドを編集したときにバーを変化させる
+		$('.pan').each(function(){
+			var $this = $(this);
+			var $bar = $('#'+$this.attr('name').replace('pan','bar')+' .progress-bar');
+			$bar.css('width',(($this.val()/127)*100)+'%');
+			$this.change(function(){
+				var $bar = $('#'+$this.attr('name').replace('pan','bar')+' .progress-bar');
+				$bar.css('width',(($this.val()/127)*100)+'%');
+			});
+		});
+
+		// 楽曲バンクをリロード
+		$('#reload').click(function(){loadData(true);});
+
+		// 前に戻るボタン
+		$('#prev').click(function(){
+			// 現在選択中の項目を取得
+			var selected_music = $('#music').prop('selectedIndex');
+			if (selected_music == $('#music option').length){
+				// 末尾の場合、最後の曲へ
+				$('#music').prop('selectedIndex',$('#music option').length);
+			}else{
+				// 選択されている項目の前の項目を選択
+				$('#music').prop('selectedIndex',selected_music-1);
+			}
+			changeMusic();
+		});
+
+		// 次に進むボタン
+		$('#next').click(function(){
+			var selected_music = $('#music').prop('selectedIndex');
+			if (selected_music == $('#music option').length){
+				// 末尾の場合最初に戻る
+				$('#music').prop('selectedIndex',1);
+			}else{
+				// 今選択されてる項目の次の項目を選択
+				$('#music').prop('selectedIndex',selected_music+1);
+			}
+			changeMusic();
+		});
+		
+		
+		// デバッグ用
+		// シリアライズ（画面のMMLデーター一式をシリアライズしてlzmaで圧縮）
+		$('#serialize').click(function(){
+			lzma.compress($('form').serialize(), 1, function(result){
+				$('#str').val(result);
+			});
+		});
+
+		// アンシリアライズ（lzma圧縮されたＭＭＬデーターを画面に展開する
+		$('#unserialize').click(function(){
+			lzma2mml($('#str').val(), function(){});
+		});
+		
+		loadData();
+		
+		// URLからMMLを読み込む
+		if (location.hash !== '') {
+			lzma2mml(location.hash.split('#')[1], function(){});
+		}
+
+		$('*[title]').tooltip();
+	});
+
+	$.getScript('//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=129144050466298',function(){
+		$('body').append('<div id="fb-root"></div>');
+	});
+	$.getScript('https://apis.google.com/js/plusone.js');
+	$.getScript(('https:' == document.location.protocol ? 'https' : 'http') + '://platform.twitter.com/widgets.js');
+	$.getScript(('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js',function(){
+		try {
+			var pageTracker = _gat._getTracker("UA-33600926-1");
+			pageTracker._trackPageview();
+		} catch(err) {}
+	});
+//});
+/*]]>*/</script>
+	</body>
+</html>
