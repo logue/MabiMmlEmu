@@ -3,138 +3,120 @@
 <head>
   <meta chaset="UTF-8" />
   <title>Web Midi Link</title>
+  <link type="text/css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
 <style type="text/css">/*<![CDATA[*/
-body {
-  background-color: white;
-}
-table {
-  font-size: 5px;
-  table-layout: fixed;
-  width: 100%;
-  border-spacing: 0;
-}
-th {
-  padding: 0;
-}
-tbody > tr:nth-child(odd) {
-  background-color: #eee;
-}
-th:first-child,
-td:first-child {
-  width: 128px;
-  overflow: hidden;
-  white-space: nowrap;
-}
-th:nth-child(2),
-td:nth-child(2) {
-  width: 32px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-align: right;
-}
-th:nth-child(3),
-td:nth-child(3) {
-  width: 32px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-align: right;
-}
-th:nth-child(4),
-td:nth-child(4) {
-  width: 48px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-align: right;
-}
-th:nth-child(5),
-td:nth-child(5) {
-  width: 48px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-align: right;
-}
-/*
-td:nth-child(65) {
-  background-color: #afa;
-}
-*/
-td:nth-child(12n+10) {
-  border-right: 1px dashed #ccc;
-}
-td:nth-child(12n+5) {
-  border-right: 1px solid #888;
-}
-td:nth-child(12n+7),
-td:nth-child(12n+9),
-td:nth-child(12n+12),
-td:nth-child(12n+14),
-td:nth-child(12n+16) {
-  background-color: #ccc;
-  border-right: none;
-}
-td.note-on {
-  background-color: red;
-}
-
-#message {
-  display: none;
-}
-#message.show {
-  padding: 1em;
-  display: block;
-  font-weight: bold;
-  color: darkred;
-  border-radius: 1em;
-  border: 1px solid darkred;
-  background-color: #fcc;
-}
-div.load {
-  border-top: 1px solid #08f;
-  border-bottom: 1px solid #08f;
-  background-color: #def;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  padding: 0.5em;
-}
+    table {
+      font-size: 5px;
+      table-layout: fixed;
+      width: 100%;
+      border-spacing: 0;
+    }
+    th {
+      padding: 0;
+    }
+    tbody > tr:nth-child(odd) {
+      background-color: #eee;
+    }
+    th:first-child,
+    td:first-child {
+      width: 146px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    th:nth-child(2),
+    td:nth-child(2) {
+      width: 32px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-align: right;
+    }
+    th:nth-child(3),
+    td:nth-child(3) {
+      width: 32px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-align: right;
+    }
+    th:nth-child(4),
+    td:nth-child(4) {
+      width: 48px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-align: right;
+    }
+    th:nth-child(5),
+    td:nth-child(5) {
+      width: 48px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-align: right;
+    }
+    th:nth-child(6){
+      text-align:right;
+    }
+    /*
+    td:nth-child(65) {
+      background-color: #afa;
+    }
+    */
+    td:nth-child(12n+10) {
+      border-right: 1px dashed #ccc;
+    }
+    td:nth-child(12n+5) {
+      border-right: 1px solid #888;
+    }
+    td:nth-child(12n+7),
+    td:nth-child(12n+9),
+    td:nth-child(12n+12),
+    td:nth-child(12n+14),
+    td:nth-child(12n+16) {
+      background-color: #ccc;
+      border-right: none;
+    }
+    td.note-on {
+      background-color: blue;
+    }
 /*]]>*/</style>
 </head>
 <body>
-
-<div id="samples"></div>
-
-<h2>Default SoundFont: MSXspirit.dls</h2>
-
-<div id="message" class="show">読み込んでいます…。容量60Mあるので時間かかるかも。</div>
-<input type="checkbox" id="reverb" checked="checked" /><label for="reverb">Reverb</label>
-<pre>
+<div class="page-header">
+<h2>Default SoundFont: <small>MSXspirit.dls</small></h2>
+</div>
+<p class="well">
 本プログラムで使用している「マビノギ」に関する文章、画像、その他の著作権及び一切の知的財産権は
 株式会社ネクソンジャパンおよび韓国NEXON社に帰属します。NEXON著作権ガイドラインも併せてご覧ください。
-</pre>
-
-<!--div class="load">
-  Load SoundFont2 file:<input type="file" id="file" name="file" />
-</div-->
+</p>
+<p class="alert alert-warning" id="msg">読み込んでいます…。60Mあるのでしばらくお待ちください。</p>
+<!-- input type="checkbox" id="reverb" checked="checked" /><label for="reverb">Reverb</label -->
 <script src="./js/sf2synth.min.js"></script>
-<script type="text/javascript" defer="defer">/*<![CDATA[*/
-var url = './sf/MSXspirit.sf2';
-var wml = new SoundFont.WebMidiLink();
-var reverb;
+<!--script src="../sf2synth.js/closure-primitives/base.js"></script>
+<script>
+/*<![CDATA[*/
+var USE_TYPEDARRAY = true;
+Object.keys(goog.dependencies_.nameToPath).forEach(function(name) {
+  goog.require(name);
+});
+/*]]>*/
+</script-->
+<script type="text/javascript">
+/*<![CDATA[*/
+	var url = 'sf/MSXspirit.sf2';
+	var wml = new SoundFont.WebMidiLink();
+	var reverb;
 
-// local file
-window.addEventListener('DOMContentLoaded', function(event) {
-		wml.setLoadCallback(function(){
-		var message = document.getElementById('message');
-		message.textContent = '';
-		message.classList.remove('show');
-		
+	wml.setLoadCallback(function(){
+		document.getElementById('msg').style.display = 'none';
+	});
+	wml.setup(url);
+/*
+	window.addEventListener('DOMContentLoaded', function(event) {
 		reverb = document.getElementById('reverb');
 		reverb.addEventListener('change', function(event) {
 			wml.setReverb(event.target.checked);
 		}, false);
-	});
-	wml.setup(url);
-}, false);
-
-/*]]>*/</script>
+	}, false);
+*/
+/*]]>*/
+ </script>
 </body>
 </html>

@@ -16,7 +16,6 @@
 
 // Lorelei JSMML Player based on JSMML(http://coderepos.org/share/wiki/JSMML)
 
-// DLSの音色番号に対応した楽器設定
 var dls2flmml = {
 	0  :'@3 @W32 @E1,0,24,80,16 @F1,32,72,24',	// Lute
 	1  :'@3 @W16 @E1,0,24,96,16 @F1,32,64,48',	// Ukulele
@@ -36,8 +35,6 @@ var dls2flmml = {
 	68 :'@4 @N0  @E1,0,50,0,0   @F1,64,127,0',	// Cymbal
 	77 :'@3 @W80 @E1,0,40,30,4  @F1,36,56,18'	// Xylophone
 };
-
-// FM音源版（未使用）
 var fm_inst = [
 	// Lute
 	'#FMGAIN 0',
@@ -145,7 +142,6 @@ function flmml_track(mml, isDrum){
 		var mml_note = mml_notes[mnid];
 		// 現在のオクターブを取得
 		if (isDrum != 0){
-			// リズムトラックの音階は削除し、Cに置き換え
 			if(mml_note.match(/[oO](0|[1-9][0-9]*)/)) {
 				flmml[mnid] = '';
 			} else if(mml_note.match(/</)) {
