@@ -845,7 +845,7 @@ setInterval(function(){
 				removeClass('btn-primary').
 				addClass('btn-success');
 		}
-		$('#music-progress .progress-bar').css('width',((player.position/player.length)*100)+'%');
+		$('#music-progress .progress-bar').css('width',((player.getPosition()/player.length)*100)+'%');
 	}
 },100);
 
