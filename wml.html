@@ -1,18 +1,22 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" manifest="mabimmlemu.appcache">
 <head>
-  <meta chaset="UTF-8" />
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex" />
   <title>Web Midi Link</title>
-  <link type="text/css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
-<style type="text/css">/*<![CDATA[*/
+  <link type="text/css" rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <style type="text/css">
+/*<![CDATA[*/
     table {
-      font-size: 5px;
       table-layout: fixed;
       width: 100%;
       border-spacing: 0;
     }
     th {
       padding: 0;
+    }
+    td, th{
+      font-size:x-small;
     }
     tbody > tr:nth-child(odd) {
       background-color: #eee;
@@ -76,21 +80,27 @@
     td.note-on {
       background-color: blue;
     }
-/*]]>*/</style>
+/*]]>*/
+  </style>
 </head>
 <body>
-<div class="page-header">
-<h2>Default SoundFont: <small>MSXspirit.dls</small></h2>
-</div>
+<h2 class="page-header" style="margin:0;">Default SoundFont: <small>MSXspirit.dls</small></h2>
+<!--div class="alert alert-info" id="droparea">
+  <div class="form-group">
+    <label for="file">Load SoundFont2 file <small>(drag and drop here *.sf2 file to change sound font)</small>:</label>
+    <input type="file" id="file" name="file" class="form-control" accept="audio/x-soundfont" />
+  </div>
+</div-->
 <p class="well">
 本プログラムで使用している「マビノギ」に関する文章、画像、その他の著作権及び一切の知的財産権は
 株式会社ネクソンジャパンおよび韓国NEXON社に帰属します。NEXON著作権ガイドラインも併せてご覧ください。
 </p>
-<p class="alert alert-warning" id="msg">読み込んでいます…。60Mあるのでしばらくお待ちください。</p>
-<!-- input type="checkbox" id="reverb" checked="checked" /><label for="reverb">Reverb</label -->
-<script src="./js/sf2synth.min.js"></script>
-<!--script src="../sf2synth.js/closure-primitives/base.js"></script>
-<script>
+<p class="alert alert-warning" id="message">読み込んでいます…。60Mあるのでしばらくお待ちください。</p>
+<div class="checkbox-inline">
+  <input type="checkbox" id="reverb" checked="checked" /><label for="reverb">Reverb</label>
+</div>
+<!--script type="text/javascript" src="../sf2synth.js/closure-primitives/base.js"></script>
+<script type="text/javascript">
 /*<![CDATA[*/
 var USE_TYPEDARRAY = true;
 Object.keys(goog.dependencies_.nameToPath).forEach(function(name) {
@@ -98,24 +108,86 @@ Object.keys(goog.dependencies_.nameToPath).forEach(function(name) {
 });
 /*]]>*/
 </script-->
-<script type="text/javascript">
+ <script type="text/javascript" src="./js/waapisim.min.js"></script>
+ <script type="text/javascript" src="./js/sf2synth.min.js"></script>
+ <script type="text/javascript">
 /*<![CDATA[*/
-	var url = 'sf/MSXspirit.sf2';
-	var wml = new SoundFont.WebMidiLink();
-	var reverb;
+    var message = document.getElementById('message');
+    var url = './sf/MSXspirit.sf2';
+    var qs = window.location.search;
+    var option = {};
+    if (qs === '?disableDrawSynth') {
+      option.disableDrawSynth = true;
+    }
+    var wml = new SoundFont.WebMidiLink(option);
+    var reverb;
 
-	wml.setLoadCallback(function(){
-		document.getElementById('msg').style.display = 'none';
-	});
-	wml.setup(url);
+    wml.setLoadCallback(function(){
+      message.style.display = 'none';
+    });
+    wml.setup(url);
+
+    // local file
+    window.addEventListener('DOMContentLoaded', function(event) {
 /*
-	window.addEventListener('DOMContentLoaded', function(event) {
-		reverb = document.getElementById('reverb');
-		reverb.addEventListener('change', function(event) {
-			wml.setReverb(event.target.checked);
-		}, false);
-	}, false);
+      var fileElement = document.getElementById('file');
+
+      document.getElementById('file').addEventListener('change', function(event) {
+        var file = document.getElementById("file").files[0];
+        handleSoundFont(file);
+        event.preventDefault();
+      }, false);
+
+      var droparea = document.getElementById('droparea');
+      droparea.addEventListener('dragover', function(e) {
+        droparea.className = "alert alert-danger";
+        e.preventDefault();
+      }, true);
+      droparea.addEventListener('drop', function(e) {
+        document.getElementById('droparea').className = "alert alert-info";
+        var dt = e.dataTransfer;
+        var files = dt.files;
+        e.stopPropagation();
+        e.preventDefault();
+        handleSoundFont(files[0]);
+      }, true);
+
+      droparea.addEventListener('dragleave', function(e) {
+        document.getElementById('droparea').className = "alert alert-info";
+      }, true);
 */
+      reverb = document.getElementById('reverb');
+      reverb.addEventListener('change', function(event) {
+        wml.setReverb(event.target.checked);
+      }, false);
+    }, false);
+
+    // Load sound font
+    function handleSoundFont(file){
+      var reader = new FileReader();
+
+//    wml.cancelLoading();
+
+      reader.readAsArrayBuffer(file);
+
+      reader.onload = function(e) {
+        var data = new Uint8Array(e.target.result);
+        wml.loadSoundFont(data);
+        document.getElementById('soundfont').innerText = file.name;
+        message.style.display = 'none';
+      };
+
+      reader.onloadstart = function(e) {
+        message.style.display = 'block';
+      };
+
+      reader.onprogress = function(e) {
+        if (e.lengthComputable) {
+          var percentLoaded = Math.round((e.loaded / e.total) * 10000);
+          message.innerHTML = '<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="' + percentLoaded + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + percentLoaded + '%;">' + percentLoaded + '%</div></div>';
+        }
+      }
+    }
 /*]]>*/
  </script>
 </body>
