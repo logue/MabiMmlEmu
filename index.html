@@ -1,18 +1,32 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" manifest="mabimmlemu.appcache">
 
 <head>
     <meta charset="UTF-8" />
-    <title>Mabinogi MML Emulator</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。" />
     <meta name="author" content="Masashi Yoshikawa" />
+    <!-- ogp -->
+    <meta property="og:title" content="Mabinogi MML Player for Web" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://logue.github.io/MabiMmlEmu/" />
+    <meta property="og:image" content="https://logue.github.io/MabiMmlEmu/icon.png" />
+    <meta property="og:site_name" content="Logue's Lab" />
+    <meta property="og:description" content="Soundfont2 based Web Mabinogi MML Player written in JavaScript." />
+    <meta property="fb:app_id" content="129144050466298" />
+    <meta property="article:publisher" content="https://www.facebook.com/logue256" />
+    <meta name="twitter:card" content="Summary" />
+    <meta name="twitter:site" content="@logue256" />
+    <meta name="twitter:title" content="Mabinogi MML Player for Web" />
+    <meta name="twitter:url" content="https://logue.github.io/MabiMmlEmu/" />
+    <meta name="twitter:description" content="Soundfont2 based Web Mabinogi MML Player written in JavaScript." />
+    <meta name="twitter:image" content="https://logue.github.io/MabiMmlEmu/icon.png" />
+    <title>Mabinogi MML Emulator</title>
+    <link rel="canonical" href="https://logue.github.io/MabiMmlEmu/">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
         crossorigin="anonymous">
     <style>
-        /*<![CDATA[*/
-
         iframe {
             width: 100%;
             height: 520px;
@@ -20,6 +34,7 @@
         }
 
         /*]]>*/
+    </style>
     </style>
 </head>
 
@@ -31,15 +46,7 @@
     <div class="container">
         <header id="info">
             <h1>Mabinogi MML Emulator for SoundFont</h1>
-            <div class="pull-right">
-                <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://logue.github.io/MabiMmlEmu" data-count="vertical"
-                    data-via="logue256" data-lang="ja">ツイート</a>
-                <div class="g-plusone" data-size="tall" data-href="https://logue.github.io/MabiMmlEmu"></div>
-                <iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Flogue.github.io%2FMabiMmlEmu&amp;width=70&amp;height=65&amp;colorscheme=light&amp;layout=box_count&amp;action=like&amp;show_faces=true&amp;send=true&amp;appId=249014621810580"
-                    scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:70px; height:65px;" allowTransparency="true"></iframe>
-            </div>
-            <p>このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。ほぼ実際のゲーム上の音と同じ音が出ます。 画面上に表示されるMMLをリアルタイムにMIDIファイルに変換し、それをsmfplayer.jsとsf2synth.jsを用いてマビノギの音源を使用して再生しています。
-            </p>
+            <p>このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。ほぼ実際のゲーム上の音と同じ音が出ます。 画面上に表示されるMMLをリアルタイムにMIDIファイルに変換し、それをsmfplayer.jsとsf2synth.jsを用いてマビノギの音源を使用して再生しています。</p>
             <p>
                 <a href="info.html" data-toggle="modal" class="btn btn-primary">詳細解説を見る</a>
                 <a href="jsmml.html" class="btn btn-info">JSMML版へ</a>
@@ -51,7 +58,23 @@
             <section id="mmlPlayer">
                 <div class="card bg-light mb-3">
                     <div class="card-header">
-                        <h2 class="h5">MMLプレイヤー</h2>
+                        <h2 class="h5 float-left">MMLプレイヤー</h2>
+                        <div class="float-right" id="socialbuttons">
+                            <button class="btn btn-secondary btn-lg facebook" title="Facebook">
+                                <i class="fab fa-facebook-square fa-lg"></i>
+                            </button>
+                            <button class="btn btn-secondary btn-lg twitter" title="Twitter">
+                                <i class="fab fa-twitter-square fa-lg"></i>
+                            </button>
+                            <button class="btn btn-secondary btn-lg google-plus" title="Google +">
+                                <i class="fab fa-google-plus-square fa-lg"></i>
+                            </button>
+                            <button class="btn btn-secondary btn-lg line" title="Line">
+                                <i class="fab fa-line fa-lg"></i>
+                            </button>
+                            <!--button class="btn btn-secondary btn-lg hatena"><i class="fas fa-h-square fa-lg"></i></button-->
+                        </div>
+                        <div class="clearfix"></div>
                         <ul class="nav nav-tabs card-header-tabs" id="mmlPlayerTab" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" href="#player" id="player-tab" data-toggle="tab" role="tab" aria-controls="player" aria-selected="true">再生</a>
@@ -317,6 +340,9 @@
     <script src="./js/PSGConverter.js"></script>
     <script src="./js/smf.player.min.js"></script>
     <script src="./js/lzma.js"></script>
+    <!-- misc -->
+    <script src="./js/jquery.socialthings.min.js"></script>
+
     <script type="text/javascript" defer="defer">/*<![CDATA[*/
         // MMLをMIDIに変換するプログラムのオブジェクト
         // 引数のboolean型はGM五感にする場合true、MSXSprit.dlsで鳴らす場合はfalseとすること。
@@ -377,11 +403,11 @@
                     $bar.css('width', (($this.val() / 127) * 100) + '%');
                 });
 
-                $('.inst').each(function(){
+                $('.inst').each(function () {
                     var tabName = '#' + $(this).parent().parent().attr('aria-labelledby') + ' small';
                     $(tabName).text('[' + $(this).children(':selected').text() + ']');
                 });
-                
+
                 // この時点でフォームに全トラックのMMLが流し込まれる
                 // つまり、MMLをMIDIに変換する処理は、MMLを呼び出すたびに、その都度動いているってこと。
                 // でcallback関数で判定している。
@@ -586,7 +612,6 @@
                 $(tabName).text('[' + $(this).children(':selected').text() + ']');
             });
 
-
             setAnchor('');
 
 
@@ -767,6 +792,28 @@
                 }
                 return false;
             });
+
+            var url = $('link[rel="canonical"]').attr('href');
+            // ソーシャルボタン
+            $('#socialbuttons .twitter').twitterShareButton({
+                width: 626,
+                height: 436,
+                name: document.title,
+                url: url,
+                via: 'logue256'
+            });
+            $('#socialbuttons .facebook').click(function () {
+                window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url) + '&t=' +
+                    encodeURIComponent(document.title), "Facebook", "width=400,height=400");
+            });
+            $('#socialbuttons .line').click(function () {
+                window.open('http://line.me/R/msg/text/?' + encodeURIComponent(document.title + "\n" + url), "Line",
+                    "width=600,height=600");
+            });
+            $('#socialbuttons .google-plus').click(function () {
+                window.open('https://plus.google.com/share?url=' + encodeURIComponent(url), "Google Plus",
+                    "width=400,height=600");
+            });
             $('*[title]').tooltip();
         });
 
@@ -827,12 +874,6 @@
                 $('#music-progress .progress-bar').css('width', ((player.getPosition() / player.length) * 100) + '%');
             }
         }, 100);
-
-        $.getScript('//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=129144050466298', function () {
-            $('body').append('<div id="fb-root"></div>');
-        });
-        $.getScript('//apis.google.com/js/plusone.js');
-        $.getScript('//platform.twitter.com/widgets.js');
 
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {

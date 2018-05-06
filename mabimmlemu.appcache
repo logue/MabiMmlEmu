@@ -1,7 +1,6 @@
 CACHE MANIFEST
 #version 1
 
-./sf/MSXspirit.sf2
 ./js/waapisim.min.js
 ./js/waapisim.swf
 ./js/lzma.js
