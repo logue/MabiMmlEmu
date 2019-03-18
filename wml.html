@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="robots" content="noindex" />
   <title>Web Midi Link</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-    crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <style type="text/css">
     /*<![CDATA[*/
 
@@ -53,11 +53,11 @@
     }
 
     .channel {
-      /*justify-content: space-between;
+      justify-content: space-between;
     }
 
     .hold {
-      color:#dc3545;
+      color: #dc3545;
     }
 
     .channel:nth-child(2n) {
@@ -211,6 +211,7 @@
       .keys>.tone {
         width: 7px;
       }
+
       .keys>.semitone {
         width: 5px;
         left: 3px;
@@ -219,6 +220,7 @@
     }
 
     @media(max-width: 991.98px) {
+
       .panpot,
       .pitchBend {
         width: 3.5rem;
@@ -227,13 +229,16 @@
     }
 
     @media(max-width: 767.98px) {
+
       .panpot,
       .pitchBend {
         width: 2rem;
       }
+
       .keys>.tone {
         width: 5px;
       }
+
       .keys>.semitone {
         width: 3px;
         left: 3px;
@@ -245,6 +250,7 @@
       .keys>.tone {
         width: 3px;
       }
+
       .keys>.semitone {
         width: 2px;
         left: 2px;
@@ -265,13 +271,13 @@
       <p class="float-right">
         By
         <a href="https://logue.be/" target="_blank">Logue</a> /
-        <small>Last Modified: 2018/05/24</small>
+        <small>Last Modified: 2019/03/19</small>
       </p>
     </header>
     <main>
       <div id="message" class="alert alert-warning">Loading...</div>
-      <div class="custom-control custom-checkbox custom-control-inline">
-        <input type="checkbox" class="custom-control-input" id="reverb" checked="checked" />
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" id="reverb" checked="checked">
         <label class="custom-control-label" for="reverb">Reverb</label>
       </div>
       <!--div class="custom-control custom-checkbox custom-control-inline">

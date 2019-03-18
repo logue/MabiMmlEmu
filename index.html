@@ -24,8 +24,8 @@
     <meta name="twitter:image" content="https://logue.github.io/MabiMmlEmu/icon.png" />
     <title>Mabinogi MML Emulator</title>
     <link rel="canonical" href="https://logue.github.io/MabiMmlEmu/">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
         iframe {
             width: 100%;
@@ -40,17 +40,20 @@
 
 <body>
     <a href="//github.com/logue/MabiMmlEmu">
-        <img style="position: absolute; top: 0; right: 0; border: 0;" src="//camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67"
-            alt="Fork me on GitHub" data-canonical-src="//s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" />
+        <img style="position: absolute; top: 0; right: 0; border: 0;"
+            src="//camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67"
+            alt="Fork me on GitHub"
+            data-canonical-src="//s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" />
     </a>
     <div class="container">
         <header id="info">
             <h1>Mabinogi MML Emulator for SoundFont</h1>
-            <p>このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。ほぼ実際のゲーム上の音と同じ音が出ます。 画面上に表示されるMMLをリアルタイムにMIDIファイルに変換し、それをsmfplayer.jsとsf2synth.jsを用いてマビノギの音源を使用して再生しています。</p>
+            <p>このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。ほぼ実際のゲーム上の音と同じ音が出ます。
+                画面上に表示されるMMLをリアルタイムにMIDIファイルに変換し、それをsmfplayer.jsとsf2synth.jsを用いてマビノギの音源を使用して再生しています。</p>
             <p>
                 <a href="info.html" data-toggle="modal" class="btn btn-primary">詳細解説を見る</a>
-                <a href="jsmml.html" class="btn btn-info">JSMML版へ</a>
-                <a href="flmml.html" class="btn btn-info">FLMML版へ</a>
+                <a href="jsmml.html" class="btn btn-info disabled">JSMML版へ</a>
+                <a href="flmml.html" class="btn btn-info disabled">FLMML版へ</a>
                 <a href="//github.com/logue/MabiMmlEmu" class="btn btn-secondary" target="_blank">Githubのページへ</a>
             </p>
         </header>
@@ -77,10 +80,12 @@
                         <div class="clearfix"></div>
                         <ul class="nav nav-tabs card-header-tabs" id="mmlPlayerTab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" href="#player" id="player-tab" data-toggle="tab" role="tab" aria-controls="player" aria-selected="true">再生</a>
+                                <a class="nav-link active" href="#player" id="player-tab" data-toggle="tab" role="tab"
+                                    aria-controls="player" aria-selected="true">再生</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#loader" id="loader-tab" data-toggle="tab" role="tab" aria-controls="loader" aria-selected="false">復元／保存</a>
+                                <a class="nav-link" href="#loader" id="loader-tab" data-toggle="tab" role="tab"
+                                    aria-controls="loader" aria-selected="false">復元／保存</a>
                             </li>
                         </ul>
                     </div>
@@ -89,19 +94,24 @@
                             <div class="tab-pane active" role="tabpanel" id="player" aria-labelledby="player-tab">
                                 <div class="row">
                                     <div class="col-md col-lg-5">
-                                        <button class="btn btn-info btn-lg" value="prev" id="prev" disabled="disabled" title="前の曲へ">
+                                        <button class="btn btn-info btn-lg" value="prev" id="prev" disabled="disabled"
+                                            title="前の曲へ">
                                             <i class="fas fa-chevron-left"></i>
                                         </button>
-                                        <button class="btn btn-primary btn-lg" value="play" id="play" disabled="disabled" title="再生/一時停止">
+                                        <button class="btn btn-primary btn-lg" value="play" id="play"
+                                            disabled="disabled" title="再生/一時停止">
                                             <i class="fas fa-play"></i>
                                         </button>
-                                        <button class="btn btn-danger btn-lg" value="stop" id="stop" disabled="disabled" title="停止">
+                                        <button class="btn btn-danger btn-lg" value="stop" id="stop" disabled="disabled"
+                                            title="停止">
                                             <i class="fas fa-stop"></i>
                                         </button>
-                                        <button class="btn btn-warning btn-lg" value="eject" id="eject" disabled="disabled" title="フォームからMMLデーター読み込み">
+                                        <button class="btn btn-warning btn-lg" value="eject" id="eject"
+                                            disabled="disabled" title="フォームからMMLデーター読み込み">
                                             <i class="fas fa-eject"></i>
                                         </button>
-                                        <button class="btn btn-info btn-lg" value="next" id="next" disabled="disabled" title="次の曲へ">
+                                        <button class="btn btn-info btn-lg" value="next" id="next" disabled="disabled"
+                                            title="次の曲へ">
                                             <i class="fas fa-chevron-right"></i>
                                         </button>
                                         <a class="btn btn-dark btn-lg" value="debug" href="" id="debug">
@@ -114,11 +124,11 @@
                                                 <select id="music" class="form-control" title="楽曲を選ぶと自動再生されます。">
                                                     <option>音源データーを読み込んでいます…。しばらくお待ちください。</option>
                                                 </select>
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-default" id="reload" title="シャッフル">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-secondary" id="reload" title="シャッフル">
                                                         <i class="fas fa-random"></i>
                                                     </button>
-                                                </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -127,18 +137,20 @@
                                     <div class="form-group col-md">
                                         <label>進捗</label>
                                         <div class="progress" id="music-progress">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                                                aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                                         </div>
                                     </div>
                                     <div class="col-md">
                                         <div class="form-group">
                                             <label for="tempo">テンポ：
                                                 <span id="tempo_value" class="badge">1.0</span>倍速</label>
-                                            <div class="input-group">
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-dashboard"></span>
-                                                </span>
-                                                <input id="tempo" type="range" class="form-control input-sm" min="0.1" max="5.0" step="0.1" value="1.0" />
+                                            <div class="d-flex">
+                                                <div class="mr-1">
+                                                    <i class="fas fa-tachometer-alt"></i>
+                                                </div>
+                                                <input id="tempo" type="range" min="0.1" max="5.0" step="0.1"
+                                                    value="1.0" class="custom-range" />
                                             </div>
                                         </div>
                                     </div>
@@ -147,14 +159,15 @@
                                             <label for="volume">マスターボリューム：
                                                 <span id="volume_value" class="badge">0.5</span>
                                             </label>
-                                            <div class="input-group">
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-volume-down"></span>
-                                                </span>
-                                                <input id="volume" type="range" class="form-control input-sm" min="0" max="1" step="0.01" value="0.5" />
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-volume-up"></span>
-                                                </span>
+                                            <div class="d-flex">
+                                                <div class="mr-1">
+                                                    <i class="fas fa-volume-down"></i>
+                                                </div>
+                                                <input id="volume" type="range" min="0" max="1" step="0.01" value="0.5"
+                                                    class="custom-range" />
+                                                <div class="ml-1">
+                                                    <i class="fas fa-volume-up"></i>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -166,11 +179,12 @@
                             </div>
 
                             <div class="tab-pane" role="tabpanel" id="loader" aria-labelledby="loader-tab">
-                                <button id="serialize" class="btn btn-default" title="フォームの内容をサニタイズしLZMAで圧縮して出力">
-                                    <span class="glyphicon glyphicon-floppy-save"></span>シリアライズ</button>
-                                <button id="unserialize" class="btn btn-default" title="LZMA圧縮したデーターを解凍しフォームに復元">
-                                    <span class="glyphicon glyphicon-floppy-open"></span>アンシリアライズ</button>
-                                <textarea id="str" class="form-control" rows="7" placeholder="LZMAデーター。ここのデーターに圧縮されたデーターが表示されます。"></textarea>
+                                <button id="serialize" class="btn btn-secondary" title="フォームの内容をサニタイズしLZMAで圧縮して出力">
+                                    <i class="fas fa-file-import"></i>シリアライズ</button>
+                                <button id="unserialize" class="btn btn-secondary" title="LZMA圧縮したデーターを解凍しフォームに復元">
+                                    <i class="fas fa-file-export"></i>アンシリアライズ</button>
+                                <textarea id="str" class="form-control" rows="7"
+                                    placeholder="LZMAデーター。ここのデーターに圧縮されたデーターが表示されます。"></textarea>
                             </div>
                         </div>
                     </div>
@@ -184,27 +198,32 @@
                             <h2 class="h5">MML</h2>
                             <ul class="nav nav-tabs card-header-tabs" id="trackTab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="#track1" id="track1-tab" data-toggle="tab" role="tab" aria-controls="track1" aria-selected="true">Track 1
+                                    <a class="nav-link active" href="#track1" id="track1-tab" data-toggle="tab"
+                                        role="tab" aria-controls="track1" aria-selected="true">Track 1
                                         <small></small>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#track2" id="track2-tab" data-toggle="tab" role="tab" aria-controls="track2" aria-selected="false">Track 2
+                                    <a class="nav-link" href="#track2" id="track2-tab" data-toggle="tab" role="tab"
+                                        aria-controls="track2" aria-selected="false">Track 2
                                         <small></small>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#track3" id="track3-tab" data-toggle="tab" role="tab" aria-controls="track3" aria-selected="false">Track 3
+                                    <a class="nav-link" href="#track3" id="track3-tab" data-toggle="tab" role="tab"
+                                        aria-controls="track3" aria-selected="false">Track 3
                                         <small></small>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#track4" id="track4-tab" data-toggle="tab" role="tab" aria-controls="track4" aria-selected="false">Track 4
+                                    <a class="nav-link" href="#track4" id="track4-tab" data-toggle="tab" role="tab"
+                                        aria-controls="track4" aria-selected="false">Track 4
                                         <small></small>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#track5" id="track5-tab" data-toggle="tab" role="tab" aria-controls="track5" aria-selected="false">Track 5
+                                    <a class="nav-link" href="#track5" id="track5-tab" data-toggle="tab" role="tab"
+                                        aria-controls="track5" aria-selected="false">Track 5
                                         <small></small>
                                     </a>
                                 </li>
@@ -214,97 +233,127 @@
                             <div class="tab-content" id="trackTabContent">
                                 <div class="tab-pane active" role="tabpanel" id="track1" aria-labelledby="track1-tab">
                                     <div class="form-group row">
-                                        <label for="inst1" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                                        <label for="inst1"
+                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
                                         <select id="inst1" name="inst1" class="form-control col-sm-8 inst"></select>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="pan1" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
-                                        <input type="number" name="pan1" id="pan1" min="0" max="127" value="64" class="pan form-control col-sm-3" />
+                                        <label for="pan1"
+                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
+                                        <input type="number" name="pan1" id="pan1" min="0" max="127" value="64"
+                                            class="pan form-control col-sm-3" />
                                         <div class="col-sm-4">
                                             <div class="progress" id="bar1">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
+                                                <div class="progress-bar" role="progressbar" aria-valuenow="64"
+                                                    aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="mml1">MML</label>
-                                        <textarea id="mml1" name="mml1" class="mml form-control" rows="5" placeholder="MML@...,...,...;" pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                                        <textarea id="mml1" name="mml1" class="mml form-control" rows="5"
+                                            placeholder="MML@...,...,...;"
+                                            pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
                                     </div>
                                 </div>
                                 <div class="tab-pane" role="tabpanel" id="track2" aria-labelledby="track2-tab">
                                     <div class="form-group row">
-                                        <label for="inst2" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                                        <label for="inst2"
+                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
                                         <select id="inst2" name="inst1" class="form-control col-sm-8 inst"></select>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="pan2" class="col-sm-4 col-md-3 col-lg-2  col-form-label">Panpod</label>
-                                        <input type="number" name="pan2" id="pan2" min="0" max="127" value="64" class="pan form-control col-sm-3" />
+                                        <label for="pan2"
+                                            class="col-sm-4 col-md-3 col-lg-2  col-form-label">Panpod</label>
+                                        <input type="number" name="pan2" id="pan2" min="0" max="127" value="64"
+                                            class="pan form-control col-sm-3" />
                                         <div class="col-sm-4">
                                             <div class="progress" id="bar2">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
+                                                <div class="progress-bar" role="progressbar" aria-valuenow="64"
+                                                    aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="mml2">MML</label>
-                                        <textarea id="mml2" name="mml2" class="mml form-control" rows="5" placeholder="MML@...,...,...;" pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                                        <textarea id="mml2" name="mml2" class="mml form-control" rows="5"
+                                            placeholder="MML@...,...,...;"
+                                            pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
                                     </div>
                                 </div>
                                 <div class="tab-pane" role="tabpanel" id="track3" aria-labelledby="track3-tab">
                                     <div class="form-group row">
-                                        <label for="inst3" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                                        <label for="inst3"
+                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
                                         <select id="inst3" name="inst3" class="form-control col-sm-8 inst"></select>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="pan3" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
-                                        <input type="number" name="pan3" id="pan3" min="0" max="127" value="64" class="pan form-control col-sm-3" />
+                                        <label for="pan3"
+                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
+                                        <input type="number" name="pan3" id="pan3" min="0" max="127" value="64"
+                                            class="pan form-control col-sm-3" />
                                         <div class="col-sm-4">
                                             <div class="progress" id="bar3">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
+                                                <div class="progress-bar" role="progressbar" aria-valuenow="64"
+                                                    aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="mml3">MML</label>
-                                        <textarea id="mml3" name="mml3" class="mml form-control" rows="5" placeholder="MML@...,...,...;" pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                                        <textarea id="mml3" name="mml3" class="mml form-control" rows="5"
+                                            placeholder="MML@...,...,...;"
+                                            pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
                                     </div>
                                 </div>
                                 <div class="tab-pane" role="tabpanel" id="track4" aria-labelledby="track4-tab">
                                     <div class="form-group row">
-                                        <label for="inst4" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                                        <label for="inst4"
+                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
                                         <select id="inst4" name="inst4" class="form-control col-sm-8 inst"></select>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="pan4" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
-                                        <input type="number" name="pan4" id="pan4" min="0" max="127" value="64" class="pan form-control col-sm-3" />
+                                        <label for="pan4"
+                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
+                                        <input type="number" name="pan4" id="pan4" min="0" max="127" value="64"
+                                            class="pan form-control col-sm-3" />
                                         <div class="col-sm-4">
                                             <div class="progress" id="bar4">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
+                                                <div class="progress-bar" role="progressbar" aria-valuenow="64"
+                                                    aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="mml4">MML</label>
-                                        <textarea id="mml4" name="mml4" class="mml form-control" rows="5" placeholder="MML@...,...,...;" pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                                        <textarea id="mml4" name="mml4" class="mml form-control" rows="5"
+                                            placeholder="MML@...,...,...;"
+                                            pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
                                     </div>
                                 </div>
                                 <div class="tab-pane" role="tabpanel" id="track5" aria-labelledby="track5-tab">
                                     <div class="form-group row">
-                                        <label for="inst5" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                                        <label for="inst5"
+                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
                                         <select id="inst5" name="inst5" class="form-control col-sm-8 inst"></select>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="pan5" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
-                                        <input type="number" name="pan5" id="pan5" min="0" max="127" value="64" class="pan form-control col-sm-3" />
+                                        <label for="pan5"
+                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
+                                        <input type="number" name="pan5" id="pan5" min="0" max="127" value="64"
+                                            class="pan form-control col-sm-3" />
                                         <div class="col-sm-4">
                                             <div class="progress" id="bar5">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
+                                                <div class="progress-bar" role="progressbar" aria-valuenow="64"
+                                                    aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="mml5">MML</label>
-                                        <textarea id="mml5" name="mml5" class="mml form-control" rows="5" placeholder="MML@...,...,...;" pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                                        <textarea id="mml5" name="mml5" class="mml form-control" rows="5"
+                                            placeholder="MML@...,...,...;"
+                                            pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -321,7 +370,7 @@
 
         <footer>
             <p>
-                <i class="far fa-copyright"></i> 2007-2013,2015,2018 by Logue</p>
+                <i class="far fa-copyright"></i> 2007-2013,2015,2018,2019 by Logue</p>
         </footer>
     </div>
     <!-- /container -->
@@ -329,12 +378,16 @@
     <!-- Le javascript
         ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script defer src="https://use.fontawesome.com/releases/v5.0.12/js/all.js" integrity="sha384-Voup2lBiiyZYkRto2XWqbzxHXwzcm4A5RfdfG6466bu5LqjwwrjXCMBQBLMWh7qR"
+    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
+        integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
         crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <!-- midi.js package -->
     <script src="./js/PSGConverter.js"></script>
