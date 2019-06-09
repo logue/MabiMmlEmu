@@ -2,961 +2,980 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。" />
-    <meta name="author" content="Masashi Yoshikawa" />
-    <!-- ogp -->
-    <meta property="og:title" content="Mabinogi MML Player for Web" />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://logue.github.io/MabiMmlEmu/" />
-    <meta property="og:image" content="https://logue.github.io/MabiMmlEmu/icon.png" />
-    <meta property="og:site_name" content="Logue's Lab" />
-    <meta property="og:description" content="Soundfont2 based Web Mabinogi MML Player written in JavaScript." />
-    <meta property="fb:app_id" content="129144050466298" />
-    <meta property="article:publisher" content="https://www.facebook.com/logue256" />
-    <meta name="twitter:card" content="Summary" />
-    <meta name="twitter:site" content="@logue256" />
-    <meta name="twitter:title" content="Mabinogi MML Player for Web" />
-    <meta name="twitter:url" content="https://logue.github.io/MabiMmlEmu/" />
-    <meta name="twitter:description" content="Soundfont2 based Web Mabinogi MML Player written in JavaScript." />
-    <meta name="twitter:image" content="https://logue.github.io/MabiMmlEmu/icon.png" />
-    <title>Mabinogi MML Emulator</title>
-    <link rel="canonical" href="https://logue.github.io/MabiMmlEmu/">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <style>
-        iframe {
-            width: 100%;
-            height: 520px;
-            border: thin;
-        }
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。" />
+  <meta name="author" content="Masashi Yoshikawa" />
+  <!-- ogp -->
+  <meta property="og:title" content="Mabinogi MML Player for Web" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://logue.github.io/MabiMmlEmu/" />
+  <meta property="og:image" content="https://logue.github.io/MabiMmlEmu/icon.png" />
+  <meta property="og:site_name" content="Logue's Lab" />
+  <meta property="og:description" content="Soundfont2 based Web Mabinogi MML Player written in JavaScript." />
+  <meta property="fb:app_id" content="129144050466298" />
+  <meta property="article:publisher" content="https://www.facebook.com/logue256" />
+  <meta name="twitter:card" content="Summary" />
+  <meta name="twitter:site" content="@logue256" />
+  <meta name="twitter:title" content="Mabinogi MML Player for Web" />
+  <meta name="twitter:url" content="https://logue.github.io/MabiMmlEmu/" />
+  <meta name="twitter:description" content="Soundfont2 based Web Mabinogi MML Player written in JavaScript." />
+  <meta name="twitter:image" content="https://logue.github.io/MabiMmlEmu/icon.png" />
+  <title>Mabinogi MML Emulator</title>
+  <link rel="canonical" href="https://logue.github.io/MabiMmlEmu/">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous" />
+  <!-- Web Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c|Varela+Round&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dseg@0.45.1/css/dseg.css"
+    integrity="sha256-0kP9GjBI5CdeL8PdmthxSmNbvRHsfz5Me/r6FK7UVJ4=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css" />
+  <style>
+    html {
+      position: relative;
+      min-height: 100%;
+    }
 
-        /*]]>*/
-    </style>
-    </style>
+    body {
+      font-family: 'Varela Round', 'Rounded Mplus 1c', sans-serif;
+      margin-bottom: 70px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 680px;
+      border: thin;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 60px;
+      /* Set the fixed height of the footer here */
+      line-height: 60px;
+      /* Vertically center the text there */
+      background-color: #f5f5f5;
+    }
+
+    /*]]>*/
+  </style>
 </head>
 
 <body>
-    <a href="//github.com/logue/MabiMmlEmu">
-        <img style="position: absolute; top: 0; right: 0; border: 0;"
-            src="//camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67"
-            alt="Fork me on GitHub"
-            data-canonical-src="//s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" />
-    </a>
-    <div class="container">
-        <header id="info">
-            <h1>Mabinogi MML Emulator for SoundFont</h1>
-            <p>このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。ほぼ実際のゲーム上の音と同じ音が出ます。
-                画面上に表示されるMMLをリアルタイムにMIDIファイルに変換し、それをsmfplayer.jsとsf2synth.jsを用いてマビノギの音源を使用して再生しています。</p>
-            <p>
-                <a href="info.html" data-toggle="modal" class="btn btn-primary">詳細解説を見る</a>
-                <a href="jsmml.html" class="btn btn-info disabled">JSMML版へ</a>
-                <a href="flmml.html" class="btn btn-info disabled">FLMML版へ</a>
-                <a href="//github.com/logue/MabiMmlEmu" class="btn btn-secondary" target="_blank">Githubのページへ</a>
-            </p>
-        </header>
-        <main>
-            <section id="mmlPlayer">
-                <div class="card bg-light mb-3">
-                    <div class="card-header">
-                        <h2 class="h5 float-left">MMLプレイヤー</h2>
-                        <div class="float-right" id="socialbuttons">
-                            <button class="btn btn-secondary btn-lg facebook" title="Facebook">
-                                <i class="fab fa-facebook-square fa-lg"></i>
-                            </button>
-                            <button class="btn btn-secondary btn-lg twitter" title="Twitter">
-                                <i class="fab fa-twitter-square fa-lg"></i>
-                            </button>
-                            <button class="btn btn-secondary btn-lg google-plus" title="Google +">
-                                <i class="fab fa-google-plus-square fa-lg"></i>
-                            </button>
-                            <button class="btn btn-secondary btn-lg line" title="Line">
-                                <i class="fab fa-line fa-lg"></i>
-                            </button>
-                            <!--button class="btn btn-secondary btn-lg hatena"><i class="fas fa-h-square fa-lg"></i></button-->
-                        </div>
-                        <div class="clearfix"></div>
-                        <ul class="nav nav-tabs card-header-tabs" id="mmlPlayerTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#player" id="player-tab" data-toggle="tab" role="tab"
-                                    aria-controls="player" aria-selected="true">再生</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#loader" id="loader-tab" data-toggle="tab" role="tab"
-                                    aria-controls="loader" aria-selected="false">復元／保存</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-content" id="mmlPlayerTabContent">
-                            <div class="tab-pane active" role="tabpanel" id="player" aria-labelledby="player-tab">
-                                <div class="row">
-                                    <div class="col-md col-lg-5">
-                                        <button class="btn btn-info btn-lg" value="prev" id="prev" disabled="disabled"
-                                            title="前の曲へ">
-                                            <i class="fas fa-chevron-left"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-lg" value="play" id="play"
-                                            disabled="disabled" title="再生/一時停止">
-                                            <i class="fas fa-play"></i>
-                                        </button>
-                                        <button class="btn btn-danger btn-lg" value="stop" id="stop" disabled="disabled"
-                                            title="停止">
-                                            <i class="fas fa-stop"></i>
-                                        </button>
-                                        <button class="btn btn-warning btn-lg" value="eject" id="eject"
-                                            disabled="disabled" title="フォームからMMLデーター読み込み">
-                                            <i class="fas fa-eject"></i>
-                                        </button>
-                                        <button class="btn btn-info btn-lg" value="next" id="next" disabled="disabled"
-                                            title="次の曲へ">
-                                            <i class="fas fa-chevron-right"></i>
-                                        </button>
-                                        <a class="btn btn-dark btn-lg" value="debug" href="" id="debug">
-                                            <i class="fas fa-save"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col-md col-lg-7">
-                                        <div class="form-group has-info">
-                                            <div class="input-group input-group-lg">
-                                                <select id="music" class="form-control" title="楽曲を選ぶと自動再生されます。">
-                                                    <option>音源データーを読み込んでいます…。しばらくお待ちください。</option>
-                                                </select>
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-secondary" id="reload" title="シャッフル">
-                                                        <i class="fas fa-random"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-md">
-                                        <label>進捗</label>
-                                        <div class="progress" id="music-progress">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="0"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md">
-                                        <div class="form-group">
-                                            <label for="tempo">テンポ：
-                                                <span id="tempo_value" class="badge">1.0</span>倍速</label>
-                                            <div class="d-flex">
-                                                <div class="mr-1">
-                                                    <i class="fas fa-tachometer-alt"></i>
-                                                </div>
-                                                <input id="tempo" type="range" min="0.1" max="5.0" step="0.1"
-                                                    value="1.0" class="custom-range" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md">
-                                        <div class="form-group">
-                                            <label for="volume">マスターボリューム：
-                                                <span id="volume_value" class="badge">0.5</span>
-                                            </label>
-                                            <div class="d-flex">
-                                                <div class="mr-1">
-                                                    <i class="fas fa-volume-down"></i>
-                                                </div>
-                                                <input id="volume" type="range" min="0" max="1" step="0.01" value="0.5"
-                                                    class="custom-range" />
-                                                <div class="ml-1">
-                                                    <i class="fas fa-volume-up"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="url">このMMLのアドレス</label>
-                                    <input type="text" id="url" class="form-control" />
-                                </div>
-                            </div>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">MabiMmlEmu</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+      aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-                            <div class="tab-pane" role="tabpanel" id="loader" aria-labelledby="loader-tab">
-                                <button id="serialize" class="btn btn-secondary" title="フォームの内容をサニタイズしLZMAで圧縮して出力">
-                                    <i class="fas fa-file-import"></i>シリアライズ</button>
-                                <button id="unserialize" class="btn btn-secondary" title="LZMA圧縮したデーターを解凍しフォームに復元">
-                                    <i class="fas fa-file-export"></i>アンシリアライズ</button>
-                                <textarea id="str" class="form-control" rows="7"
-                                    placeholder="LZMAデーター。ここのデーターに圧縮されたデーターが表示されます。"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="scores">
-                <form>
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            <h2 class="h5">MML</h2>
-                            <ul class="nav nav-tabs card-header-tabs" id="trackTab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="#track1" id="track1-tab" data-toggle="tab"
-                                        role="tab" aria-controls="track1" aria-selected="true">Track 1
-                                        <small></small>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#track2" id="track2-tab" data-toggle="tab" role="tab"
-                                        aria-controls="track2" aria-selected="false">Track 2
-                                        <small></small>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#track3" id="track3-tab" data-toggle="tab" role="tab"
-                                        aria-controls="track3" aria-selected="false">Track 3
-                                        <small></small>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#track4" id="track4-tab" data-toggle="tab" role="tab"
-                                        aria-controls="track4" aria-selected="false">Track 4
-                                        <small></small>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#track5" id="track5-tab" data-toggle="tab" role="tab"
-                                        aria-controls="track5" aria-selected="false">Track 5
-                                        <small></small>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="card-body">
-                            <div class="tab-content" id="trackTabContent">
-                                <div class="tab-pane active" role="tabpanel" id="track1" aria-labelledby="track1-tab">
-                                    <div class="form-group row">
-                                        <label for="inst1"
-                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
-                                        <select id="inst1" name="inst1" class="form-control col-sm-8 inst"></select>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="pan1"
-                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
-                                        <input type="number" name="pan1" id="pan1" min="0" max="127" value="64"
-                                            class="pan form-control col-sm-3" />
-                                        <div class="col-sm-4">
-                                            <div class="progress" id="bar1">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="64"
-                                                    aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="mml1">MML</label>
-                                        <textarea id="mml1" name="mml1" class="mml form-control" rows="5"
-                                            placeholder="MML@...,...,...;"
-                                            pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" role="tabpanel" id="track2" aria-labelledby="track2-tab">
-                                    <div class="form-group row">
-                                        <label for="inst2"
-                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
-                                        <select id="inst2" name="inst1" class="form-control col-sm-8 inst"></select>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="pan2"
-                                            class="col-sm-4 col-md-3 col-lg-2  col-form-label">Panpod</label>
-                                        <input type="number" name="pan2" id="pan2" min="0" max="127" value="64"
-                                            class="pan form-control col-sm-3" />
-                                        <div class="col-sm-4">
-                                            <div class="progress" id="bar2">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="64"
-                                                    aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="mml2">MML</label>
-                                        <textarea id="mml2" name="mml2" class="mml form-control" rows="5"
-                                            placeholder="MML@...,...,...;"
-                                            pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" role="tabpanel" id="track3" aria-labelledby="track3-tab">
-                                    <div class="form-group row">
-                                        <label for="inst3"
-                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
-                                        <select id="inst3" name="inst3" class="form-control col-sm-8 inst"></select>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="pan3"
-                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
-                                        <input type="number" name="pan3" id="pan3" min="0" max="127" value="64"
-                                            class="pan form-control col-sm-3" />
-                                        <div class="col-sm-4">
-                                            <div class="progress" id="bar3">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="64"
-                                                    aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="mml3">MML</label>
-                                        <textarea id="mml3" name="mml3" class="mml form-control" rows="5"
-                                            placeholder="MML@...,...,...;"
-                                            pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" role="tabpanel" id="track4" aria-labelledby="track4-tab">
-                                    <div class="form-group row">
-                                        <label for="inst4"
-                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
-                                        <select id="inst4" name="inst4" class="form-control col-sm-8 inst"></select>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="pan4"
-                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
-                                        <input type="number" name="pan4" id="pan4" min="0" max="127" value="64"
-                                            class="pan form-control col-sm-3" />
-                                        <div class="col-sm-4">
-                                            <div class="progress" id="bar4">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="64"
-                                                    aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="mml4">MML</label>
-                                        <textarea id="mml4" name="mml4" class="mml form-control" rows="5"
-                                            placeholder="MML@...,...,...;"
-                                            pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" role="tabpanel" id="track5" aria-labelledby="track5-tab">
-                                    <div class="form-group row">
-                                        <label for="inst5"
-                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
-                                        <select id="inst5" name="inst5" class="form-control col-sm-8 inst"></select>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="pan5"
-                                            class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
-                                        <input type="number" name="pan5" id="pan5" min="0" max="127" value="64"
-                                            class="pan form-control col-sm-3" />
-                                        <div class="col-sm-4">
-                                            <div class="progress" id="bar5">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="64"
-                                                    aria-valuemin="0" aria-valuemax="127" style="width: 50%;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="mml5">MML</label>
-                                        <textarea id="mml5" name="mml5" class="mml form-control" rows="5"
-                                            placeholder="MML@...,...,...;"
-                                            pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </section>
-
-            <div class="card card-secondaly">
-                <div class="card-header">Synthesyther</div>
-                <div class="card-body" id="wml"></div>
-            </div>
-        </main>
-
-        <footer>
-            <p>
-                <i class="far fa-copyright"></i> 2007-2013,2015,2018,2019 by Logue</p>
-        </footer>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Sample
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/logue/smfplayer.js/">smfplayer.js</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/logue/sf2synth.js/">sf2synth.js</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/logue/MabiMmlEmu/">MabiMmlEmu</a>
+        </li>
+      </ul>
     </div>
-    <!-- /container -->
+  </nav>
 
-    <!-- Le javascript
+  <main role="main" class="container my-3">
+    <header id="info">
+      <h1>Mabinogi MML Emulator for SoundFont</h1>
+      <p>このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。ほぼ実際のゲーム上の音と同じ音が出ます。
+        画面上に表示されるMMLをリアルタイムにMIDIファイルに変換し、それをsmfplayer.jsとsf2synth.jsを用いてマビノギの音源を使用して再生しています。</p>
+      <p>
+        <a href="info.html" data-toggle="modal" class="btn btn-primary">詳細解説を見る</a>
+        <a href="//github.com/logue/MabiMmlEmu" class="btn btn-secondary" target="_blank">Githubのページへ</a>
+      </p>
+    </header>
+    <section id="mmlPlayer">
+      <div class="card bg-light mb-3">
+        <div class="card-header">
+          <h2 class="h5 float-left">MMLプレイヤー</h2>
+          <div class="float-right" id="socialbuttons">
+            <button class="btn btn-secondary btn-lg facebook" title="Facebook">
+              <i class="fab fa-facebook-square fa-lg"></i>
+            </button>
+            <button class="btn btn-secondary btn-lg twitter" title="Twitter">
+              <i class="fab fa-twitter-square fa-lg"></i>
+            </button>
+            <button class="btn btn-secondary btn-lg line" title="Line">
+              <i class="fab fa-line fa-lg"></i>
+            </button>
+            <!--button class="btn btn-secondary btn-lg hatena"><i class="fas fa-h-square fa-lg"></i></button-->
+          </div>
+          <div class="clearfix"></div>
+          <ul class="nav nav-tabs card-header-tabs" id="mmlPlayerTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" href="#player" id="player-tab" data-toggle="tab" role="tab"
+                aria-controls="player" aria-selected="true">再生</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#loader" id="loader-tab" data-toggle="tab" role="tab" aria-controls="loader"
+                aria-selected="false">復元／保存</a>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <div class="tab-content" id="mmlPlayerTabContent">
+            <div class="tab-pane active" role="tabpanel" id="player" aria-labelledby="player-tab">
+              <div class="row">
+                <div class="col-md col-lg-5">
+                  <button class="btn btn-info btn-lg" value="prev" id="prev" disabled="disabled" title="前の曲へ">
+                    <i class="fas fa-chevron-left"></i>
+                  </button>
+                  <button class="btn btn-primary btn-lg" value="play" id="play" disabled="disabled" title="再生/一時停止">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="btn btn-danger btn-lg" value="stop" id="stop" disabled="disabled" title="停止">
+                    <i class="fas fa-stop"></i>
+                  </button>
+                  <button class="btn btn-warning btn-lg" value="eject" id="eject" disabled="disabled"
+                    title="フォームからMMLデーター読み込み">
+                    <i class="fas fa-eject"></i>
+                  </button>
+                  <button class="btn btn-info btn-lg" value="next" id="next" disabled="disabled" title="次の曲へ">
+                    <i class="fas fa-chevron-right"></i>
+                  </button>
+                  <a class="btn btn-dark btn-lg" value="debug" href="" id="debug">
+                    <i class="fas fa-save"></i>
+                  </a>
+                </div>
+                <div class="col-md col-lg-7">
+                  <div class="form-group has-info">
+                    <div class="input-group input-group-lg">
+                      <select id="music" class="form-control" title="楽曲を選ぶと自動再生されます。">
+                        <option>音源データーを読み込んでいます…。しばらくお待ちください。</option>
+                      </select>
+                      <div class="input-group-append">
+                        <button class="btn btn-secondary" id="reload" title="シャッフル">
+                          <i class="fas fa-random"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md">
+                  <label>進捗</label>
+                  <div class="progress" id="music-progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                      style="width: 0%;"></div>
+                  </div>
+                </div>
+                <div class="col-md">
+                  <div class="form-group">
+                    <label for="tempo">テンポ：
+                      <span id="tempo_value" class="badge">1.0</span>倍速</label>
+                    <div class="d-flex">
+                      <div class="mr-1">
+                        <i class="fas fa-tachometer-alt"></i>
+                      </div>
+                      <input id="tempo" type="range" min="0.1" max="5.0" step="0.1" value="1.0" class="custom-range" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md">
+                  <div class="form-group">
+                    <label for="volume">マスターボリューム：
+                      <span id="volume_value" class="badge">0.5</span>
+                    </label>
+                    <div class="d-flex">
+                      <div class="mr-1">
+                        <i class="fas fa-volume-down"></i>
+                      </div>
+                      <input id="volume" type="range" min="0" max="1" step="0.01" value="0.5" class="custom-range" />
+                      <div class="ml-1">
+                        <i class="fas fa-volume-up"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="url">このMMLのアドレス</label>
+                <input type="text" id="url" class="form-control" />
+              </div>
+            </div>
+
+            <div class="tab-pane" role="tabpanel" id="loader" aria-labelledby="loader-tab">
+              <button id="serialize" class="btn btn-secondary" title="フォームの内容をサニタイズしLZMAで圧縮して出力">
+                <i class="fas fa-file-import"></i>シリアライズ</button>
+              <button id="unserialize" class="btn btn-secondary" title="LZMA圧縮したデーターを解凍しフォームに復元">
+                <i class="fas fa-file-export"></i>アンシリアライズ</button>
+              <textarea id="str" class="form-control" rows="7"
+                placeholder="LZMAデーター。ここのデーターに圧縮されたデーターが表示されます。"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scores">
+      <form>
+        <div class="card mb-3">
+          <div class="card-header">
+            <h2 class="h5">MML</h2>
+            <ul class="nav nav-tabs card-header-tabs" id="trackTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" href="#track1" id="track1-tab" data-toggle="tab" role="tab"
+                  aria-controls="track1" aria-selected="true">Track 1
+                  <small></small>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#track2" id="track2-tab" data-toggle="tab" role="tab" aria-controls="track2"
+                  aria-selected="false">Track 2
+                  <small></small>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#track3" id="track3-tab" data-toggle="tab" role="tab" aria-controls="track3"
+                  aria-selected="false">Track 3
+                  <small></small>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#track4" id="track4-tab" data-toggle="tab" role="tab" aria-controls="track4"
+                  aria-selected="false">Track 4
+                  <small></small>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#track5" id="track5-tab" data-toggle="tab" role="tab" aria-controls="track5"
+                  aria-selected="false">Track 5
+                  <small></small>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body">
+            <div class="tab-content" id="trackTabContent">
+              <div class="tab-pane active" role="tabpanel" id="track1" aria-labelledby="track1-tab">
+                <div class="form-group row">
+                  <label for="inst1" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                  <select id="inst1" name="inst1" class="form-control col-sm-8 inst"></select>
+                </div>
+                <div class="form-group row">
+                  <label for="pan1" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
+                  <input type="number" name="pan1" id="pan1" min="0" max="127" value="64"
+                    class="pan form-control col-sm-3" />
+                  <div class="col-sm-4">
+                    <div class="progress" id="bar1">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
+                        aria-valuemax="127" style="width: 50%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="mml1">MML</label>
+                  <textarea id="mml1" name="mml1" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
+                    pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                </div>
+              </div>
+              <div class="tab-pane" role="tabpanel" id="track2" aria-labelledby="track2-tab">
+                <div class="form-group row">
+                  <label for="inst2" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                  <select id="inst2" name="inst1" class="form-control col-sm-8 inst"></select>
+                </div>
+                <div class="form-group row">
+                  <label for="pan2" class="col-sm-4 col-md-3 col-lg-2  col-form-label">Panpod</label>
+                  <input type="number" name="pan2" id="pan2" min="0" max="127" value="64"
+                    class="pan form-control col-sm-3" />
+                  <div class="col-sm-4">
+                    <div class="progress" id="bar2">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
+                        aria-valuemax="127" style="width: 50%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="mml2">MML</label>
+                  <textarea id="mml2" name="mml2" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
+                    pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                </div>
+              </div>
+              <div class="tab-pane" role="tabpanel" id="track3" aria-labelledby="track3-tab">
+                <div class="form-group row">
+                  <label for="inst3" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                  <select id="inst3" name="inst3" class="form-control col-sm-8 inst"></select>
+                </div>
+                <div class="form-group row">
+                  <label for="pan3" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
+                  <input type="number" name="pan3" id="pan3" min="0" max="127" value="64"
+                    class="pan form-control col-sm-3" />
+                  <div class="col-sm-4">
+                    <div class="progress" id="bar3">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
+                        aria-valuemax="127" style="width: 50%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="mml3">MML</label>
+                  <textarea id="mml3" name="mml3" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
+                    pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                </div>
+              </div>
+              <div class="tab-pane" role="tabpanel" id="track4" aria-labelledby="track4-tab">
+                <div class="form-group row">
+                  <label for="inst4" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                  <select id="inst4" name="inst4" class="form-control col-sm-8 inst"></select>
+                </div>
+                <div class="form-group row">
+                  <label for="pan4" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
+                  <input type="number" name="pan4" id="pan4" min="0" max="127" value="64"
+                    class="pan form-control col-sm-3" />
+                  <div class="col-sm-4">
+                    <div class="progress" id="bar4">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
+                        aria-valuemax="127" style="width: 50%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="mml4">MML</label>
+                  <textarea id="mml4" name="mml4" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
+                    pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                </div>
+              </div>
+              <div class="tab-pane" role="tabpanel" id="track5" aria-labelledby="track5-tab">
+                <div class="form-group row">
+                  <label for="inst5" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                  <select id="inst5" name="inst5" class="form-control col-sm-8 inst"></select>
+                </div>
+                <div class="form-group row">
+                  <label for="pan5" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
+                  <input type="number" name="pan5" id="pan5" min="0" max="127" value="64"
+                    class="pan form-control col-sm-3" />
+                  <div class="col-sm-4">
+                    <div class="progress" id="bar5">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
+                        aria-valuemax="127" style="width: 50%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="mml5">MML</label>
+                  <textarea id="mml5" name="mml5" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
+                    pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <div class="card card-secondaly">
+      <div class="card-header">Synthesyther</div>
+      <div class="card-body" id="wml"></div>
+    </div>
+  </main>
+
+  <footer>
+    <address class="container mb-0">
+      <i class="far fa-copyright"></i> 2007-2013,2015,2018,2019 by Logue</address>
+  </footer>
+  </div>
+  <!-- /container -->
+
+  <!-- Le javascript
         ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
-        integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
-        crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-    <!-- midi.js package -->
-    <script src="./js/PSGConverter.js"></script>
-    <script src="./js/smf.player.min.js"></script>
-    <script src="./js/lzma.js"></script>
-    <!-- misc -->
-    <script src="./js/jquery.socialthings.min.js"></script>
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
+    integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <!-- midi.js package -->
+  <script src="./js/PSGConverter.js"></script>
+  <script src="./js/smf.player.min.js"></script>
+  <script src="./js/lzma.js"></script>
+  <!-- misc -->
+  <script src="./js/jquery.socialthings.min.js"></script>
 
-    <script type="text/javascript" defer="defer">/*<![CDATA[*/
-        // MMLをMIDIに変換するプログラムのオブジェクト
-        // 引数のboolean型はGM五感にする場合true、MSXSprit.dlsで鳴らす場合はfalseとすること。
-        var mmlObj = new PSGConverter(false);
-        // SMF Playerのセットアップ
-        var player = new SMF.Player();
-        // 再生中フラグ
-        var isPlay = false;
-        // 読み込み済みフラグ
-        var isLoaded = false;
-        // 再生ボタン
-        var $play = $('#play');
-        // インターバル用再生時間
-        var past_position = 0;
+  <script type="text/javascript" defer="defer">/*<![CDATA[*/
+    // MMLをMIDIに変換するプログラムのオブジェクト
+    // 引数のboolean型はGM五感にする場合true、MSXSprit.dlsで鳴らす場合はfalseとすること。
+    var mmlObj = new PSGConverter(false);
+    // SMF Playerのセットアップ
+    var player = new SMF.Player();
+    // 再生中フラグ
+    var isPlay = false;
+    // 読み込み済みフラグ
+    var isLoaded = false;
+    // 再生ボタン
+    var $play = $('#play');
+    // インターバル用再生時間
+    var past_position = 0;
 
-        /**
-         * LZMA圧縮のMMLデーターを展開
-         * @param string lzmastr 圧縮データー
-         * @param function callback コールバック
-         */
-        var lzma = new LZMA("./js/lzma_worker.min.js");
-        // mmlデータ（music.jsonは）フォームに入力された値をjqueryでstringfy化したものを圧縮している
-        // つまり、トラック関係のフォームをGETメソッドで送信したときのURLパラメータを、そのまま圧縮しているだけに過ぎない。
-        // この値は、「シリアライズ」ボタンで一応取得できる。しかし、結局だれにもわからなかったようである。
-        function lzma2mml(lzmastr, callback) {
-            lzma.decompress(eval('[' + lzmastr + ']'), function (result) {
-                // 解凍後のデータは、チャンネルごとのフォームをgetで送ったときのString型
-                // フォーム名に配列を使ってないので変な処理になっている。
-                var str = decodeURI(result);
-                var pairs = str.split('&');
-                var obj = {}, p, idx, val;
+    /**
+     * LZMA圧縮のMMLデーターを展開
+     * @param string lzmastr 圧縮データー
+     * @param function callback コールバック
+     */
+    var lzma = new LZMA("./js/lzma_worker.min.js");
+    // mmlデータ（music.jsonは）フォームに入力された値をjqueryでstringfy化したものを圧縮している
+    // つまり、トラック関係のフォームをGETメソッドで送信したときのURLパラメータを、そのまま圧縮しているだけに過ぎない。
+    // この値は、「シリアライズ」ボタンで一応取得できる。しかし、結局だれにもわからなかったようである。
+    function lzma2mml(lzmastr, callback) {
+      lzma.decompress(eval('[' + lzmastr + ']'), function (result) {
+        // 解凍後のデータは、チャンネルごとのフォームをgetで送ったときのString型
+        // フォーム名に配列を使ってないので変な処理になっている。
+        var str = decodeURI(result);
+        var pairs = str.split('&');
+        var obj = {}, p, idx, val;
 
-                for (var i = 0, n = pairs.length; i < n; i++) {
-                    p = pairs[i].split('=');
-                    idx = p[0];
-                    if (idx.indexOf("[]") == (idx.length - 2)) {
-                        // Eh um vetor
-                        var ind = idx.substring(0, idx.length - 2)
-                        if (obj[ind] === undefined) {
-                            obj[ind] = [];
-                        }
-                        obj[ind].push(p[1]);
-                    }
-                    else {
-                        obj[idx] = p[1];
-                    }
-                }
-                // ここから復元処理
-
-                // MMLデータ
-                for (var line in obj) {
-                    $('#' + line).val(decodeURIComponent(obj[line]));
-                }
-                // パンポッド
-                $('.pan').each(function () {
-                    var $this = $(this);
-                    var $bar = $('#' + $this.attr('name').replace('pan', 'bar') + ' .progress-bar');
-                    $bar.css('width', (($this.val() / 127) * 100) + '%');
-                });
-
-                $('.inst').each(function () {
-                    var tabName = '#' + $(this).parent().parent().attr('aria-labelledby') + ' small';
-                    $(tabName).text('[' + $(this).children(':selected').text() + ']');
-                });
-
-                // この時点でフォームに全トラックのMMLが流し込まれる
-                // つまり、MMLをMIDIに変換する処理は、MMLを呼び出すたびに、その都度動いているってこと。
-                // でcallback関数で判定している。
-                // 一見非同期処理を想定しているようで、全然考えていないクソコードである。
-                callback(str);
-            });
-        }
-
-        /**
-         * フォームからPSGConverterに送るMMLを取得
-         */
-        function getMml() {
-            return [
-                { inst: $('#inst1').val(), mml: $('#mml1').val(), pan: $('#pan1').val() },
-                { inst: $('#inst2').val(), mml: $('#mml2').val(), pan: $('#pan2').val() },
-                { inst: $('#inst3').val(), mml: $('#mml3').val(), pan: $('#pan3').val() },
-                { inst: $('#inst4').val(), mml: $('#mml4').val(), pan: $('#pan4').val() },
-                { inst: $('#inst5').val(), mml: $('#mml5').val(), pan: $('#pan5').val() },
-            ];
-        }
-
-        /**
-         * ajaxでMMLデーターを読み込む
-         */
-        var loadData = function (shuffle) {
-            $(':input').attr('disabled', 'disabled');
-            var $music = $('#music');
-            $music.append('<option>MMLデーターセットを読み込んでいます…。</option>');
-            $.ajax({
-                type: "GET",
-                dataType: 'json',
-                url: './music.json',
-                cache: false,
-                success: function (data) {
-                    console.info(data.length, " musics ready.");
-                    if (shuffle) {
-                        // 配列をランダムソートする
-                        // http://raining.bear-life.com/javascript/javascript%E3%81%A7%E9%85%8D%E5%88%97%E3%81%AE%E4%B8%AD%E8%BA%AB%E3%82%92%E3%83%A9%E3%83%B3%E3%83%80%E3%83%A0%E3%81%AB%E4%B8%A6%E3%81%B3%E6%9B%BF%E3%81%88%E3%82%8B
-                        data.sort(
-                            function () {
-                                return Math.random() - 0.5;
-                            }
-                        );
-                    }
-
-                    $('#music option').remove();
-                    // value値には、フォームを初期化する値が入っているがあきらかに冗長だｗ。
-                    $music.append('<option selected="selected" value="93,0,0,1,0,109,0,0,0,0,0,0,0,0,52,-101,-118,-50,29,-90,-87,84,-34,28,67,-37,22,-42,11,6,66,32,-33,31,-88,71,14,58,77,-79,58,-30,50,-105,89,-113,-29,-24,50,-96,81,-20,68,-117,-19,-19,-114,-43,53,-65,-40,-109,-47,72,127,-1,-43,124,64,0">楽曲を選択</option>');
-                    var i = 0;
-                    for (var line in data) {
-                        $music.append('<option value="' + data[i].value + '">' + data[i].name + '</option>');
-                        i++;
-                    }
-                    $(':input').removeAttr('disabled');
-                },
-                error: function (result, e) {
-                    // たぶんJSONのエラー
-                    console.error(result, e);
-                    $(':input').removeAttr('disabled');
-                }
-            });
-        }
-
-        /**
-         * 楽曲を変更
-         */
-        function changeMusic(autoplay) {
-            past_position = 0;
-            player.stop();
-            isPlay = false;
-            $('#play').
-                html('<span class="fas fa-play"></span>').
-                removeClass('btn-success').
-                addClass('btn-primary');
-
-            lzma2mml($('#music').val(), function () {
-                // フォームに流し込まれたMMLデータをMIDIに変換
-                var midi = mmlObj.toString(getMml(), true);
-                $('#debug').attr('href', midi);
-                player.loadMidiFile(convertDataURIToBinary(midi));
-                isLoaded = true;
-                $('#url').val(location.href + '#' + $('#music').val());
-                if (autoplay) {
-                    player.play();
-                } else {
-                    player.stop();
-                }
-            });
-        }
-
-        /**
-         * アンカータグに割り当てる処理
-         */
-        function setAnchor(prefix) {
-            $(prefix + ' a').each(function (elem) {
-                var $this = $(this);    // DOMをキャッシュ
-                var href = $this.attr('href');    // href属性を取得
-
-                // 外部リンク（rel="external"）は新しいウィンドウで開く
-                if ($this.attr('rel') == 'external') {
-                    $this.unbind('click').bind('click', function () {
-                        window.open(href);
-                        return false;
-                    });
-                    // 地球アイコンを追加
-                    $this.prepend('<span class="fa fa-globe"></span>');
-                }
-                /**
-                 * アンカースクロール
-                 * クラスが含まれている場合、Twitter Bootstrapのプラグインで使用する場合があるため、
-                 * data-toggle属性が含まれていない場合に限り実行する（不十分）
-                 */
-                if (href.match('#') && typeof $this.data('toggle') === "undefined") {
-                    $this.unbind('click').bind('click', function () {
-                        var $body;
-                        if ($(window).scrollTop() === 0) {
-                            // Webkit系ブラウザでスクロールが0の時エラーになる問題を1ピクセルスクロールさせることでごまかす
-                            $(window).scrollTop(1);
-                        }
-                        // ブラウザによって、htmlタグ基準かbodyタグ基準かが違うためのおまじない
-                        if ($('html').scrollTop() > 0) {
-                            $body = $('html');
-                        } else if ($('body').scrollTop() > 0) {
-                            $body = $('body');
-                        } else {
-                            return;
-                        }
-                        $body.stop().animate({
-                            // #しか含まれていない場合は、ページのトップ（0）にスクロールさせる
-                            scrollTop: href !== '#' ? $(href).offset().top : 0
-                        }, {
-                                duration: 800
-                            });
-                        return false;
-                    });
-                }
-            });
-        }
-
-        /**
-		 * dataURIをarrayBufferに変換
-		 * @string dataURI
-		 * @return array
-		 * @see https://gist.github.com/borismus/1032746
-		 */
-        var BASE64_MARKER = ';base64,';
-
-        function convertDataURIToBinary(dataURI) {
-            var base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
-            var base64 = dataURI.substring(base64Index);
-            console.log(base64);
-            var raw = window.atob(base64);
-            var rawLength = raw.length;
-            var array = new Uint8Array(new ArrayBuffer(rawLength));
-
-            for (i = 0; i < rawLength; i++) {
-                array[i] = raw.charCodeAt(i);
+        for (var i = 0, n = pairs.length; i < n; i++) {
+          p = pairs[i].split('=');
+          idx = p[0];
+          if (idx.indexOf("[]") == (idx.length - 2)) {
+            // Eh um vetor
+            var ind = idx.substring(0, idx.length - 2)
+            if (obj[ind] === undefined) {
+              obj[ind] = [];
             }
-            return array;
+            obj[ind].push(p[1]);
+          }
+          else {
+            obj[idx] = p[1];
+          }
         }
+        // ここから復元処理
 
-        // インターバル関数用。準備完了フラグ
-        var isReady = false;
-
-        /**
-         * メイン処理
-         */
-        $(document).ready(function () {
-            // フォームを無効化
-            $(':input').attr('disabled', 'disabled');
-
-            // 初期チェック
-            window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext;
-            if (typeof (window.AudioContext) === 'undefined') {
-                var str = 'お使いのブラウザはWeb Audioをサポートしていないため再生できません。最新版のブラウザを使用してください。';
-                if (location.hash !== '') {
-                    str += '<br /><a href="./jsmml.html#' + location.hash + '" class="btn btn-default">JSMML版で再生する</a>（IEはURLの長さ制限で再生できない場合があります）';
-                }
-                $('#info').append('<p class="alert alert-danger">' + str + '</p>');
-
-                $('#music option').remove();
-                $('#music').append('<option>再生できません。</option>');
-                return;
-            }
-
-            if (!location.protocol.match(/^https?\:/)) {
-                $('#info').append('<p class="alert alert-warning">このプログラムはajaxを多用しているため、サーバーを立てないと動きません。</p>');
-                $('#music option').remove();
-                $('#music').append('<option>再生できません。</option>');
-                return;
-            }
-
-            // 楽器名を反映
-            $('.inst').each(function () {
-                var tabName = '#' + $(this).parent().parent().attr('aria-labelledby') + ' small';
-                $(this).empty().on('change', function () {
-                    $(tabName).text('[' + $(this).children(':selected').text() + ']');
-                });
-                for (var key in mmlObj.INSTSUMENTALS) {
-                    $(this).append('<option value="' + key + '"' + (key === 0 ? 'checked="checked"' : '') + '>' + mmlObj.MESSAGES[mmlObj.INSTSUMENTALS[key].name] + '</option>');
-                }
-                $(tabName).text('[' + $(this).children(':selected').text() + ']');
-            });
-
-            setAnchor('');
-
-
-            isReady = true;
-            // smfplayer.jsのセットアップ
-            player.setLoop(false); // Player Loop
-            player.setCC111Loop(false); // CC#111 Loop
-            player.setFalcomLoop(false); // Ys2 Eternal Loop
-            player.setMFiLoop(false); // MFi Loop
-            player.setTempoRate(1.0); // Playback tempo rate
-            player.setMasterVolume(16383 * $('#volume').val()); // Master Volume
-            player.setWebMidiLink('./wml.html', 'wml');    // 音源（くわしくはwml.htmlを開いてくれ）
-
-            // MMLのリロードボタン
-            $('#eject').on('click', function () {
-                // 再生中のMMLを停止
-                player.stop();
-                // ボタンを変更
-                $('#play').
-                    html('<span class="fas fa-play"></span>').
-                    removeClass('btn-success').
-                    addClass('btn-primary');
-                // MMLからMIDIデーターを生成
-                // このMMLのURL
-                lzma.compress($('form').serialize(), 1, function (result) {
-                    $('#url').val(location.href + '#' + result);
-                });
-                // MMLを読み込む
-                //player.loadMidiFile(convertDataURIToBinary(midi));
-                // 再生
-                //player.play();
-
-                alert('読み込みました。');
-            });
-
-            // 楽曲選択メニュー
-            $('#music').on('change', function () {
-                changeMusic(true);
-            });
-
-            // formは無効化
-            $('form').on('submit', function () { return false });
-
-            // パンポッドを編集したときにバーを変化させる
-            $('.pan').each(function () {
-                var $this = $(this);
-                var $bar = $('#' + $this.attr('name').replace('pan', 'bar') + ' .progress-bar');
-                $bar.css('width', (($this.val() / 127) * 100) + '%');
-                $this.on('change', function () {
-                    var $bar = $('#' + $this.attr('name').replace('pan', 'bar') + ' .progress-bar');
-                    $bar.css('width', (($this.val() / 127) * 100) + '%');
-                });
-            });
-
-            // 楽曲バンクをリロード
-            $('#reload').on('click', loadData(true));
-
-            // テンポ設定
-            $('#tempo').on('change', function () {
-                var value = $(this).val();
-                player.setTempoRate(value);
-                $('#tempo_value').text(value);
-            });
-
-            // マスターボリューム
-            $('#volume').on('change', function () {
-                var value = $(this).val();
-                player.setMasterVolume(value * 16383);
-                $('#volume_value').text(value);
-            });
-
-            // デバッグ用
-            // シリアライズ（画面のMMLデーター一式をシリアライズしてlzmaで圧縮）
-            $('#serialize').on('click', function () {
-                lzma.compress($('form').serialize(), 1, function (result) {
-                    $('#str').val(result);
-                });
-            });
-
-            // アンシリアライズ（lzma圧縮されたＭＭＬデーターを画面に展開する
-            $('#unserialize').on('click', function () {
-                lzma2mml($('#str').val(), function () { });
-            });
-
-            // 再生／一時停止ボタン
-            $('#play').on('click', function () {
-                if (player.pause) {            // 停止中
-                    // 再生
-                    player.play();
-                } else {            // 再生中
-                    // 停止
-                    player.stop();
-                }
-            });
-
-            // 前に戻るボタン
-            $('#prev').on('click', function () {
-                // 現在選択中の項目を取得
-                var selected_music = $('#music').prop('selectedIndex');
-                if (selected_music == $('#music option').length) {
-                    // 末尾の場合、最後の曲へ
-                    $('#music').prop('selectedIndex', $('#music option').length);
-                } else {
-                    // 選択されている項目の前の項目を選択
-                    $('#music').prop('selectedIndex', selected_music - 1);
-                }
-                changeMusic(true);
-            });
-
-            // 次に進むボタン
-            $('#next').on('click', function () {
-                var selected_music = $('#music').prop('selectedIndex');
-                if (selected_music == $('#music option').length) {
-                    // 末尾の場合最初に戻る
-                    $('#music').prop('selectedIndex', 1);
-                } else {
-                    // 今選択されてる項目の次の項目を選択
-                    $('#music').prop('selectedIndex', selected_music + 1);
-                }
-                changeMusic(true);
-            });
-
-            // 停止ボタン
-            $('#stop').on('click', function () {
-                player.stop();
-                isPlay = false;
-                changeMusic(false);
-            });
-
-            // URLからMMLを読み込む
-            if (location.hash !== '') {
-                lzma2mml(location.hash.split('#')[1], function () {
-
-                });
-            }
-
-            // モーダルダイアログのDOMを生成。この辺は読まなくていい
-            $('body').append([
-                '<article class="modal fade" id="modal">',
-                '<div class="modal-dialog">',
-                '<div class="modal-content">',
-                '<header class="modal-header">',
-                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="閉じる">&#215;</button>',
-                '<h2 class="modal-title"></h2>',
-                '</header>',
-                '<section class="modal-body"></section>',
-                '<footer class="modal-footer">',
-                '<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>',
-                '</footer>',
-                '</div><!-- /.modal-content -->',
-                '</div><!-- /.modal-dialog -->',
-                '</article><!-- /.modal -->'
-            ].join("\n"));
-
-            // Bootstrapのモーダルダイアログでajaxを通じてHTMLを表示
-            $('[data-toggle="modal"]').click(function (e) {
-                e.preventDefault();
-                var url = $(this).attr('href');
-                if (url.indexOf('#') == 0) {
-                    $(url).modal('open');
-                } else {
-                    $.ajax({
-                        type: "GET",
-                        url: url,
-                        dataType: "xml",
-                        cache: false,
-                        success: function (result) {
-                            $('#modal .modal-header .modal-title').html($(result).find('title').text());
-                            $('#modal .modal-body').html($(result).find('body').children());
-                            $('#modal').modal();
-                            setAnchor('#modal');
-                            $('input:text:visible:first').focus();
-                        },
-                        error: function (result, e) {
-                            console.error(e);
-                        }
-                    });
-                }
-                return false;
-            });
-
-            var url = $('link[rel="canonical"]').attr('href');
-            // ソーシャルボタン
-            $('#socialbuttons .twitter').twitterShareButton({
-                width: 626,
-                height: 436,
-                name: document.title,
-                url: url,
-                via: 'logue256'
-            });
-            $('#socialbuttons .facebook').click(function () {
-                window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url) + '&t=' +
-                    encodeURIComponent(document.title), "Facebook", "width=400,height=400");
-            });
-            $('#socialbuttons .line').click(function () {
-                window.open('http://line.me/R/msg/text/?' + encodeURIComponent(document.title + "\n" + url), "Line",
-                    "width=600,height=600");
-            });
-            $('#socialbuttons .google-plus').click(function () {
-                window.open('https://plus.google.com/share?url=' + encodeURIComponent(url), "Google Plus",
-                    "width=400,height=600");
-            });
-            $('*[title]').tooltip();
+        // MMLデータ
+        for (var line in obj) {
+          $('#' + line).val(decodeURIComponent(obj[line]));
+        }
+        // パンポッド
+        $('.pan').each(function () {
+          var $this = $(this);
+          var $bar = $('#' + $this.attr('name').replace('pan', 'bar') + ' .progress-bar');
+          $bar.css('width', (($this.val() / 127) * 100) + '%');
         });
 
-        /**
-         * IFRAMEから送られてくるwindow.postMessageを監視
-         */
-        $(window).on('message', function (e) {
-            var event = e.originalEvent.data;  // Should work.
-            // WMLがロードされたとき
-            if (event === 'link,ready') {
-                loadData(false);
-            }
-
-            // 曲一覧の現在選択中の項目番号
-            var selected_music = $('#music').prop('selectedIndex');
-            // 曲が終了したとき（ハッシュで外部MMLを読み込んだ場合を除く）
-            if (event === 'endoftrack') {
-                // 曲は終了しても、player.pauseの値が変化しないので、ここで、再生ボタンにする。
-                $play.
-                    html('<span class="fas fa-play"></span>').
-                    removeClass('btn-success').
-                    addClass('btn-primary');
-                if (selected_music !== 0) {
-                    // ループで最初に戻った場合（player.positionがリセットされた場合）
-                    // 次の曲を選択
-                    if (selected_music == $('#music option').length) {
-                        // 末尾の場合最初に戻る
-                        $('#music').prop('selectedIndex', 1);
-                    } else {
-                        $('#music').prop('selectedIndex', selected_music + 1);
-                    }
-                    // 曲を変更
-                    changeMusic(true);
-                }
-            }
+        $('.inst').each(function () {
+          var tabName = '#' + $(this).parent().parent().attr('aria-labelledby') + ' small';
+          $(tabName).text('[' + $(this).children(':selected').text() + ']');
         });
 
-        /**
-         * インターバル関数
-         */
-        setInterval(function () {
-            if (isReady) {
-                // player.pauseの値で再生/一時停止ボタンを変化させる
-                // ただし、smfplayer.jsのバグでplayer.loadMidiFile()が実行された直後、
-                // 再生していない状態でもplayer.pauseの値がtrueになってしまうので、
-                // もう一工夫いる。
-                if (player.pause) {
-                    $play.
-                        html('<span class="fas fa-play"></span>').
-                        removeClass('btn-success').
-                        addClass('btn-primary');
-                } else {
-                    $play.
-                        html('<span class="fas fa-pause"></span>').
-                        removeClass('btn-primary').
-                        addClass('btn-success');
-                }
-                $('#music-progress .progress-bar').css('width', ((player.getPosition() / player.length) * 100) + '%');
-            }
-        }, 100);
+        // この時点でフォームに全トラックのMMLが流し込まれる
+        // つまり、MMLをMIDIに変換する処理は、MMLを呼び出すたびに、その都度動いているってこと。
+        // でcallback関数で判定している。
+        // 一見非同期処理を想定しているようで、全然考えていないクソコードである。
+        callback(str);
+      });
+    }
 
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date(); a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    /**
+     * フォームからPSGConverterに送るMMLを取得
+     */
+    function getMml() {
+      return [
+        { inst: $('#inst1').val(), mml: $('#mml1').val(), pan: $('#pan1').val() },
+        { inst: $('#inst2').val(), mml: $('#mml2').val(), pan: $('#pan2').val() },
+        { inst: $('#inst3').val(), mml: $('#mml3').val(), pan: $('#pan3').val() },
+        { inst: $('#inst4').val(), mml: $('#mml4').val(), pan: $('#pan4').val() },
+        { inst: $('#inst5').val(), mml: $('#mml5').val(), pan: $('#pan5').val() },
+      ];
+    }
 
-        ga('create', 'UA-33600926-1', 'auto');
-        ga('send', 'pageview');
+    /**
+     * ajaxでMMLデーターを読み込む
+     */
+    var loadData = function (shuffle) {
+      $(':input').attr('disabled', 'disabled');
+      var $music = $('#music');
+      $music.append('<option>MMLデーターセットを読み込んでいます…。</option>');
+      $.ajax({
+        type: "GET",
+        dataType: 'json',
+        url: './music.json',
+        cache: false,
+        success: function (data) {
+          console.info(data.length, " musics ready.");
+          if (shuffle) {
+            // 配列をランダムソートする
+            // http://raining.bear-life.com/javascript/javascript%E3%81%A7%E9%85%8D%E5%88%97%E3%81%AE%E4%B8%AD%E8%BA%AB%E3%82%92%E3%83%A9%E3%83%B3%E3%83%80%E3%83%A0%E3%81%AB%E4%B8%A6%E3%81%B3%E6%9B%BF%E3%81%88%E3%82%8B
+            data.sort(
+              function () {
+                return Math.random() - 0.5;
+              }
+            );
+          }
 
-        /**
-         * dataURIをarrayBufferに変換
-         * @string dataURI
-         * @return array
-         * @see https://gist.github.com/borismus/1032746
-         */
-        var BASE64_MARKER = ';base64,';
-        function convertDataURIToBinary(dataURI) {
-            var base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
-            var base64 = dataURI.substring(base64Index);
-            var raw = window.atob(base64);
-            var rawLength = raw.length;
-            var array = new Uint8Array(new ArrayBuffer(rawLength));
-
-            for (i = 0; i < rawLength; i++) {
-                array[i] = raw.charCodeAt(i);
-            }
-            return array;
+          $('#music option').remove();
+          // value値には、フォームを初期化する値が入っているがあきらかに冗長だｗ。
+          $music.append('<option selected="selected" value="93,0,0,1,0,109,0,0,0,0,0,0,0,0,52,-101,-118,-50,29,-90,-87,84,-34,28,67,-37,22,-42,11,6,66,32,-33,31,-88,71,14,58,77,-79,58,-30,50,-105,89,-113,-29,-24,50,-96,81,-20,68,-117,-19,-19,-114,-43,53,-65,-40,-109,-47,72,127,-1,-43,124,64,0">楽曲を選択</option>');
+          var i = 0;
+          for (var line in data) {
+            $music.append('<option value="' + data[i].value + '">' + data[i].name + '</option>');
+            i++;
+          }
+          $(':input').removeAttr('disabled');
+        },
+        error: function (result, e) {
+          // たぶんJSONのエラー
+          console.error(result, e);
+          $(':input').removeAttr('disabled');
         }
+      });
+    }
+
+    /**
+     * 楽曲を変更
+     */
+    function changeMusic(autoplay) {
+      past_position = 0;
+      player.stop();
+      isPlay = false;
+      $('#play').
+        html('<span class="fas fa-play"></span>').
+        removeClass('btn-success').
+        addClass('btn-primary');
+
+      lzma2mml($('#music').val(), function () {
+        // フォームに流し込まれたMMLデータをMIDIに変換
+        var midi = mmlObj.toString(getMml(), true);
+        $('#debug').attr('href', midi);
+        player.loadMidiFile(convertDataURIToBinary(midi));
+        isLoaded = true;
+        $('#url').val(location.href + '#' + $('#music').val());
+        if (autoplay) {
+          player.play();
+        } else {
+          player.stop();
+        }
+      });
+    }
+
+    /**
+     * アンカータグに割り当てる処理
+     */
+    function setAnchor(prefix) {
+      $(prefix + ' a').each(function (elem) {
+        var $this = $(this);    // DOMをキャッシュ
+        var href = $this.attr('href');    // href属性を取得
+
+        // 外部リンク（rel="external"）は新しいウィンドウで開く
+        if ($this.attr('rel') == 'external') {
+          $this.unbind('click').bind('click', function () {
+            window.open(href);
+            return false;
+          });
+          // 地球アイコンを追加
+          $this.prepend('<span class="fa fa-globe"></span>');
+        }
+        /**
+         * アンカースクロール
+         * クラスが含まれている場合、Twitter Bootstrapのプラグインで使用する場合があるため、
+         * data-toggle属性が含まれていない場合に限り実行する（不十分）
+         */
+        if (href.match('#') && typeof $this.data('toggle') === "undefined") {
+          $this.unbind('click').bind('click', function () {
+            var $body;
+            if ($(window).scrollTop() === 0) {
+              // Webkit系ブラウザでスクロールが0の時エラーになる問題を1ピクセルスクロールさせることでごまかす
+              $(window).scrollTop(1);
+            }
+            // ブラウザによって、htmlタグ基準かbodyタグ基準かが違うためのおまじない
+            if ($('html').scrollTop() > 0) {
+              $body = $('html');
+            } else if ($('body').scrollTop() > 0) {
+              $body = $('body');
+            } else {
+              return;
+            }
+            $body.stop().animate({
+              // #しか含まれていない場合は、ページのトップ（0）にスクロールさせる
+              scrollTop: href !== '#' ? $(href).offset().top : 0
+            }, {
+                duration: 800
+              });
+            return false;
+          });
+        }
+      });
+    }
+
+    /**
+ * dataURIをarrayBufferに変換
+ * @string dataURI
+ * @return array
+ * @see https://gist.github.com/borismus/1032746
+ */
+    var BASE64_MARKER = ';base64,';
+
+    function convertDataURIToBinary(dataURI) {
+      var base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
+      var base64 = dataURI.substring(base64Index);
+      console.log(base64);
+      var raw = window.atob(base64);
+      var rawLength = raw.length;
+      var array = new Uint8Array(new ArrayBuffer(rawLength));
+
+      for (i = 0; i < rawLength; i++) {
+        array[i] = raw.charCodeAt(i);
+      }
+      return array;
+    }
+
+    // インターバル関数用。準備完了フラグ
+    var isReady = false;
+
+    /**
+     * メイン処理
+     */
+    $(document).ready(function () {
+      // フォームを無効化
+      $(':input').attr('disabled', 'disabled');
+
+      // 初期チェック
+      window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext;
+      if (typeof (window.AudioContext) === 'undefined') {
+        var str = 'お使いのブラウザはWeb Audioをサポートしていないため再生できません。最新版のブラウザを使用してください。';
+        if (location.hash !== '') {
+          str += '<br /><a href="./jsmml.html#' + location.hash + '" class="btn btn-default">JSMML版で再生する</a>（IEはURLの長さ制限で再生できない場合があります）';
+        }
+        $('#info').append('<p class="alert alert-danger">' + str + '</p>');
+
+        $('#music option').remove();
+        $('#music').append('<option>再生できません。</option>');
+        return;
+      }
+
+      if (!location.protocol.match(/^https?\:/)) {
+        $('#info').append('<p class="alert alert-warning">このプログラムはajaxを多用しているため、サーバーを立てないと動きません。</p>');
+        $('#music option').remove();
+        $('#music').append('<option>再生できません。</option>');
+        return;
+      }
+
+      // 楽器名を反映
+      $('.inst').each(function () {
+        var tabName = '#' + $(this).parent().parent().attr('aria-labelledby') + ' small';
+        $(this).empty().on('change', function () {
+          $(tabName).text('[' + $(this).children(':selected').text() + ']');
+        });
+        for (var key in mmlObj.INSTSUMENTALS) {
+          $(this).append('<option value="' + key + '"' + (key === 0 ? 'checked="checked"' : '') + '>' + mmlObj.MESSAGES[mmlObj.INSTSUMENTALS[key].name] + '</option>');
+        }
+        $(tabName).text('[' + $(this).children(':selected').text() + ']');
+      });
+
+      setAnchor('');
+
+
+      isReady = true;
+      // smfplayer.jsのセットアップ
+      player.setLoop(false); // Player Loop
+      player.setCC111Loop(false); // CC#111 Loop
+      player.setFalcomLoop(false); // Ys2 Eternal Loop
+      player.setMFiLoop(false); // MFi Loop
+      player.setTempoRate(1.0); // Playback tempo rate
+      player.setMasterVolume(16383 * $('#volume').val()); // Master Volume
+      player.setWebMidiLink('./wml.html', 'wml');    // 音源（くわしくはwml.htmlを開いてくれ）
+
+      // MMLのリロードボタン
+      $('#eject').on('click', function () {
+        // 再生中のMMLを停止
+        player.stop();
+        // ボタンを変更
+        $('#play').
+          html('<span class="fas fa-play"></span>').
+          removeClass('btn-success').
+          addClass('btn-primary');
+        // MMLからMIDIデーターを生成
+        // このMMLのURL
+        lzma.compress($('form').serialize(), 1, function (result) {
+          $('#url').val(location.href + '#' + result);
+        });
+        // MMLを読み込む
+        //player.loadMidiFile(convertDataURIToBinary(midi));
+        // 再生
+        //player.play();
+
+        alert('読み込みました。');
+      });
+
+      // 楽曲選択メニュー
+      $('#music').on('change', function () {
+        changeMusic(true);
+      });
+
+      // formは無効化
+      $('form').on('submit', function () { return false });
+
+      // パンポッドを編集したときにバーを変化させる
+      $('.pan').each(function () {
+        var $this = $(this);
+        var $bar = $('#' + $this.attr('name').replace('pan', 'bar') + ' .progress-bar');
+        $bar.css('width', (($this.val() / 127) * 100) + '%');
+        $this.on('change', function () {
+          var $bar = $('#' + $this.attr('name').replace('pan', 'bar') + ' .progress-bar');
+          $bar.css('width', (($this.val() / 127) * 100) + '%');
+        });
+      });
+
+      // 楽曲バンクをリロード
+      $('#reload').on('click', loadData(true));
+
+      // テンポ設定
+      $('#tempo').on('change', function () {
+        var value = $(this).val();
+        player.setTempoRate(value);
+        $('#tempo_value').text(value);
+      });
+
+      // マスターボリューム
+      $('#volume').on('change', function () {
+        var value = $(this).val();
+        player.setMasterVolume(value * 16383);
+        $('#volume_value').text(value);
+      });
+
+      // デバッグ用
+      // シリアライズ（画面のMMLデーター一式をシリアライズしてlzmaで圧縮）
+      $('#serialize').on('click', function () {
+        lzma.compress($('form').serialize(), 1, function (result) {
+          $('#str').val(result);
+        });
+      });
+
+      // アンシリアライズ（lzma圧縮されたＭＭＬデーターを画面に展開する
+      $('#unserialize').on('click', function () {
+        lzma2mml($('#str').val(), function () { });
+      });
+
+      // 再生／一時停止ボタン
+      $('#play').on('click', function () {
+        if (player.pause) {            // 停止中
+          // 再生
+          player.play();
+        } else {            // 再生中
+          // 停止
+          player.stop();
+        }
+      });
+
+      // 前に戻るボタン
+      $('#prev').on('click', function () {
+        // 現在選択中の項目を取得
+        var selected_music = $('#music').prop('selectedIndex');
+        if (selected_music == $('#music option').length) {
+          // 末尾の場合、最後の曲へ
+          $('#music').prop('selectedIndex', $('#music option').length);
+        } else {
+          // 選択されている項目の前の項目を選択
+          $('#music').prop('selectedIndex', selected_music - 1);
+        }
+        changeMusic(true);
+      });
+
+      // 次に進むボタン
+      $('#next').on('click', function () {
+        var selected_music = $('#music').prop('selectedIndex');
+        if (selected_music == $('#music option').length) {
+          // 末尾の場合最初に戻る
+          $('#music').prop('selectedIndex', 1);
+        } else {
+          // 今選択されてる項目の次の項目を選択
+          $('#music').prop('selectedIndex', selected_music + 1);
+        }
+        changeMusic(true);
+      });
+
+      // 停止ボタン
+      $('#stop').on('click', function () {
+        player.stop();
+        isPlay = false;
+        changeMusic(false);
+      });
+
+      // URLからMMLを読み込む
+      if (location.hash !== '') {
+        lzma2mml(location.hash.split('#')[1], function () {
+
+        });
+      }
+
+      // モーダルダイアログのDOMを生成。この辺は読まなくていい
+      $('body').append([
+        '<article class="modal fade" id="modal">',
+        '<div class="modal-dialog">',
+        '<div class="modal-content">',
+        '<header class="modal-header">',
+        '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="閉じる">&#215;</button>',
+        '<h2 class="modal-title"></h2>',
+        '</header>',
+        '<section class="modal-body"></section>',
+        '<footer class="modal-footer">',
+        '<button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>',
+        '</footer>',
+        '</div><!-- /.modal-content -->',
+        '</div><!-- /.modal-dialog -->',
+        '</article><!-- /.modal -->'
+      ].join("\n"));
+
+      // Bootstrapのモーダルダイアログでajaxを通じてHTMLを表示
+      $('[data-toggle="modal"]').click(function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        if (url.indexOf('#') == 0) {
+          $(url).modal('open');
+        } else {
+          $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "xml",
+            cache: false,
+            success: function (result) {
+              $('#modal .modal-header .modal-title').html($(result).find('title').text());
+              $('#modal .modal-body').html($(result).find('body').children());
+              $('#modal').modal();
+              setAnchor('#modal');
+              $('input:text:visible:first').focus();
+            },
+            error: function (result, e) {
+              console.error(e);
+            }
+          });
+        }
+        return false;
+      });
+
+      var url = $('link[rel="canonical"]').attr('href');
+      // ソーシャルボタン
+      $('#socialbuttons .twitter').twitterShareButton({
+        width: 626,
+        height: 436,
+        name: document.title,
+        url: url,
+        via: 'logue256'
+      });
+      $('#socialbuttons .facebook').click(function () {
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url) + '&t=' +
+          encodeURIComponent(document.title), "Facebook", "width=400,height=400");
+      });
+      $('#socialbuttons .line').click(function () {
+        window.open('http://line.me/R/msg/text/?' + encodeURIComponent(document.title + "\n" + url), "Line",
+          "width=600,height=600");
+      });
+      $('#socialbuttons .google-plus').click(function () {
+        window.open('https://plus.google.com/share?url=' + encodeURIComponent(url), "Google Plus",
+          "width=400,height=600");
+      });
+      $('*[title]').tooltip();
+    });
+
+    /**
+     * IFRAMEから送られてくるwindow.postMessageを監視
+     */
+    $(window).on('message', function (e) {
+      var event = e.originalEvent.data;  // Should work.
+      // WMLがロードされたとき
+      if (event === 'link,ready') {
+        loadData(false);
+      }
+
+      // 曲一覧の現在選択中の項目番号
+      var selected_music = $('#music').prop('selectedIndex');
+      // 曲が終了したとき（ハッシュで外部MMLを読み込んだ場合を除く）
+      if (event === 'endoftrack') {
+        // 曲は終了しても、player.pauseの値が変化しないので、ここで、再生ボタンにする。
+        $play.
+          html('<span class="fas fa-play"></span>').
+          removeClass('btn-success').
+          addClass('btn-primary');
+        if (selected_music !== 0) {
+          // ループで最初に戻った場合（player.positionがリセットされた場合）
+          // 次の曲を選択
+          if (selected_music == $('#music option').length) {
+            // 末尾の場合最初に戻る
+            $('#music').prop('selectedIndex', 1);
+          } else {
+            $('#music').prop('selectedIndex', selected_music + 1);
+          }
+          // 曲を変更
+          changeMusic(true);
+        }
+      }
+    });
+
+    /**
+     * インターバル関数
+     */
+    setInterval(function () {
+      if (isReady) {
+        // player.pauseの値で再生/一時停止ボタンを変化させる
+        // ただし、smfplayer.jsのバグでplayer.loadMidiFile()が実行された直後、
+        // 再生していない状態でもplayer.pauseの値がtrueになってしまうので、
+        // もう一工夫いる。
+        if (player.pause) {
+          $play.
+            html('<span class="fas fa-play"></span>').
+            removeClass('btn-success').
+            addClass('btn-primary');
+        } else {
+          $play.
+            html('<span class="fas fa-pause"></span>').
+            removeClass('btn-primary').
+            addClass('btn-success');
+        }
+        $('#music-progress .progress-bar').css('width', ((player.getPosition() / player.length) * 100) + '%');
+      }
+    }, 100);
+
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-33600926-1', 'auto');
+    ga('send', 'pageview');
+
+    /**
+     * dataURIをarrayBufferに変換
+     * @string dataURI
+     * @return array
+     * @see https://gist.github.com/borismus/1032746
+     */
+    var BASE64_MARKER = ';base64,';
+    function convertDataURIToBinary(dataURI) {
+      var base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
+      var base64 = dataURI.substring(base64Index);
+      var raw = window.atob(base64);
+      var rawLength = raw.length;
+      var array = new Uint8Array(new ArrayBuffer(rawLength));
+
+      for (i = 0; i < rawLength; i++) {
+        array[i] = raw.charCodeAt(i);
+      }
+      return array;
+    }
 /*]]>*/</script>
 </body>
 
