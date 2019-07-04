@@ -25,7 +25,7 @@
       <p class="float-right">
         By
         <a href="https://logue.be/" target="_blank">Logue</a> /
-        <small>Last Modified: 2019/06/16</small>
+        <small>Last Modified: 2019/07/04</small>
       </p>
     </header>
     <main>
@@ -54,15 +54,15 @@
     </footer>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/query-string@1.0.1/query-string.min.js"></script>
-  <script type="text/javascript" src="./js/sf2.synth.min.js"></script>
-  <script type="text/javascript" src="./js/waapisim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/g200kg/WAAPISim@master/waapisim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/logue/sf2synth.js@develop/bin/sf2.synth.min.js"></script>
   <script type="text/javascript">
     /*<![CDATA[*/
     const message = document.getElementById('message');
     const qs = queryString.parse(window.location.search);
     var option = {};
     if (qs.ui === 'false') {
-      option.disableDrawSynth = true;
+      option.drawSynth = false;
     }
     const sf = qs.soundfont ? qs.soundfont : 'sf/MSXspirit01.sf2';
     document.getElementById('soundfont').innerText = sf;
