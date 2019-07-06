@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<html lang="ja" class="h-100">
 
 <head>
   <meta charset="UTF-8" />
@@ -49,7 +49,37 @@
 
     body {
       font-family: 'Varela Round', 'Rounded Mplus 1c', sans-serif;
-      margin-bottom: 70px;
+    }
+
+    .percentage {
+      font-family: 'DSEG14-Modern';
+    }
+
+    .control-btn {
+      height: 50px;
+      width: 50px;
+    }
+
+    .Clock-Wrapper {
+      font-family: 'DSEG14-Modern';
+      font-style: italic;
+      position: relative;
+      height: 36px;
+    }
+
+    .Clock-Time-Front {
+      z-index: 100;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .Clock-Time-Background {
+      z-index: 50;
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: rgba(0, 0, 0, 0.1);
     }
 
     iframe {
@@ -58,346 +88,356 @@
       border: thin;
     }
 
-    footer {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 60px;
-      /* Set the fixed height of the footer here */
-      line-height: 60px;
-      /* Vertically center the text there */
-      background-color: #f5f5f5;
-    }
-
     /*]]>*/
   </style>
 </head>
 
-<body>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">MabiMmlEmu</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-      aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+<body class="d-flex flex-column h-100">
+  <header>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">MabiMmlEmu</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+        aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Sample
-            <span class="sr-only">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://github.com/logue/smfplayer.js/">smfplayer.js</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://github.com/logue/sf2synth.js/">sf2synth.js</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://github.com/logue/MabiMmlEmu/">MabiMmlEmu</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <main role="main" class="container my-3">
-    <header id="info">
-      <h1>Mabinogi MML Emulator for SoundFont</h1>
-      <p>このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。ほぼ実際のゲーム上の音と同じ音が出ます。
-        画面上に表示されるMMLをリアルタイムにMIDIファイルに変換し、それをsmfplayer.jsとsf2synth.jsを用いてマビノギの音源を使用して再生しています。</p>
-      <p>
-        <a href="info.html" data-toggle="modal" class="btn btn-primary">詳細解説を見る</a>
-        <a href="//github.com/logue/MabiMmlEmu" class="btn btn-secondary" target="_blank">Githubのページへ</a>
-      </p>
-    </header>
-    <section id="mmlPlayer">
-      <div class="card bg-light mb-3">
-        <div class="card-header">
-          <h2 class="h5 float-left">MMLプレイヤー</h2>
-          <div class="float-right" id="socialbuttons">
-            <button class="btn btn-secondary btn-lg facebook" title="Facebook">
-              <i class="fab fa-facebook-square fa-lg"></i>
-            </button>
-            <button class="btn btn-secondary btn-lg twitter" title="Twitter">
-              <i class="fab fa-twitter-square fa-lg"></i>
-            </button>
-            <button class="btn btn-secondary btn-lg line" title="Line">
-              <i class="fab fa-line fa-lg"></i>
-            </button>
-            <!--button class="btn btn-secondary btn-lg hatena"><i class="fas fa-h-square fa-lg"></i></button-->
-          </div>
-          <div class="clearfix"></div>
-          <ul class="nav nav-tabs card-header-tabs" id="mmlPlayerTab" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" href="#player" id="player-tab" data-toggle="tab" role="tab"
-                aria-controls="player" aria-selected="true">再生</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#loader" id="loader-tab" data-toggle="tab" role="tab" aria-controls="loader"
-                aria-selected="false">復元／保存</a>
-            </li>
-          </ul>
-        </div>
-        <div class="card-body">
-          <div class="tab-content" id="mmlPlayerTabContent">
-            <div class="tab-pane active" role="tabpanel" id="player" aria-labelledby="player-tab">
-              <div class="row">
-                <div class="col-md col-lg-5">
-                  <button class="btn btn-info btn-lg" value="prev" id="prev" disabled="disabled" title="前の曲へ">
-                    <i class="fas fa-chevron-left"></i>
-                  </button>
-                  <button class="btn btn-primary btn-lg" value="play" id="play" disabled="disabled" title="再生/一時停止">
-                    <i class="fas fa-play"></i>
-                  </button>
-                  <button class="btn btn-danger btn-lg" value="stop" id="stop" disabled="disabled" title="停止">
-                    <i class="fas fa-stop"></i>
-                  </button>
-                  <button class="btn btn-warning btn-lg" value="eject" id="eject" disabled="disabled"
-                    title="フォームからMMLデーター読み込み">
-                    <i class="fas fa-eject"></i>
-                  </button>
-                  <button class="btn btn-info btn-lg" value="next" id="next" disabled="disabled" title="次の曲へ">
-                    <i class="fas fa-chevron-right"></i>
-                  </button>
-                  <a class="btn btn-dark btn-lg" value="debug" href="" id="debug">
-                    <i class="fas fa-save"></i>
-                  </a>
-                </div>
-                <div class="col-md col-lg-7">
-                  <div class="form-group has-info">
-                    <div class="input-group input-group-lg">
-                      <select id="music" class="form-control" title="楽曲を選ぶと自動再生されます。">
-                        <option>音源データーを読み込んでいます…。しばらくお待ちください。</option>
-                      </select>
-                      <div class="input-group-append">
-                        <button class="btn btn-secondary" id="reload" title="シャッフル">
-                          <i class="fas fa-random"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="form-group col-md">
-                  <label>進捗</label>
-                  <div class="progress" id="music-progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
-                      style="width: 0%;"></div>
-                  </div>
-                </div>
-                <div class="col-md">
-                  <div class="form-group">
-                    <label for="tempo">テンポ：
-                      <span id="tempo_value" class="badge">1.0</span>倍速</label>
-                    <div class="d-flex">
-                      <div class="mr-1">
-                        <i class="fas fa-tachometer-alt"></i>
-                      </div>
-                      <input id="tempo" type="range" min="0.1" max="5.0" step="0.1" value="1.0" class="custom-range" />
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md">
-                  <div class="form-group">
-                    <label for="volume">マスターボリューム：
-                      <span id="volume_value" class="badge">0.5</span>
-                    </label>
-                    <div class="d-flex">
-                      <div class="mr-1">
-                        <i class="fas fa-volume-down"></i>
-                      </div>
-                      <input id="volume" type="range" min="0" max="1" step="0.01" value="0.5" class="custom-range" />
-                      <div class="ml-1">
-                        <i class="fas fa-volume-up"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="url">このMMLのアドレス</label>
-                <input type="text" id="url" class="form-control" />
-              </div>
-            </div>
-
-            <div class="tab-pane" role="tabpanel" id="loader" aria-labelledby="loader-tab">
-              <button id="serialize" class="btn btn-secondary" title="フォームの内容をサニタイズしLZMAで圧縮して出力">
-                <i class="fas fa-file-import"></i>シリアライズ</button>
-              <button id="unserialize" class="btn btn-secondary" title="LZMA圧縮したデーターを解凍しフォームに復元">
-                <i class="fas fa-file-export"></i>アンシリアライズ</button>
-              <textarea id="str" class="form-control" rows="7"
-                placeholder="LZMAデーター。ここのデーターに圧縮されたデーターが表示されます。"></textarea>
-            </div>
-          </div>
-        </div>
+      <div class="collapse navbar-collapse d-flex" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">SoundFont Version
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="flmml.html">FLMML Version
+            </a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/logue/smfplayer.js/">smfplayer.js</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/logue/sf2synth.js/">sf2synth.js</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/logue/Reverb.js/">Reverb.js</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/logue/MabiMmlEmu/">MabiMmlEmu</a>
+          </li>
+        </ul>
       </div>
-    </section>
+    </nav>
+  </header>
 
-    <section id="scores">
-      <form>
-        <div class="card mb-3">
+  <main role="main" class="flex-shrink-0 mt-2">
+    <div class="container">
+      <section id="info">
+        <h1>Mabinogi MML Emulator (SoundFont Version)</h1>
+        <p>このプログラムは、Nexon社のオンラインゲーム「マビノギ」の演奏スキルで再生されるMMLをWeb上で再現したMMLエミュレーターです。ほぼ実際のゲーム上の音と同じ音が出ます。
+          画面上に表示されるMMLをリアルタイムにMIDIファイルに変換し、それをsmfplayer.jsとsf2synth.jsを用いてマビノギの音源を使用して再生しています。</p>
+        <p>
+          <a href="info.html" data-toggle="modal" class="btn btn-primary">Infomation (Japanese only)</a>
+        </p>
+      </section>
+      <section id="mmlPlayer">
+        <div class="card bg-light mb-3">
           <div class="card-header">
-            <h2 class="h5">MML</h2>
-            <ul class="nav nav-tabs card-header-tabs" id="trackTab" role="tablist">
+            <h2 class="h5 float-left">MML Player</h2>
+            <div class="float-right" id="socialbuttons">
+              <button class="btn btn-secondary btn-lg facebook" title="Facebook">
+                <i class="fab fa-facebook-square fa-lg"></i>
+              </button>
+              <button class="btn btn-secondary btn-lg twitter" title="Twitter">
+                <i class="fab fa-twitter-square fa-lg"></i>
+              </button>
+              <button class="btn btn-secondary btn-lg line" title="Line">
+                <i class="fab fa-line fa-lg"></i>
+              </button>
+              <!--button class="btn btn-secondary btn-lg hatena"><i class="fas fa-h-square fa-lg"></i></button-->
+            </div>
+            <div class="clearfix"></div>
+            <ul class="nav nav-tabs card-header-tabs" id="mmlPlayerTab" role="tablist">
               <li class="nav-item">
-                <a class="nav-link active" href="#track1" id="track1-tab" data-toggle="tab" role="tab"
-                  aria-controls="track1" aria-selected="true">Track 1
-                  <small></small>
-                </a>
+                <a class="nav-link active" href="#player" id="player-tab" data-toggle="tab" role="tab"
+                  aria-controls="player" aria-selected="true">Play</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#track2" id="track2-tab" data-toggle="tab" role="tab" aria-controls="track2"
-                  aria-selected="false">Track 2
-                  <small></small>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#track3" id="track3-tab" data-toggle="tab" role="tab" aria-controls="track3"
-                  aria-selected="false">Track 3
-                  <small></small>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#track4" id="track4-tab" data-toggle="tab" role="tab" aria-controls="track4"
-                  aria-selected="false">Track 4
-                  <small></small>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#track5" id="track5-tab" data-toggle="tab" role="tab" aria-controls="track5"
-                  aria-selected="false">Track 5
-                  <small></small>
-                </a>
+                <a class="nav-link" href="#loader" id="loader-tab" data-toggle="tab" role="tab" aria-controls="loader"
+                  aria-selected="false">Save</a>
               </li>
             </ul>
           </div>
           <div class="card-body">
-            <div class="tab-content" id="trackTabContent">
-              <div class="tab-pane active" role="tabpanel" id="track1" aria-labelledby="track1-tab">
-                <div class="form-group row">
-                  <label for="inst1" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
-                  <select id="inst1" name="inst1" class="form-control col-sm-8 inst"></select>
+            <div class="tab-content" id="mmlPlayerTabContent">
+              <div class="tab-pane active" role="tabpanel" id="player" aria-labelledby="player-tab">
+                <div class="d-sm-flex align-items-center">
+                  <div>
+                    <button class="btn btn-info btn-lg" value="prev" id="prev" disabled="disabled" title="Previous">
+                      <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="btn btn-primary btn-lg" value="play" id="play" disabled="disabled"
+                      title="Play / Pause">
+                      <i class="fas fa-play"></i>
+                    </button>
+                    <button class="btn btn-danger btn-lg" value="stop" id="stop" disabled="disabled" title="Stop">
+                      <i class="fas fa-stop"></i>
+                    </button>
+                    <button class="btn btn-warning btn-lg" value="eject" id="eject" disabled="disabled"
+                      title="Load from form">
+                      <i class="fas fa-eject"></i>
+                    </button>
+                    <button class="btn btn-info btn-lg" value="next" id="next" disabled="disabled" title="Next">
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <a class="btn btn-dark btn-lg" value="debug" href="" id="debug">
+                      <i class="fas fa-save"></i>
+                    </a>
+                  </div>
+                  <!-- time -->
+                  <div class="flex-grow-1 ml-sm-3 my-3">
+                    <!--div class="Clock-Wrapper">
+                      <span class="Clock-Time-Background h4">
+                        ~:~~:~~ / ~:~~:~~
+                      </span>
+                      <span id="clock" class="Clock-Time-Front h4">
+                      <span id="time-now">0:00:00</span>
+                      /
+                      <span id="time-total">0:00:00</span>
+                      </span>
+                    </div-->
+                    <div class="progress" id="music-progress">
+                      <div class="progress-bar percentage" role="progressbar" style="width:0%;" aria-valuemin="0"
+                        aria-valuemin="0" aria-valuemax="100">0%</div>
+                    </div>
+                  </div>
                 </div>
-                <div class="form-group row">
-                  <label for="pan1" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
-                  <input type="number" name="pan1" id="pan1" min="0" max="127" value="64"
-                    class="pan form-control col-sm-3" />
-                  <div class="col-sm-4">
-                    <div class="progress" id="bar1">
-                      <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
-                        aria-valuemax="127" style="width: 50%;"></div>
+                <div class="form-group mt-sm-2">
+                  <div class="input-group input-group">
+                    <select id="music" class="form-control" title="Music Selector">
+                      <option>Now loading MMLs.</option>
+                    </select>
+                    <div class="input-group-append">
+                      <button class="btn btn-secondary" id="reload" title="Shuffle">
+                        <i class="fas fa-random"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md">
+                    <div class="form-group">
+                      <label for="tempo">Tempo
+                        <span id="tempo_value" class="badge">1.0</span></label>
+                      <div class="d-flex">
+                        <div class="mr-1">
+                          <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <input id="tempo" type="range" min="0.1" max="5.0" step="0.1" value="1.0"
+                          class="custom-range" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md">
+                    <div class="form-group">
+                      <label for="volume">Volume:
+                        <span id="volume_value" class="badge">0.5</span>
+                      </label>
+                      <div class="d-flex">
+                        <div class="mr-1">
+                          <i class="fas fa-volume-down"></i>
+                        </div>
+                        <input id="volume" type="range" min="0" max="1" step="0.01" value="0.5" class="custom-range" />
+                        <div class="ml-1">
+                          <i class="fas fa-volume-up"></i>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="mml1">MML</label>
-                  <textarea id="mml1" name="mml1" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
-                    pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                  <label for="url">URL to this MML</label>
+                  <input type="text" id="url" class="form-control" />
                 </div>
               </div>
-              <div class="tab-pane" role="tabpanel" id="track2" aria-labelledby="track2-tab">
-                <div class="form-group row">
-                  <label for="inst2" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
-                  <select id="inst2" name="inst1" class="form-control col-sm-8 inst"></select>
-                </div>
-                <div class="form-group row">
-                  <label for="pan2" class="col-sm-4 col-md-3 col-lg-2  col-form-label">Panpod</label>
-                  <input type="number" name="pan2" id="pan2" min="0" max="127" value="64"
-                    class="pan form-control col-sm-3" />
-                  <div class="col-sm-4">
-                    <div class="progress" id="bar2">
-                      <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
-                        aria-valuemax="127" style="width: 50%;"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="mml2">MML</label>
-                  <textarea id="mml2" name="mml2" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
-                    pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
-                </div>
-              </div>
-              <div class="tab-pane" role="tabpanel" id="track3" aria-labelledby="track3-tab">
-                <div class="form-group row">
-                  <label for="inst3" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
-                  <select id="inst3" name="inst3" class="form-control col-sm-8 inst"></select>
-                </div>
-                <div class="form-group row">
-                  <label for="pan3" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
-                  <input type="number" name="pan3" id="pan3" min="0" max="127" value="64"
-                    class="pan form-control col-sm-3" />
-                  <div class="col-sm-4">
-                    <div class="progress" id="bar3">
-                      <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
-                        aria-valuemax="127" style="width: 50%;"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="mml3">MML</label>
-                  <textarea id="mml3" name="mml3" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
-                    pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
-                </div>
-              </div>
-              <div class="tab-pane" role="tabpanel" id="track4" aria-labelledby="track4-tab">
-                <div class="form-group row">
-                  <label for="inst4" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
-                  <select id="inst4" name="inst4" class="form-control col-sm-8 inst"></select>
-                </div>
-                <div class="form-group row">
-                  <label for="pan4" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
-                  <input type="number" name="pan4" id="pan4" min="0" max="127" value="64"
-                    class="pan form-control col-sm-3" />
-                  <div class="col-sm-4">
-                    <div class="progress" id="bar4">
-                      <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
-                        aria-valuemax="127" style="width: 50%;"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="mml4">MML</label>
-                  <textarea id="mml4" name="mml4" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
-                    pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
-                </div>
-              </div>
-              <div class="tab-pane" role="tabpanel" id="track5" aria-labelledby="track5-tab">
-                <div class="form-group row">
-                  <label for="inst5" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
-                  <select id="inst5" name="inst5" class="form-control col-sm-8 inst"></select>
-                </div>
-                <div class="form-group row">
-                  <label for="pan5" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
-                  <input type="number" name="pan5" id="pan5" min="0" max="127" value="64"
-                    class="pan form-control col-sm-3" />
-                  <div class="col-sm-4">
-                    <div class="progress" id="bar5">
-                      <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
-                        aria-valuemax="127" style="width: 50%;"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="mml5">MML</label>
-                  <textarea id="mml5" name="mml5" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
-                    pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
-                </div>
+
+              <div class="tab-pane" role="tabpanel" id="loader" aria-labelledby="loader-tab">
+                <button id="serialize" class="btn btn-secondary" title="Save MML to serialized data.">
+                  <i class="fas fa-file-import"></i>Serialize</button>
+                <button id="unserialize" class="btn btn-secondary" title="Load MML from serialized data.">
+                  <i class="fas fa-file-export"></i>Unserialize</button>
+                <textarea id="str" class="form-control" rows="7" placeholder="Serialized data"></textarea>
               </div>
             </div>
           </div>
         </div>
-      </form>
-    </section>
+      </section>
 
-    <div class="card card-secondaly">
-      <div class="card-header">Synthesyther</div>
-      <div class="card-body p-0" id="wml"></div>
+      <section id="scores">
+        <form>
+          <div class="card mb-3">
+            <div class="card-header">
+              <h2 class="h5">MML</h2>
+              <ul class="nav nav-tabs card-header-tabs" id="trackTab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#track1" id="track1-tab" data-toggle="tab" role="tab"
+                    aria-controls="track1" aria-selected="true">Track 1
+                    <small></small>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#track2" id="track2-tab" data-toggle="tab" role="tab" aria-controls="track2"
+                    aria-selected="false">Track 2
+                    <small></small>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#track3" id="track3-tab" data-toggle="tab" role="tab" aria-controls="track3"
+                    aria-selected="false">Track 3
+                    <small></small>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#track4" id="track4-tab" data-toggle="tab" role="tab" aria-controls="track4"
+                    aria-selected="false">Track 4
+                    <small></small>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#track5" id="track5-tab" data-toggle="tab" role="tab" aria-controls="track5"
+                    aria-selected="false">Track 5
+                    <small></small>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="card-body">
+              <div class="tab-content" id="trackTabContent">
+                <div class="tab-pane active" role="tabpanel" id="track1" aria-labelledby="track1-tab">
+                  <div class="form-group row">
+                    <label for="inst1" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                    <select id="inst1" name="inst1" class="form-control col-sm-8 inst"></select>
+                  </div>
+                  <div class="form-group row">
+                    <label for="pan1" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
+                    <input type="number" name="pan1" id="pan1" min="0" max="127" value="64"
+                      class="pan form-control col-sm-3" />
+                    <div class="col-sm-4">
+                      <div class="progress" id="bar1">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
+                          aria-valuemax="127" style="width: 50%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="mml1">MML</label>
+                    <textarea id="mml1" name="mml1" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
+                      pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                  </div>
+                </div>
+                <div class="tab-pane" role="tabpanel" id="track2" aria-labelledby="track2-tab">
+                  <div class="form-group row">
+                    <label for="inst2" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                    <select id="inst2" name="inst1" class="form-control col-sm-8 inst"></select>
+                  </div>
+                  <div class="form-group row">
+                    <label for="pan2" class="col-sm-4 col-md-3 col-lg-2  col-form-label">Panpod</label>
+                    <input type="number" name="pan2" id="pan2" min="0" max="127" value="64"
+                      class="pan form-control col-sm-3" />
+                    <div class="col-sm-4">
+                      <div class="progress" id="bar2">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
+                          aria-valuemax="127" style="width: 50%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="mml2">MML</label>
+                    <textarea id="mml2" name="mml2" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
+                      pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                  </div>
+                </div>
+                <div class="tab-pane" role="tabpanel" id="track3" aria-labelledby="track3-tab">
+                  <div class="form-group row">
+                    <label for="inst3" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                    <select id="inst3" name="inst3" class="form-control col-sm-8 inst"></select>
+                  </div>
+                  <div class="form-group row">
+                    <label for="pan3" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
+                    <input type="number" name="pan3" id="pan3" min="0" max="127" value="64"
+                      class="pan form-control col-sm-3" />
+                    <div class="col-sm-4">
+                      <div class="progress" id="bar3">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
+                          aria-valuemax="127" style="width: 50%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="mml3">MML</label>
+                    <textarea id="mml3" name="mml3" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
+                      pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                  </div>
+                </div>
+                <div class="tab-pane" role="tabpanel" id="track4" aria-labelledby="track4-tab">
+                  <div class="form-group row">
+                    <label for="inst4" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                    <select id="inst4" name="inst4" class="form-control col-sm-8 inst"></select>
+                  </div>
+                  <div class="form-group row">
+                    <label for="pan4" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
+                    <input type="number" name="pan4" id="pan4" min="0" max="127" value="64"
+                      class="pan form-control col-sm-3" />
+                    <div class="col-sm-4">
+                      <div class="progress" id="bar4">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
+                          aria-valuemax="127" style="width: 50%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="mml4">MML</label>
+                    <textarea id="mml4" name="mml4" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
+                      pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                  </div>
+                </div>
+                <div class="tab-pane" role="tabpanel" id="track5" aria-labelledby="track5-tab">
+                  <div class="form-group row">
+                    <label for="inst5" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Instrument</label>
+                    <select id="inst5" name="inst5" class="form-control col-sm-8 inst"></select>
+                  </div>
+                  <div class="form-group row">
+                    <label for="pan5" class="col-sm-4 col-md-3 col-lg-2 col-form-label">Panpod</label>
+                    <input type="number" name="pan5" id="pan5" min="0" max="127" value="64"
+                      class="pan form-control col-sm-3" />
+                    <div class="col-sm-4">
+                      <div class="progress" id="bar5">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="64" aria-valuemin="0"
+                          aria-valuemax="127" style="width: 50%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="mml5">MML</label>
+                    <textarea id="mml5" name="mml5" class="mml form-control" rows="5" placeholder="MML@...,...,...;"
+                      pattern="^MML\@([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?,([0-9A-GLNORTV#<>.&+-]*)?;$"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <div class="card card-secondaly">
+        <div class="card-header">Synthesyther</div>
+        <div class="card-body p-0" id="wml"></div>
+      </div>
     </div>
   </main>
 
-  <footer>
+  <footer class="footer mt-auto py-3 mb-0 bg-light">
     <address class="container mb-0">
       <i class="far fa-copyright"></i> 2007-2013,2015,2018,2019 by Logue</address>
   </footer>
@@ -418,7 +458,6 @@
   <!-- midi.js package -->
   <script src="https://cdn.jsdelivr.net/gh/logue/smfplayer.js/bin/smf.player.min.js"></script>
   <script src="./js/PSGConverter.js"></script>
-
 
   <script type="text/javascript" defer="defer">/*<![CDATA[*/
     // MMLをMIDIに変換するプログラムのオブジェクト
