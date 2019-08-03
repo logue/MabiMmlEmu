@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
+  <meta charset="UTF-8" />
   <meta name="robots" content="noindex" />
   <title>Web Midi Link</title>
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -64,14 +65,14 @@
     if (qs.ui === 'false') {
       option.drawSynth = false;
     }
-    const sf = qs.soundfont ? qs.soundfont : 'MSXspirit.sf2';
+    const sf = qs.soundfont ? qs.soundfont : 'https://logue.be/mabinogi/mml/MSXspirit.sf2';
     document.getElementById('soundfont').innerText = sf;
     option.placeholder = 'placeholder';
     const wml = new SoundFont.WebMidiLink(option);
     wml.setLoadCallback(function () {
       message.style.display = 'none';
     });
-    wml.setup('https://media.githubusercontent.com/media/logue/MabiMmlEmu/gh-pages/sf/' + sf);
+    wml.setup(sf);
 
     // Load sound font
     const handleSoundFont = (file) => {
