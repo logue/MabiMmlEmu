@@ -3,7 +3,7 @@ import SMF from '@logue/smfplayer';
 import $ from 'jquery/dist/jquery.slim';
 import { Tab } from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Zlib } from 'zlibjs/bin/unzip.min';
+import * as Zlib from 'zlibjs/bin/unzip.min';
 import Encoding from 'encoding-japanese';
 
 // インターバル関数用。準備完了フラグ
