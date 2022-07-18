@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "mabinogi-mml-player",
+  "version": "3.0.0-alpha1",
+  "description": "Mabinogi MML Web Player",
+  "keywords": [
+    "Mabinogi",
+    "MML",
+    "music-macro-language",
+    "midi",
+    "webplayer",
+    "smfplayer"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Logue",
+    "email": "logue@hotmail.co.jp",
+    "url": "https://logue.dev/"
+  },
+  "homepage": "https://github.com/logue/MabiMmlEmu",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:logue/MabiMmlEmu.git"
+  },
+  "bugs": {
+    "url": "https://github.com/logue/MabiMmlEmu/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=16.16.0",
+    "yarn": ">=1.22.4"
+  },
+  "packageManager": "yarn@3.2.1",
+  "sideEffects": false,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:clean": "rimraf dist",
+    "lint": "eslint . --fix --cache --cache-location ./node_modules/.vite/vite-plugin-eslint && prettier . --write",
+    "preview": "vite preview",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "eslint": "^8.19.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-import-resolver-typescript": "^3.2.6",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsdoc": "^39.3.3",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-tsdoc": "^0.2.16",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "vite": "^3.0.0",
+    "vite-plugin-banner": "^0.3.0",
+    "vite-plugin-checker": "^0.4.9"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.vue": "vue-tsc --noEmit",
+    "*.{js,ts,json,yml,yaml,vue,htm,html}": "eslint --fix --cache --cache-location ./node_modules/.vite/vite-plugin-eslint",
+    "*.{css,sass,scss,vue,htm,html}": "stylelint --fix --cache --cache-location ./node_modules/.vite/vite-plugin-stylelint",
+    "*": "prettier -w -u"
+  },
+  "resolutions": {
+    "prettier": "^2.7.1"
+  },
+  "dependencies": {
+    "@logue/sf2synth": "^0.4.1",
+    "@logue/smfplayer": "^0.4.0",
+    "@popperjs/core": "^2.11.5",
+    "bootstrap": "5.2.0-beta1",
+    "bootstrap-icons": "^1.9.1",
+    "encoding-japanese": "^2.0.0",
+    "jquery": "^3.6.0",
+    "querystring": "^0.2.1",
+    "zlibjs": "^0.3.1"
+  }
+}
