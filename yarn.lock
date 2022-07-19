@@ -2180,7 +2180,6 @@ __metadata:
     vite: ^3.0.2
     vite-plugin-banner: ^0.3.0
     vite-plugin-checker: ^0.4.9
-    zlibjs: ^0.3.1
   languageName: unknown
   linkType: soft
 
@@ -3515,12 +3514,5 @@ __metadata:
   version: 2.1.1
   resolution: "yaml@npm:2.1.1"
   checksum: f48bb209918aa57cfaf78ef6448d1a1f8187f45c746f933268b7023dc59e5456004611879126c9bb5ea55b0a2b1c2b392dfde436931ece0c703a3d754562bb96
-  languageName: node
-  linkType: hard
-
-"zlibjs@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "zlibjs@npm:0.3.1"
-  checksum: 91f3d28bb5925ac71565a1fd4d44303b6b876ed483c9c192864393811151b399f29d917c9118a5aca5a541d9dfc7c199460f86b489ea1f77b7217e0edc887c89
   languageName: node
   linkType: hard
