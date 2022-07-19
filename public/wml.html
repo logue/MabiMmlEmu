@@ -59,8 +59,10 @@
       crossorigin="anonymous"
     ></script>
     <script type="text/javascript">
-      const sf = 'MSXspirit.sf2';
-      document.getElementById('soundfont').innerText = sf;
+      const sf =
+        'https://media.githubusercontent.com/media/logue/MabiMmlEmu/master/MSXspirit.sf2';
+      // const sf = 'MSXspirit.sf2';
+      document.getElementById('soundfont').innerText = 'MSXspirit.sf2';
 
       const wml = new SoundFont.WebMidiLink();
       document.getElementById('build').innerText = wml.build;
