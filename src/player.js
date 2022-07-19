@@ -3,7 +3,6 @@ import SMF from '@logue/smfplayer';
 import $ from 'jquery/dist/jquery.slim';
 import { Tab } from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Zlib from 'zlibjs/bin/unzip.min';
 import Encoding from 'encoding-japanese';
 
 // インターバル関数用。準備完了フラグ
@@ -247,11 +246,11 @@ function handleFile(file) {
   reader.onload = e => {
     const input = new Uint8Array(e.target.result);
     handleInput(file.name, input);
-    $('#info p').text = 'Ready.';
-    info.classList.removeClass('alert-warning').addClass('alert-success');
+    info.innerHtml = 'Ready.';
+    info.classList.remove('alert-warning').add('alert-success');
   };
   reader.onloadstart = () =>
-    info.classList.removeClass('alert-success').addClass('alert-warning');
+    info.classList.remove('alert-success').add('alert-warning');
 
   reader.onprogress = e => {
     if (e.lengthComputable) {
@@ -277,9 +276,10 @@ function loadSample(zipfile) {
     const select = document.getElementById('files');
     while (select.firstChild) select.removeChild(select.firstChild);
 
-    // Zipファイルからファイル名一覧を取得
-    select.zip = new Zlib.Zlib.Unzip(input);
-    const filenames = select.zip.getFilenames().sort();
+    // Zipファイルを展開
+    // eslint-disable-next-line no-undef
+    select.zip = new Zlib.Unzip(input);
+
     // console.log(filenames);
 
     $('#info div')
@@ -287,7 +287,9 @@ function loadSample(zipfile) {
       .addClass('progress-info')
       .show();
 
-    // ファイル名一覧をセレクトボックスに流し込む
+    // ファイル名一覧を取得
+    const filenames = select.zip.getFilenames().sort();
+    // セレクトボックスに流し込む
     filenames.forEach((name, i) => {
       const ext = name.slice(name.lastIndexOf('.')).toLowerCase();
       const percentLoaded = Math.round((i / filenames.length) * 10000);
@@ -350,7 +352,8 @@ function loadSample(zipfile) {
           .then(stream => ready(stream))
           .catch(e =>
             console.error(
-              'There has been a problem with your fetch operation: ' + e.message
+              'There has been a problem with your fetch operation: ',
+              e
             )
           );
         // .catch(e => alert('Save to cache. please reselect zip file.'));
@@ -375,22 +378,28 @@ function handleSelect() {
     // ページのタイトルを反映
     let title = document.getElementById('files').value;
     title = title.substr(0, title.lastIndexOf('.'));
-    document.title =
-      title + ' ' + document.getElementById('zips').value + ' / SMF.Player';
+    document.title = `${title} - ${
+      document.getElementById('zips').value
+    } / Mabinogi MML Emulator`;
 
-    const hash =
-      '#zip=' +
-      encodeURIComponent($('#zips').val()) +
-      '&file=' +
-      encodeURIComponent(filename);
-    $('link[rel="canonical"]').attr('href') + hash;
+    const hash = `#zip=${encodeURIComponent(
+      document.getElementById('zips').value
+    )}&file=${encodeURIComponent(filename)}`;
+
+    document
+      .querySelector('link[rel="canonical"]')
+      .setAttribute('href', `${location.href}/${hash}`);
 
     // MIDIファイルに埋め込まれたメタデータを取得
-    $('#music_title').val(
-      Encoding.convert(player.getSequenceName(1), 'UNICODE', 'AUTO')
+    document.getElementById('music_title').value = Encoding.convert(
+      player.getSequenceName(1),
+      'UNICODE',
+      'AUTO'
     );
-    $('#copyright').val(
-      Encoding.convert(player.getCopyright(), 'UNICODE', 'AUTO')
+    document.getElementById('#copyright').value = Encoding.convert(
+      player.getCopyright(),
+      'UNICODE',
+      'AUTO'
     );
 
     // pushstateを使用
@@ -447,7 +456,7 @@ function handleInput(filename, buffer) {
   }
 
   // マスターボリュームが低いままになるので
-  player.setMasterVolume($('#volume').val() * 16383);
+  player.setMasterVolume(document.getElementById('volume').value * 16383);
   // $("#time-total").text(player.getTotalTime());
   // よく分からんが非同期で読み込むらしい
   setTimeout(function () {
@@ -476,7 +485,7 @@ function randomArchive() {
 /**
  * IFRAMEから送られてくるwindow.postMessageを監視
  */
-$(window).on('message', function (e) {
+$(window).on('message', e => {
   const event = e.originalEvent.data; // Should work.
   const selected = $('#music').prop('selectedIndex');
 
@@ -520,7 +529,7 @@ $(window).on('message', function (e) {
       }
       $('#info').addClass('alert-success').removeClass('alert-warning');
       $('#info p').text('Ready.');
-      // $(':input').prop('disabled', false);
+      $(':input').prop('disabled', false);
       break;
   }
 });
@@ -528,7 +537,7 @@ $(window).on('message', function (e) {
 /**
  * インターバル関数
  */
-setInterval(function () {
+setInterval(() => {
   if (isReady) {
     // player.pauseの値で再生/一時停止ボタンを変化させる
     // ただし、smfplayer.jsのバグでplayer.loadMidiFile()が実行された直後、
