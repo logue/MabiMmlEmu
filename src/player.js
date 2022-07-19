@@ -3,7 +3,7 @@ import SMF from '@logue/smfplayer';
 import $ from 'jquery/dist/jquery.slim';
 import { Tab } from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import * as Zlib from 'zlibjs/bin/unzip.min';
+import Zlib from 'zlibjs/bin/unzip.min';
 import Encoding from 'encoding-japanese';
 
 // インターバル関数用。準備完了フラグ
@@ -36,7 +36,7 @@ window.requestFileSystem =
  * メイン処理
  */
 document.addEventListener('DOMContentLoaded', async () => {
-  $(':input').attr('disabled', 'disabled');
+  // $(':input').attr('disabled', 'disabled');
   // AudioContextが使用可能かのチェック
   window.AudioContext =
     window.AudioContext || window.webkitAudioContext || window.mozAudioContext;
@@ -89,6 +89,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const option = document.createElement('option');
     option.innerHTML = Object.keys(k);
     option.value = `${import.meta.env.BASE_URL}mmls/${Object.values(k)}`;
+    if (i === 0) {
+      option.selected = 'selected';
+    }
     zips.appendChild(option);
   });
 
@@ -102,11 +105,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (params.zip && !initialized) {
     // クエリからZipファイルを選択
     zips.value = params.zip;
-    loadSample(params.zip);
   } else {
     randomArchive();
-    loadSample(zips.value);
   }
+  loadSample(zips.value);
 
   // MIDIファイルのドラッグアンドドロップ
   $('#player *')
@@ -238,20 +240,20 @@ ssplayer.setPosition( player.getLength() * progress_bar_percentage);
  * ファイルを読み込む
  */
 function handleFile(file) {
+  const info = document.getElementById('info');
   const reader = new FileReader();
   player.sendGmReset();
 
-  reader.onload = function (e) {
+  reader.onload = e => {
     const input = new Uint8Array(e.target.result);
     handleInput(file.name, input);
     $('#info p').text = 'Ready.';
-    $('#info').removeClass('alert-warning').addClass('alert-success');
+    info.classList.removeClass('alert-warning').addClass('alert-success');
   };
-  reader.onloadstart = function (e) {
-    $('#info').removeClass('alert-success').addClass('alert-warning');
-  };
+  reader.onloadstart = () =>
+    info.classList.removeClass('alert-success').addClass('alert-warning');
 
-  reader.onprogress = function (e) {
+  reader.onprogress = e => {
     if (e.lengthComputable) {
       const percentLoaded = (e.loaded / e.total) | (0 * 100);
       $('#info div div')
@@ -267,7 +269,7 @@ let initialized = false;
  * Zipファイルの内容を取得し、selectタグに割り当てる
  */
 function loadSample(zipfile) {
-  $(':input').attr('disabled', 'disabled');
+  // $(':input').attr('disabled', 'disabled');
   const ready = stream => {
     const input = new Uint8Array(stream);
 
@@ -276,9 +278,8 @@ function loadSample(zipfile) {
     while (select.firstChild) select.removeChild(select.firstChild);
 
     // Zipファイルからファイル名一覧を取得
-    const zip = (select.zip = new Zlib.Unzip(input));
-    console.log(zip);
-    const filenames = zip.getFilenames().sort();
+    select.zip = new Zlib.Zlib.Unzip(input);
+    const filenames = select.zip.getFilenames().sort();
     // console.log(filenames);
 
     $('#info div')
@@ -287,7 +288,7 @@ function loadSample(zipfile) {
       .show();
 
     // ファイル名一覧をセレクトボックスに流し込む
-    filenames.forEach(function (name, i) {
+    filenames.forEach((name, i) => {
       const ext = name.slice(name.lastIndexOf('.')).toLowerCase();
       const percentLoaded = Math.round((i / filenames.length) * 10000);
 
@@ -304,7 +305,7 @@ function loadSample(zipfile) {
       // 項目名
       option.textContent = Encoding.convert(name, 'UNICODE', 'AUTO');
       // 実際のファイル名
-      option.setAttribute('data-midiplayer-filename', name);
+      option.dataset.filename = name;
       // selectタグに流し込む
       select.appendChild(option);
     });
@@ -320,11 +321,11 @@ function loadSample(zipfile) {
     $('#info p').text('Ready.');
     $('#info div').removeClass('progress-info').hide();
     $('#info').removeClass('alert-warning').addClass('alert-success');
-    $(':input').removeAttr('disabled ');
+    // $(':input').removeAttr('disabled ');
 
     if (params.file && !initialized) {
       // クエリにファイル名が含まれている場合、それを選択
-      $('#files').val(params.file);
+      document.getElementById('files').value = params.file;
       handleSelect();
     }
     initialized = true;
@@ -355,7 +356,7 @@ function loadSample(zipfile) {
         // .catch(e => alert('Save to cache. please reselect zip file.'));
       });
   });
-  $(':input').attr('disabled', '');
+  // $(':input').attr('disabled', '');
 }
 /**
  * 選択されたファイルを解凍
@@ -363,7 +364,10 @@ function loadSample(zipfile) {
 function handleSelect() {
   const select = document.getElementById('files');
   const option = select.querySelectorAll('option')[select.selectedIndex];
-  const filename = option.dataset.midiplayerFilename;
+  if (!option) {
+    return;
+  }
+  const filename = option.dataset.filename || undefined;
 
   if (filename) {
     handleInput(filename, select.zip.decompress(filename));
@@ -516,7 +520,7 @@ $(window).on('message', function (e) {
       }
       $('#info').addClass('alert-success').removeClass('alert-warning');
       $('#info p').text('Ready.');
-      $(':input').prop('disabled', false);
+      // $(':input').prop('disabled', false);
       break;
   }
 });
