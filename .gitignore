@@ -4,3 +4,4 @@
 /dist
 !/dist/wml.html
 /src/meta.js
+.env
