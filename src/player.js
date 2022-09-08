@@ -1,9 +1,15 @@
-import queryString from 'querystring';
+import queryString from 'query-string';
 import SMF from '@logue/smfplayer';
-import $ from 'jquery/dist/jquery.slim';
-import { Tab } from 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Tab, Tooltip } from 'bootstrap';
 import Encoding from 'encoding-japanese';
+import streamSaver from 'streamsaver';
+import './styles.scss';
+
+formLock(true);
+
+// Bootstrapのツールチップ
+const tooltipTriggerList = document.querySelectorAll('*[title]');
+[...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
 
 // インターバル関数用。準備完了フラグ
 let isReady = false;
@@ -25,46 +31,39 @@ const availableExts = [
   '.mp2mml',
 ];
 
-// スマフォの場合、軽量版にする上、UIを隠す
-const wml = './wml.html';
-
-window.requestFileSystem =
-  window.requestFileSystem || window.webkitRequestFileSystem;
+const wml = 'wml.html';
 
 /**
  * メイン処理
  */
 document.addEventListener('DOMContentLoaded', async () => {
-  // $(':input').attr('disabled', 'disabled');
-  // AudioContextが使用可能かのチェック
-  window.AudioContext =
-    window.AudioContext || window.webkitAudioContext || window.mozAudioContext;
-  if (typeof window.AudioContext === 'undefined') {
-    $('#info')
-      .addClass('alert-danger')
-      .removeClass('alert-warning')
-      .text(
-        'Your browser has not supported AudioContent function. Please use Firefox or Blink based browser. (such as Chrome)'
-      );
-    return;
-  }
+  const info = document.getElementById('info');
+
   // fileプロトコルは使用不可。（Ajaxを使うため）
   if (location.protocol === 'file:') {
-    $('#info')
-      .addClass('alert-danger')
-      .removeClass('alert-warning')
-      .text('This program require runs by server.');
+    info.classList.add('alert-danger');
+    info.classList.remove('alert-warning');
+    info.innerText = 'This program require runs by server.';
+    return;
+  }
+
+  // AudioContextが使用可能かのチェック
+  if (typeof window.AudioContext === 'undefined') {
+    info.classList.add('alert-danger');
+    info.classList.remove('alert-warning');
+    info.innerText =
+      'Your browser has not supported AudioContent function. Please use Firefox or Blink based browser. (such as Chrome)';
     return;
   }
 
   // smfplayer.jsの初期化
-  player.setLoop($('#playerloop').is(':checked'));
-  player.setTempoRate($('#tempo').val());
-  player.setMasterVolume($('#volume').val() * 16383);
-  // player.setMasterChannel(new TimerMasterChannel(TimerMasterChannel.MODE_DEFAULT));
+  player.setLoop(document.getElementById('playerloop').checked);
+  player.setTempoRate(document.getElementById('tempo').value);
+  player.setMasterVolume(document.getElementById('volume').value * 16383);
   // WebMidiLink設定
   player.setWebMidiLink(wml, 'wml');
 
+  /** @type {HTMLButtonElement[]} */
   const triggerTabList = [].slice.call(
     document.querySelectorAll('#control-tab button')
   );
@@ -80,14 +79,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   /** @type {HTMLSelectElement} */
   const zips = document.getElementById('zips');
 
-  const mmls = await fetch(`${import.meta.env.BASE_URL}mmls/index.json`).then(
+  const mmls = await fetch(`${import.meta.env.BASE_URL}files/index.json`).then(
     response => response.json()
   );
 
   mmls.forEach((k, i) => {
     const option = document.createElement('option');
     option.innerHTML = Object.keys(k);
-    option.value = `${import.meta.env.BASE_URL}mmls/${Object.values(k)}`;
+    option.value = `${import.meta.env.BASE_URL}files/${Object.values(k)}`;
     if (i === 0) {
       option.selected = 'selected';
     }
@@ -97,7 +96,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Zipファイルの取得
   document
     .getElementById('files')
-    .addEventListener('change', e => handleSelect(e.target.value));
+    .addEventListener('change', () => handleSelect());
 
   zips.addEventListener('change', e => loadSample(e.target.value));
 
@@ -109,73 +108,75 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   loadSample(zips.value);
 
+  const playerCard = document.getElementById('player');
   // MIDIファイルのドラッグアンドドロップ
-  $('#player *')
-    .on('drop', e => {
-      if (e.originalEvent.dataTransfer) {
-        if (e.originalEvent.dataTransfer.files.length) {
-          e.preventDefault();
-          e.stopPropagation();
-          handleFile(e.originalEvent.dataTransfer.files[0]);
-        }
+
+  playerCard.addEventListener('drop', e => {
+    if (e.originalEvent.dataTransfer) {
+      if (e.originalEvent.dataTransfer.files.length) {
+        e.preventDefault();
+        e.stopPropagation();
+        handleFile(e.originalEvent.dataTransfer.files[0]);
       }
-      $('#player').removeClass('text-white bg-danger');
-    })
-    .on('dragover', e => {
-      e.preventDefault();
-      e.stopPropagation();
-      $('#player').addClass('text-white bg-danger');
-    })
-    .on('dragleave', e => {
-      e.preventDefault();
-      e.stopPropagation();
-      $('#player').removeClass('text-white bg-danger');
-    });
+    }
+    playerCard.classList.remove('bg-warning');
+  });
+  playerCard.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    playerCard.classList.add('bg-warning');
+  });
+  playerCard.addEventListener('dragleave', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    playerCard.classList.remove('bg-warning');
+  });
 
   // テンポ設定
-  $('#tempo').on('change', e => {
-    const value = $(this).val();
+  document.getElementById('tempo').addEventListener('change', e => {
+    const value = e.target.value;
     player.setTempoRate(value);
-    $('#tempo_value').text(value);
+    document.getElementById('tempo_value').innerText = value;
   });
 
   // マスターボリューム
-  $('#volume').on('change', function () {
-    const value = $(this).val();
-    // console.log(value);
+  document.getElementById('volume').addEventListener('change', e => {
+    const value = e.target.value;
     player.setMasterVolume(value * 16383);
-    $('#volume_value').text(value);
+    document.getElementById('volume_value').innerText = value;
   });
 
   // 前に戻るボタン
-  $('#prev').on('click', function () {
+  document.getElementById('prev').addEventListener('click', () => {
     // 現在選択中の項目を取得
-    const selected = $('#files').prop('selectedIndex');
-    if (selected == $('#files option').length) {
+    const select = document.getElementById('files');
+    const selected = select.selectedIndex;
+    if (selected === select.options.length) {
       // 末尾の場合、最後の曲へ
-      $('#files').prop('selectedIndex', $('#files option').length);
+      select.selectedIndex = select.options.length;
     } else {
       // 選択されている項目の前の項目を選択
-      $('#files').prop('selectedIndex', selected - 1);
+      select.selectedIndex = selected - 1;
     }
-    handleSelect(document.getElementById('files'));
+    handleSelect();
   });
 
   // 次に進むボタン
-  $('#next').on('click', function () {
-    const selected = $('#files').prop('selectedIndex');
-    if (selected == $('#files option').length) {
+  document.getElementById('next').addEventListener('click', () => {
+    const select = document.getElementById('files');
+    const selected = select.selectedIndex;
+    if (selected === select.options.length) {
       // 末尾の場合最初に戻る
-      $('#files').prop('selectedIndex', 0);
+      select.selectedIndex = 0;
     } else {
       // 今選択されてる項目の次の項目を選択
-      $('#files').prop('selectedIndex', selected + 1);
+      select.selectedIndex = selected + 1;
     }
-    handleSelect(document.getElementById('files'));
+    handleSelect();
   });
 
   // 再生／一時停止ボタン
-  $('#play').on('click', () => {
+  document.getElementById('play').addEventListener('click', () => {
     if (player.pause) {
       // 再生
       player.play();
@@ -186,78 +187,97 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // 停止ボタン
-  $('#stop').on('click', () => {
-    handleSelect(document.getElementById('files'));
+  document.getElementById('stop').addEventListener('click', () => {
+    handleSelect();
     // ハッシュを削除
     history.pushState('', document.title, window.location.pathname);
-    setTimeout(function () {
+    setTimeout(() => {
       player.stop();
     }, 51); // よく分からんが非同期で止めるらしい
   });
 
   // パニックボタン
-  $('#panic').on('click', () => {
-    player.sendAllSoundOff();
-  });
+  document
+    .getElementById('panic')
+    .addEventListener('click', () => player.sendAllSoundOff());
+
+  // GMリセットボタン
+  // document
+  //   .getElementById('reset')
+  //   .addEventListener('click', () => player.sendGmReset());
 
   // MIDIファイルのダウンロード
-  $('#download').on('click', () => {
+  document.getElementById('download').addEventListener('click', () => {
     // 選択状態を取得
     const select = document.getElementById('files');
     const option = select.querySelectorAll('option')[select.selectedIndex];
     const filename = option.dataset.midiplayerFilename;
 
-    // arraybufferをbase64に変換
-    let binary = '';
+    /** シーケンスデーター */
     const bytes = new Uint8Array(select.zip.decompress(filename));
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
 
-    // この方法は泥臭い
-    window.location.href = 'data:audio/midi;base64,' + window.btoa(binary);
+    const fileStream = streamSaver.createWriteStream(
+      Encoding.convert(filename, 'UNICODE', 'AUTO'),
+      {
+        size: bytes.byteLength,
+      }
+    );
+
+    const writer = fileStream.getWriter();
+    writer.write(bytes);
+    writer.close();
   });
 
-  $('#synth').on('change', function (e) {
-    player.stop();
-    player.setWebMidiLink($(this).val(), 'wml');
-  });
+  // シンセサイザ変更
+  // document.getElementById('synth').addEventListener('change', e => {
+  //   player.stop();
+  //   player.setWebMidiLink(e.target.value, 'wml');
+  // });
 
-  // $('*[title]').tooltip();
-
-  /*
-// 曲の位置を変更。将来実装予定・・・。
-$('#music-progress').on('click', function(e){
-ssvar progress_bar_percentage = e.offsetX / $(this).width();
-ssplayer.setPosition( player.getLength() * progress_bar_percentage);
-});
-*/
+  formLock(false);
 });
 
 /**
  * ファイルを読み込む
  */
 function handleFile(file) {
+  /** @type {HTMLDivElement} */
   const info = document.getElementById('info');
+  /** @type {HTMLParagraphElement} */
+  const message = document.createElement('p');
+  message.innerText = 'Now Loading...';
+  info.appendChild(message);
+
+  /** @type {HTMLDivElement} */
+  const progressOuter = document.createElement('div');
+  progressOuter.className = 'progress';
+  /** @type {HTMLDivElement} */
+  const progress = document.createElement('div');
+  progress.className = 'progress-bar progress-warning';
+
+  progressOuter.appendChild(progress);
+  info.appendChild(progressOuter);
+
+  /** @type {FileReader} */
   const reader = new FileReader();
   player.sendGmReset();
 
   reader.onload = e => {
     const input = new Uint8Array(e.target.result);
     handleInput(file.name, input);
-    info.innerHtml = 'Ready.';
-    info.classList.remove('alert-warning').add('alert-success');
+    message.innerHtml = 'Ready.';
+    info.classList.remove('alert-warning');
+    info.classList.add('alert-success');
+    info.removeChild(progressOuter);
   };
-  reader.onloadstart = () =>
-    info.classList.remove('alert-success').add('alert-warning');
+  reader.onloadstart = () => info.classList.remove('alert-success');
+  info.classList.add('alert-warning');
 
   reader.onprogress = e => {
     if (e.lengthComputable) {
       const percentLoaded = (e.loaded / e.total) | (0 * 100);
-      $('#info div div')
-        .css('width', percentLoaded + '%')
-        .text(percentLoaded + '%');
+      progress.style.width = percentLoaded + '%';
+      progress.innerText = percentLoaded + ' %';
     }
   };
   reader.readAsArrayBuffer(file);
@@ -266,38 +286,30 @@ let initialized = false;
 
 /**
  * Zipファイルの内容を取得し、selectタグに割り当てる
+ *
+ * @param {Srting} zipfile - Zipファイル名
  */
-function loadSample(zipfile) {
-  // $(':input').attr('disabled', 'disabled');
+async function loadSample(zipfile) {
+  formLock(true);
+
+  /** @type {HTMLSelectElement} ファイルリスト */
+  const select = document.getElementById('files');
+
   const ready = stream => {
     const input = new Uint8Array(stream);
 
     // ファイルリストの子要素を一括削除
-    const select = document.getElementById('files');
     while (select.firstChild) select.removeChild(select.firstChild);
 
     // Zipファイルを展開
     // eslint-disable-next-line no-undef
     select.zip = new Zlib.Unzip(input);
 
-    // console.log(filenames);
-
-    $('#info div')
-      .removeClass('progress-warning')
-      .addClass('progress-info')
-      .show();
-
     // ファイル名一覧を取得
     const filenames = select.zip.getFilenames().sort();
     // セレクトボックスに流し込む
     filenames.forEach((name, i) => {
       const ext = name.slice(name.lastIndexOf('.')).toLowerCase();
-      const percentLoaded = Math.round((i / filenames.length) * 10000);
-
-      $('#info p').text('Parsing zip file...');
-      $('#info div div')
-        .css('width', percentLoaded)
-        .text(percentLoaded + '%');
 
       if (ext === '/' || !availableExts.includes(ext)) {
         return;
@@ -307,7 +319,7 @@ function loadSample(zipfile) {
       // 項目名
       option.textContent = Encoding.convert(name, 'UNICODE', 'AUTO');
       // 実際のファイル名
-      option.dataset.filename = name;
+      option.value = name;
       // selectタグに流し込む
       select.appendChild(option);
     });
@@ -320,83 +332,87 @@ function loadSample(zipfile) {
     }
     select.selectedIndex = next;
 
-    $('#info p').text('Ready.');
-    $('#info div').removeClass('progress-info').hide();
-    $('#info').removeClass('alert-warning').addClass('alert-success');
-    // $(':input').removeAttr('disabled ');
+    formLock(false);
 
     if (params.file && !initialized) {
       // クエリにファイル名が含まれている場合、それを選択
-      document.getElementById('files').value = params.file;
+      select.value = params.file;
       handleSelect();
     }
     initialized = true;
   };
 
-  window.caches.open('zip').then(cache => {
-    cache
-      .match(zipfile)
-      .then(response => response.arrayBuffer())
-      .then(stream => ready(stream))
-      .catch(() => {
-        // キャッシュ処理
-        fetch(zipfile)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok.');
-            }
-            const copy = response.clone();
-            cache.put(zipfile, response);
-            return copy.arrayBuffer();
-          })
-          .then(stream => ready(stream))
-          .catch(e =>
-            console.error(
-              'There has been a problem with your fetch operation: ',
-              e
-            )
-          );
-        // .catch(e => alert('Save to cache. please reselect zip file.'));
-      });
+  /** @type {CacheStorage} */
+  const cache = await window.caches.open('zips');
+  /** @type {Response} */
+  const cached = await cache.match(select.value);
+
+  if (cached) {
+    ready(await cached.arrayBuffer());
+    return;
+  }
+
+  /** @type {Response} キャッシュがない場合Fetchで取得 */
+  const response = await fetch(zipfile, {
+    method: 'GET',
+    mode: 'no-cors',
+    headers: {
+      Accept: 'application/zip',
+      'Access-Control-Allow-Origin': '*',
+      credentials: 'include',
+    },
   });
-  // $(':input').attr('disabled', '');
+  if (!response.ok) {
+    throw new Error('Network response was not ok.');
+  }
+
+  const clonedResponse = response.clone();
+
+  if (cache) {
+    cache.put(zipfile, clonedResponse);
+  }
+  ready(await response.arrayBuffer());
+  formLock(false);
 }
 /**
  * 選択されたファイルを解凍
  */
 function handleSelect() {
+  /** @type {HTMLSelectElement} */
   const select = document.getElementById('files');
-  const option = select.querySelectorAll('option')[select.selectedIndex];
-  if (!option) {
-    return;
-  }
-  const filename = option.dataset.filename || undefined;
+  /** @type {string} */
+  const filename = select.value;
 
   if (filename) {
     handleInput(filename, select.zip.decompress(filename));
 
+    // メタ情報のタイトル
+    const title = Encoding.convert(
+      player.getSequenceName(1),
+      'UNICODE',
+      'AUTO'
+    );
+
     // ページのタイトルを反映
-    let title = document.getElementById('files').value;
-    title = title.substr(0, title.lastIndexOf('.'));
-    document.title = `${title} - ${
+    const file =
+      title === ''
+        ? Encoding.convert(filename, 'UNICODE', 'AUTO').substr(
+            0,
+            title.lastIndexOf('.')
+          )
+        : title;
+
+    document.title = `${file} - ${
       document.getElementById('zips').value
-    } / Mabinogi MML Emulator`;
+    } / Standard MIDI Player`;
 
     const hash = `#zip=${encodeURIComponent(
       document.getElementById('zips').value
     )}&file=${encodeURIComponent(filename)}`;
 
-    document
-      .querySelector('link[rel="canonical"]')
-      .setAttribute('href', `${location.href}/${hash}`);
-
     // MIDIファイルに埋め込まれたメタデータを取得
-    document.getElementById('music_title').value = Encoding.convert(
-      player.getSequenceName(1),
-      'UNICODE',
-      'AUTO'
-    );
-    document.getElementById('#copyright').value = Encoding.convert(
+    document.getElementById('music_title').value = title;
+    document.getElementById('copyright').value = Encoding.convert(
       player.getCopyright(),
       'UNICODE',
       'AUTO'
@@ -407,6 +423,9 @@ function handleSelect() {
       window.history.pushState(document.title, null, hash);
       return false;
     }
+    document
+      .querySelector('link[rel="canonical"]')
+      .setAttribute('href', `${location.href}/${hash}`);
   }
 }
 /**
@@ -424,8 +443,10 @@ function handleInput(filename, buffer) {
   player.sendGmReset();
 
   // テキストを初期化
-  $('#music_title, #copyright, #text_event').val('');
-  document.title = 'Mabinogi MML Emulator';
+  document.getElementById('music_title').value = '';
+  document.getElementById('copyright').value = '';
+  document.getElementById('text_event').value = '';
+  document.title = 'SMF Player';
 
   switch (filename.split('.').pop().toLowerCase()) {
     case 'midi':
@@ -457,11 +478,7 @@ function handleInput(filename, buffer) {
 
   // マスターボリュームが低いままになるので
   player.setMasterVolume(document.getElementById('volume').value * 16383);
-  // $("#time-total").text(player.getTotalTime());
-  // よく分からんが非同期で読み込むらしい
-  setTimeout(function () {
-    player.play();
-  }, 1000);
+  player.play();
 }
 
 /**
@@ -470,7 +487,18 @@ function handleInput(filename, buffer) {
 function randomPlay() {
   const select = document.getElementById('files');
   select.selectedIndex = ~~(select.length * Math.random());
-  handleSelect(select);
+  handleSelect();
+}
+
+/**
+ * フォームのロック／アンロック
+ *
+ * @param {boolean} lock
+ */
+function formLock(lock = true) {
+  document
+    .querySelectorAll('input, button, select')
+    .forEach(e => (e.disabled = lock ? 'disabled' : ''));
 }
 
 /**
@@ -479,101 +507,120 @@ function randomPlay() {
 function randomArchive() {
   const select = document.getElementById('zips');
   select.selectedIndex = ~~(select.length * Math.random());
-  handleSelect(select);
+  handleSelect();
 }
 
 /**
  * IFRAMEから送られてくるwindow.postMessageを監視
  */
-$(window).on('message', e => {
-  const event = e.originalEvent.data; // Should work.
-  const selected = $('#music').prop('selectedIndex');
+window.onmessage = (/** @type {MessageEvent} */ e) => {
+  // console.log(e);
+  const event = e.data; // Should work.
+  const selected = document.getElementById('files').selectedIndex || 0;
+  const playButton = document.getElementById('play');
+  const info = document.getElementById('info');
 
   switch (event) {
     case 'endoftrack':
       // 曲が終了したとき
-      // 曲一覧の現在選択中の項目番号
-
       player.stop();
-
       // 曲は終了しても、player.pauseの値が変化しないので、ここで、再生ボタンにする。
-      $('#play')
-        .html('<em class="bi bi-play-fill"></em>')
-        .removeClass('btn-success')
-        .addClass('btn-primary');
-      if ($('#random').is(':checked')) {
+      playButton.innerHTML = '<em class="bi bi-play-fill"></em>';
+      playButton.classList.add('btn-primary');
+      playButton.classList.remove('btn-success');
+      if (document.getElementById('random').chcked) {
         randomPlay();
       } else {
+        const files = document.getElementById('files');
         if (selected !== 0) {
           // ループで最初に戻った場合（player.positionがリセットされた場合）
           // 次の曲を選択
-          if (selected == $('#files option').length) {
+          if (selected == files.options.length) {
             // 末尾の場合最初に戻る
-            $('#files').prop('selectedIndex', 0);
+            files.selectedIndex = 0;
           } else {
-            $('#files').prop('selectedIndex', selected + 1);
+            files.selectedIndex = selected + 1;
           }
           // 曲を変更
-          handleSelect(document.getElementById('files'));
+          handleSelect();
         }
       }
       break;
     case 'progress':
-      $('#info p').text('Loading soundfont...');
+      info.innerText = 'Loading soundfont...';
       break;
     case 'link,ready':
       // WMLが読み込まれた時
       isReady = true;
-      if (document.querySelector('#random').checked) {
-        handleSelect(document.querySelector('#files'));
+      if (document.getElementById('random').checked) {
+        handleSelect();
       }
-      $('#info').addClass('alert-success').removeClass('alert-warning');
-      $('#info p').text('Ready.');
-      $(':input').prop('disabled', false);
+      info.classList.add('alert-success');
+      info.classList.remove('alert-warning');
+      info.innerText = 'Ready.';
+      document
+        .querySelectorAll('input, button, select')
+        .forEach(e => (e.disabled = ''));
       break;
   }
-});
+};
 
+let parentTextEvent = '';
 /**
  * インターバル関数
  */
 setInterval(() => {
+  const progressBar = document
+    .getElementById('music-progress')
+    .querySelector('.progress-bar');
+
+  const playButton = document.getElementById('play');
+
   if (isReady) {
     // player.pauseの値で再生/一時停止ボタンを変化させる
     // ただし、smfplayer.jsのバグでplayer.loadMidiFile()が実行された直後、
     // 再生していない状態でもplayer.pauseの値がtrueになってしまうので、
     // もう一工夫いる。
     if (player.pause) {
-      $('#play')
-        .html('<em class="bi bi-play-fill"></em>')
-        .removeClass('btn-success')
-        .addClass('btn-primary');
+      playButton.innerHTML = '<em class="bi bi-play"></em>';
+      playButton.classList.remove('btn-success');
+      playButton.classList.add('btn-primary');
     } else {
-      $('#play')
-        .html('<wm class="bi bi-pause-fill"></em>')
-        .removeClass('btn-primary')
-        .addClass('btn-success');
+      playButton.innerHTML = '<em class="bi bi-pause"></em>';
+      playButton.classList.remove('btn-primary');
+      playButton.classList.add('btn-success');
     }
     const percentage = ((player.getPosition() / player.getLength()) * 100) | 0;
-    $('#music-progress .progress-bar')
-      .css('width', percentage + '%')
-      .text(percentage + '%');
-    $('#time-now').text(player.getTime());
-    $('#time-total').text(player.getTotalTime());
-    $('#current-tempo').text(player.getTempo());
+    progressBar.style.width = percentage + '%';
+    progressBar.innerText = percentage + '%';
+
+    document.getElementById('time-now').innerText = player.getTime();
+    document.getElementById('time-total').innerText = player.getTotalTime();
+    document.getElementById('current-tempo').innerText = player.getTempo();
+
+    if (parentTextEvent !== player.getTextEvent()) {
+      document.getElementById('text_event').value = Encoding.convert(
+        player.getTextEvent(),
+        'UNICODE',
+        'AUTO'
+      );
+    }
+
+    parentTextEvent = player.getTextEvent();
 
     if (percentage === 100) {
       // 次の曲
-      player.sendGmReset();
-      const selected = $('#files').prop('selectedIndex');
-      if (selected == $('#files option').length) {
+
+      /** @type {HTMLSelectElement} */
+      const files = document.getElementById('files');
+      if (files.selectedIndex == files.options.length) {
         // 末尾の場合最初に戻る
-        $('#files').prop('selectedIndex', 0);
+        files.selectedIndex = 0;
       } else {
         // 今選択されてる項目の次の項目を選択
-        $('#files').prop('selectedIndex', selected + 1);
+        files.selectedIndex = files.selectedIndex + 1;
       }
       handleSelect();
     }
   }
-}, 100);
+}, 600);

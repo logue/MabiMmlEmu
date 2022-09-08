@@ -1,11 +1,28 @@
 import { defineConfig } from 'vite';
-import checker from 'vite-plugin-checker';
+import { checker } from 'vite-plugin-checker';
 import banner from 'vite-plugin-banner';
+import path from 'path';
+
 const pkg = require('./package.json');
 
-// https://vitejs.dev/config/
+/**
+ * @see {@link https://vitejs.dev/config/}
+ * @type {import('vite').UserConfig}
+ */
 const config = {
   base: './',
+  // Resolver
+  resolve: {
+    // https://vitejs.dev/config/shared-options.html#resolve-alias
+    alias: {
+      '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
+      '~bootstrap-icons': path.resolve(
+        __dirname,
+        'node_modules/bootstrap-icons'
+      ),
+      '~dseg': path.resolve(__dirname, 'node_modules/dseg'),
+    },
+  },
   // https://vitejs.dev/config/#server-options
   server: {
     fs: {
@@ -30,7 +47,7 @@ const config = {
  *
  * @description ${pkg.description}
  * @author ${pkg.author.name} <${pkg.author.email}>
- * @copyright 2007-2013,2015,2018,2019,2022 By Masashi Yoshikawa All rights reserved.
+ * @copyright 2007-2013, 2015, 2018, 2019, 2022 By Masashi Yoshikawa All rights reserved.
  * @license ${pkg.license}
  * @version ${pkg.version}
  * @see {@link ${pkg.homepage}}
@@ -42,6 +59,12 @@ const config = {
   build: {
     outDir: 'dist',
     target: 'es2021',
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        wml: path.resolve(__dirname, 'wml.html'),
+      },
+    },
   },
 };
 
