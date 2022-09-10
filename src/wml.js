@@ -17,10 +17,6 @@ window.addEventListener(
 
     /** WebMidiLink */
     const wml = new SoundFont.WebMidiLink(option);
-    /** File Input Form */
-    const fileInput = document.getElementById('file');
-    /** Drag and Drop area */
-    const dd = document.getElementById('drop');
     /** Build information */
     const build = document.getElementById('build');
     /** SoundFont Filename */
@@ -58,45 +54,6 @@ window.addEventListener(
         : url;
       await wml.setup(url);
     }
-
-    /**
-     * Load sound font
-     *
-     * @param {string} file
-     */
-    const handleSoundFont = file => {
-      const reader = new FileReader();
-
-      reader.readAsArrayBuffer(file);
-
-      reader.onload = e => {
-        console.log('loaded', file);
-        document.getElementById('soundfont').innerText = file.name;
-        const data = new Uint8Array(e.target.result);
-        wml.setupByBuffer(data);
-      };
-    };
-
-    // File selector
-    fileInput.addEventListener('change', event => {
-      event.preventDefault();
-      handleSoundFont(fileInput.files[0]);
-      fileInput.value = '';
-    });
-
-    dd.addEventListener('dragover', e => e.preventDefault(), true);
-
-    dd.addEventListener(
-      'drop',
-      e => {
-        const dt = e.dataTransfer;
-        const files = dt.files;
-        e.stopPropagation();
-        e.preventDefault();
-        handleSoundFont(files[0]);
-      },
-      true
-    );
   },
   false
 );
