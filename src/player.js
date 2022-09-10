@@ -3,7 +3,7 @@ import SMF from '@logue/smfplayer';
 import { Tab, Tooltip } from 'bootstrap';
 import Encoding from 'encoding-japanese';
 import streamSaver from 'streamsaver';
-import './styles.scss';
+import './style.scss';
 
 formLock(true);
 
@@ -31,37 +31,16 @@ const availableExts = [
   '.mp2mml',
 ];
 
-const wml = 'wml.html';
-
 /**
  * メイン処理
  */
 document.addEventListener('DOMContentLoaded', async () => {
-  const info = document.getElementById('info');
-
-  // fileプロトコルは使用不可。（Ajaxを使うため）
-  if (location.protocol === 'file:') {
-    info.classList.add('alert-danger');
-    info.classList.remove('alert-warning');
-    info.innerText = 'This program require runs by server.';
-    return;
-  }
-
-  // AudioContextが使用可能かのチェック
-  if (typeof window.AudioContext === 'undefined') {
-    info.classList.add('alert-danger');
-    info.classList.remove('alert-warning');
-    info.innerText =
-      'Your browser has not supported AudioContent function. Please use Firefox or Blink based browser. (such as Chrome)';
-    return;
-  }
-
   // smfplayer.jsの初期化
   player.setLoop(document.getElementById('playerloop').checked);
   player.setTempoRate(document.getElementById('tempo').value);
   player.setMasterVolume(document.getElementById('volume').value * 16383);
   // WebMidiLink設定
-  player.setWebMidiLink(wml, 'wml');
+  player.setWebMidiLink(import.meta.env.VITE_WML_URL || './wml.html', 'wml');
 
   /** @type {HTMLButtonElement[]} */
   const triggerTabList = [].slice.call(
@@ -295,6 +274,11 @@ async function loadSample(zipfile) {
   /** @type {HTMLSelectElement} ファイルリスト */
   const select = document.getElementById('files');
 
+  /**
+   * 読み込まれたときの処理
+   *
+   * @param {ArrayBuffer} stream
+   */
   const ready = stream => {
     const input = new Uint8Array(stream);
 
@@ -356,11 +340,7 @@ async function loadSample(zipfile) {
   const response = await fetch(zipfile, {
     method: 'GET',
     mode: 'no-cors',
-    headers: {
-      Accept: 'application/zip',
-      'Access-Control-Allow-Origin': '*',
-      credentials: 'include',
-    },
+    credentials: 'include',
   });
   if (!response.ok) {
     throw new Error('Network response was not ok.');
@@ -386,32 +366,22 @@ function handleSelect() {
   if (filename) {
     handleInput(filename, select.zip.decompress(filename));
 
-    // メタ情報のタイトル
-    const title = Encoding.convert(
-      player.getSequenceName(1),
-      'UNICODE',
-      'AUTO'
-    );
-
     // ページのタイトルを反映
-    const file =
-      title === ''
-        ? Encoding.convert(filename, 'UNICODE', 'AUTO').substr(
-            0,
-            title.lastIndexOf('.')
-          )
-        : title;
-
-    document.title = `${file} - ${
+    document.title = `${Encoding.convert(filename, 'UNICODE', 'AUTO')} - ${
       document.getElementById('zips').value
-    } / Standard MIDI Player`;
+    } / Mabinogi MML Emulator`;
 
     const hash = `#zip=${encodeURIComponent(
       document.getElementById('zips').value
     )}&file=${encodeURIComponent(filename)}`;
 
-    // MIDIファイルに埋め込まれたメタデータを取得
-    document.getElementById('music_title').value = title;
+    // メタ情報のタイトル
+    document.getElementById('music_title').value = Encoding.convert(
+      player.getSequenceName(1),
+      'UNICODE',
+      'AUTO'
+    );
+    // メタ情報の著作権表記
     document.getElementById('copyright').value = Encoding.convert(
       player.getCopyright(),
       'UNICODE',
@@ -426,6 +396,10 @@ function handleSelect() {
     document
       .querySelector('link[rel="canonical"]')
       .setAttribute('href', `${location.href}/${hash}`);
+
+    if (params.zip && params.file) {
+      player.play();
+    }
   }
 }
 /**
@@ -498,7 +472,7 @@ function randomPlay() {
 function formLock(lock = true) {
   document
     .querySelectorAll('input, button, select')
-    .forEach(e => (e.disabled = lock ? 'disabled' : ''));
+    .forEach(e => (e.disabled = lock));
 }
 
 /**
