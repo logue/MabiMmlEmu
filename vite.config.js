@@ -1,9 +1,10 @@
 import { checker } from 'vite-plugin-checker';
 import { defineConfig } from 'vite';
-import path from 'path';
 import banner from 'vite-plugin-banner';
+import { fileURLToPath } from 'url';
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 import inject from '@rollup/plugin-inject';
+
 const pkg = require('./package.json');
 
 // Export vite config
@@ -16,12 +17,13 @@ export default defineConfig(async ({ mode }) => {
     resolve: {
       // https://vitejs.dev/config/shared-options.html#resolve-alias
       alias: {
-        '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
-        '~bootstrap-icons': path.resolve(
-          __dirname,
-          'node_modules/bootstrap-icons'
+        '~bootstrap': fileURLToPath(
+          new URL('./node_modules/bootstrap', import.meta.url)
         ),
-        '~dseg': path.resolve(__dirname, 'node_modules/dseg'),
+        '~bootstrap-icons': fileURLToPath(
+          new URL('./node_modules/bootstrap-icons', import.meta.url)
+        ),
+        '~dseg': fileURLToPath(new URL('./node_modules/dseg', import.meta.url)),
         // AWS Fix
         './runtimeConfig': './runtimeConfig.browser',
       },
@@ -68,13 +70,13 @@ export default defineConfig(async ({ mode }) => {
     // Build Options
     // https://vitejs.dev/config/#build-options
     build: {
-      outDir: 'docs',
+      outDir: 'dist',
       // Minify option
       // https://vitejs.dev/config/#build-minify
       rollupOptions: {
         input: {
-          index: path.resolve(__dirname, 'index.html'),
-          wml: path.resolve(__dirname, 'wml.html'),
+          index: fileURLToPath(new URL('index.html', import.meta.url)),
+          wml: fileURLToPath(new URL('wml.html', import.meta.url)),
         },
         plugins: [
           // Enable rollup polyfills plugin
