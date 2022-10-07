@@ -1,4 +1,4 @@
-import queryString from 'query-string';
+import QueryString from 'query-string';
 import SMF from '@logue/smfplayer';
 import { Tab, Tooltip } from 'bootstrap';
 import Encoding from 'encoding-japanese';
@@ -15,16 +15,13 @@ const tooltipTriggerList = document.querySelectorAll('*[title]');
 let isReady = false;
 
 // QueryStrings
-const params = queryString.parse(window.location.hash);
+const params = QueryString.parse(window.location.hash);
 
 // SMF Player
 const player = new SMF.Player('#wml');
 
 // 利用可能な拡張子
 const availableExts = [
-  '.mid',
-  '.midi',
-  '.mld',
   '.mml',
   '.mms',
   '.mmi',
@@ -88,28 +85,40 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadSample(zips.value);
 
   const playerCard = document.getElementById('player');
-  // MIDIファイルのドラッグアンドドロップ
 
-  playerCard.addEventListener('drop', e => {
-    if (e.originalEvent.dataTransfer) {
-      if (e.originalEvent.dataTransfer.files.length) {
-        e.preventDefault();
-        e.stopPropagation();
-        handleFile(e.originalEvent.dataTransfer.files[0]);
+  // MIDIファイルのドラッグアンドドロップ
+  playerCard.addEventListener(
+    'drop',
+    event => {
+      const dt = event.dataTransfer;
+      console.log(dt);
+      if (dt.files.length) {
+        event.preventDefault();
+        event.stopPropagation();
+        handleFile(dt.files[0]);
       }
-    }
-    playerCard.classList.remove('bg-warning');
-  });
-  playerCard.addEventListener('dragover', e => {
-    e.preventDefault();
-    e.stopPropagation();
-    playerCard.classList.add('bg-warning');
-  });
-  playerCard.addEventListener('dragleave', e => {
-    e.preventDefault();
-    e.stopPropagation();
-    playerCard.classList.remove('bg-warning');
-  });
+      playerCard.classList.remove('bg-info');
+    },
+    false
+  );
+  playerCard.addEventListener(
+    'dragover',
+    event => {
+      event.preventDefault();
+      event.stopPropagation();
+      playerCard.classList.add('bg-info');
+    },
+    false
+  );
+  playerCard.addEventListener(
+    'dragleave',
+    event => {
+      event.preventDefault();
+      event.stopPropagation();
+      playerCard.classList.remove('bg-info');
+    },
+    false
+  );
 
   // テンポ設定
   document.getElementById('tempo').addEventListener('change', e => {
@@ -222,10 +231,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 function handleFile(file) {
   /** @type {HTMLDivElement} */
   const info = document.getElementById('info');
-  /** @type {HTMLParagraphElement} */
-  const message = document.createElement('p');
-  message.innerText = 'Now Loading...';
-  info.appendChild(message);
+  info.innerText = 'Now Loading...';
 
   /** @type {HTMLDivElement} */
   const progressOuter = document.createElement('div');
@@ -244,10 +250,14 @@ function handleFile(file) {
   reader.onload = e => {
     const input = new Uint8Array(e.target.result);
     handleInput(file.name, input);
-    message.innerHtml = 'Ready.';
+    info.removeChild(progressOuter);
+    info.innerHtml = `Now Playing "${Encoding.convert(
+      file.name,
+      'UNICODE',
+      'AUTO'
+    )}".`;
     info.classList.remove('alert-warning');
     info.classList.add('alert-success');
-    info.removeChild(progressOuter);
   };
   reader.onloadstart = () => info.classList.remove('alert-success');
   info.classList.add('alert-warning');
@@ -366,10 +376,12 @@ function handleSelect() {
   if (filename) {
     handleInput(filename, select.zip.decompress(filename));
 
+    const f = Encoding.convert(filename, 'UNICODE', 'AUTO');
+    document.getElementById('info').innerHTML = `Now playing "${f}".`;
+
     // ページのタイトルを反映
-    document.title = `${Encoding.convert(filename, 'UNICODE', 'AUTO')} - ${
-      document.getElementById('zips').value
-    } / Mabinogi MML Emulator`;
+    document.title = `${f} - ${document.getElementById('zips').value
+      } / Standard MIDI Player for Web`;
 
     const hash = `#zip=${encodeURIComponent(
       document.getElementById('zips').value
@@ -598,3 +610,23 @@ setInterval(() => {
     }
   }
 }, 600);
+
+if (import.meta.env.VITE_GOOGLE_ANALYTICS_ID) {
+  // Global site tag (gtag.js) - Google Analytics
+  ((w, d, s, l, i) => {
+    w[l] = w[l] || [];
+    w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    const f = d.getElementsByTagName(s)[0];
+    const j = d.createElement(s);
+    const dl = l != 'dataLayer' ? '&l=' + l : '';
+    j.async = true;
+    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(
+    window,
+    document,
+    'script',
+    'dataLayer',
+    import.meta.env.VITE_GOOGLE_ANALYTICS_ID
+  );
+}
