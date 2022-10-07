@@ -52,7 +52,7 @@ export default defineConfig(async ({ mode }) => {
  *
  * @description ${pkg.description}
  * @author Logue
- * @copyright 2007-2013, 2015, 2018, 2019, 2022 Masashi Yoshikawa
+ * @copyright 2006-2013, 2015, 2018, 2019, 2022 Masashi Yoshikawa
  * @license ${pkg.license}
  * @version ${pkg.version}
  * @see {@link ${pkg.homepage}}

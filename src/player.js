@@ -21,12 +21,7 @@ const params = QueryString.parse(window.location.hash);
 const player = new SMF.Player('#wml');
 
 // 利用可能な拡張子
-const availableExts = [
-  '.mml',
-  '.mms',
-  '.mmi',
-  '.mp2mml',
-];
+const availableExts = ['.mml', '.mms', '.mmi', '.mp2mml'];
 
 /**
  * メイン処理
@@ -380,8 +375,9 @@ function handleSelect() {
     document.getElementById('info').innerHTML = `Now playing "${f}".`;
 
     // ページのタイトルを反映
-    document.title = `${f} - ${document.getElementById('zips').value
-      } / Standard MIDI Player for Web`;
+    document.title = `${f} - ${
+      document.getElementById('zips').value
+    } / Standard MIDI Player for Web`;
 
     const hash = `#zip=${encodeURIComponent(
       document.getElementById('zips').value

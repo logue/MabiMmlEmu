@@ -3,6 +3,7 @@
   "name": "mabinogi-mml-player",
   "version": "3.0.0",
   "description": "Mabinogi MML Web Player",
+  "type": "module",
   "keywords": [
     "Mabinogi",
     "MML",
@@ -30,7 +31,7 @@
     "MSXSprint.sf2"
   ],
   "engines": {
-    "node": ">=16.17.0",
+    "node": ">=16.17.1",
     "yarn": ">=1.22.10"
   },
   "packageManager": "yarn@3.2.3",
