@@ -1,9 +1,10 @@
 import { checker } from 'vite-plugin-checker';
 import { defineConfig } from 'vite';
 import banner from 'vite-plugin-banner';
-import { fileURLToPath } from 'url';
-import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 import inject from '@rollup/plugin-inject';
+import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
+
+import { fileURLToPath } from 'url';
 
 const pkg = require('./package.json');
 
