@@ -20,7 +20,7 @@ window.addEventListener(
     /** Build information */
     const build = document.getElementById('build');
     /** SoundFont Filename */
-    const name = document.getElementById('name');
+    const name = document.getElementById('soundfont');
 
     build.innerText = new Date(SoundFont.build).toLocaleString();
 

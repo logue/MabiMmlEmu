@@ -18,15 +18,8 @@ export default defineConfig(async ({ mode }) => {
     resolve: {
       // https://vitejs.dev/config/shared-options.html#resolve-alias
       alias: {
-        '~bootstrap': fileURLToPath(
-          new URL('./node_modules/bootstrap', import.meta.url)
-        ),
-        '~bootstrap-icons': fileURLToPath(
-          new URL('./node_modules/bootstrap-icons', import.meta.url)
-        ),
-        '~dseg': fileURLToPath(new URL('./node_modules/dseg', import.meta.url)),
-        // AWS Fix
-        './runtimeConfig': './runtimeConfig.browser',
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+        '~': fileURLToPath(new URL('./node_modules', import.meta.url)),
       },
     },
     // https://vitejs.dev/config/#server-options
@@ -53,7 +46,7 @@ export default defineConfig(async ({ mode }) => {
  *
  * @description ${pkg.description}
  * @author Logue
- * @copyright 2006-2013, 2015, 2018, 2019, 2022 Masashi Yoshikawa
+ * @copyright 2006-2013, 2015, 2018, 2019, 2022-2023 Masashi Yoshikawa
  * @license ${pkg.license}
  * @version ${pkg.version}
  * @see {@link ${pkg.homepage}}
