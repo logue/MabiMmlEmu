@@ -5,6 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <meta name="color-scheme" content="light dark" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@logue/sf2synth@0.5.2/dist/style.min.css"
+      rel="stylesheet"
+    />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!-- Google Tag Manager -->
+    <script type="module">
+      if (import.meta.env.VITE_GOOGLE_ANALYTICS_ID) {
+        (function (w, d, s, l, i) {
+          w[l] = w[l] || [];
+          w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != 'dataLayer' ? '&l=' + l : '';
+          j.async = true;
+          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+          f.parentNode.insertBefore(j, f);
+        })(
+          window,
+          document,
+          'script',
+          'dataLayer',
+          import.meta.env.VITE_GOOGLE_ANALYTICS_ID
+        );
+      }
+    </script>
     <title>Web Midi Link</title>
   </head>
   <body>
@@ -59,9 +85,111 @@
         <div id="placeholder"></div>
       </main>
     </div>
-    <script>
-      window.global = window;
+    <script src="https://cdn.jsdelivr.net/npm/@logue/sf2synth@0.5.2/dist/sf2synth.umd.min.js"></script>
+    <script type="module">
+      /** sf2synth.js Option */
+      const options = {
+        // URL to SoundFont File
+        sf: import.meta.env.VITE_SOUNDFONT_URL,
+        // Show Keyboard
+        ui: true,
+        // Target dom id
+        placeholder: 'placeholder',
+        // Color Mode (auto, dark, light)
+        colorMode: 'auto',
+      };
+
+      document.addEventListener(
+        'DOMContentLoaded',
+        event => {
+          /** @type {HTMLDivElement} Placeholder */
+          const placeholder = document.getElementById('placeholder');
+          /** @type {HTMLTimeElement} Build Date */
+          const build = document.getElementById('build');
+          /** @type {HTMLInputElement} */
+          const toggleDarkMode = document.getElementById('toggleDarkMode');
+
+          /** @type {string} SoundFont file */
+          const sf = decodeURIComponent(options.sf);
+          document.getElementById('soundfont').innerText = sf;
+
+          // Apply build time
+          build.dateTime = SoundFont.build;
+          build.innerText = new Date(SoundFont.build).toLocaleString();
+
+          if (options.colorMode !== 'auto') {
+            // Apply color mode.
+            setColorMode(options.colorMode);
+          }
+
+          /** WebMidiLink */
+          const wml = new SoundFont.WebMidiLink(options);
+          wml.setup(sf);
+
+          // Keep an eye out for System Light/Dark Mode Changes
+          const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+          mediaQuery.addListener(() => {
+            // Ignore change if there's an override set
+            if (document.documentElement.getAttribute('data-bs-theme')) {
+              return;
+            }
+
+            // Make sure the checkbox is up-to-date
+            toggleDarkMode.checked = mediaQuery.matches;
+          });
+
+          /** Load sound font
+           * @param {File} file
+           */
+          const handleSoundFont = file => {
+            const reader = new FileReader();
+
+            // wml.cancelLoading();
+
+            reader.readAsArrayBuffer(file);
+
+            reader.onload = e => {
+              document.getElementById('soundfont').innerText = file.name;
+              const data = new Uint8Array(e.target.result);
+              wml.setupByBuffer(data);
+            };
+          };
+          // Toggle Dark mode
+          toggleDarkMode.addEventListener('change', e => {
+            setColorMode(e.target.checked ? 'dark' : 'light');
+          });
+        },
+        false
+      );
+
+      /**
+       * Toggle Color Mode.
+       *
+       * @param {<dark|light|auto>} mode
+       */
+      const setColorMode = mode => {
+        // Mode was given
+        if (mode) {
+          // Update data-* attr on html
+          document.documentElement.setAttribute('data-bs-theme', mode);
+          // Persist in local storage
+          window.localStorage.setItem('color-mode', mode);
+          // Make sure the checkbox is up-to-date
+          toggleDarkMode.checked = mode === 'dark';
+        }
+
+        // No mode given (e.g. reset)
+        else {
+          // Remove data-* attr from html
+          document.documentElement.setAttribute('data-bs-theme', 'auto');
+          // Remove entry from local storage
+          window.localStorage.removeItem('color-mode');
+          // Make sure the checkbox is up-to-date, matching the system preferences
+          toggleDarkMode.checked = window.matchMedia(
+            '(prefers-color-scheme: dark)'
+          ).matches;
+        }
+      };
     </script>
-    <script type="module" src="/src/wml.js"></script>
   </body>
 </html>
