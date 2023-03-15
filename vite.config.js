@@ -1,10 +1,10 @@
 import { checker } from 'vite-plugin-checker';
 import { defineConfig } from 'vite';
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 import banner from 'vite-plugin-banner';
-import inject from '@rollup/plugin-inject';
-import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 
-import { fileURLToPath } from 'url';
+import { fileURLToPath, URL } from 'url';
 
 const pkg = require('./package.json');
 
@@ -20,6 +20,8 @@ export default defineConfig(async ({ mode }) => {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
         '~': fileURLToPath(new URL('./node_modules', import.meta.url)),
+        buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
+        url: 'rollup-plugin-node-polyfills/polyfills/url',
       },
     },
     // https://vitejs.dev/config/#server-options
@@ -72,11 +74,13 @@ export default defineConfig(async ({ mode }) => {
           index: fileURLToPath(new URL('index.html', import.meta.url)),
           wml: fileURLToPath(new URL('wml.html', import.meta.url)),
         },
+        // Enable esbuild polyfill plugins
         plugins: [
-          // Enable rollup polyfills plugin
-          // used during production bundling
-          rollupNodePolyFill(),
-          inject({ Buffer: ['Buffer', 'Buffer'] }),
+          NodeGlobalsPolyfillPlugin({
+            buffer: true,
+            process: true,
+          }),
+          NodeModulesPolyfillPlugin(),
         ],
       },
       minify: 'esbuild',
