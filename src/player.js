@@ -187,10 +187,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     .getElementById('panic')
     .addEventListener('click', () => player.sendAllSoundOff());
 
+  /*
   // GMリセットボタン
   document
     .getElementById('reset')
     .addEventListener('click', () => player.sendGmReset());
+  */
 
   // MIDIファイルのダウンロード
   document.getElementById('download').addEventListener('click', async () => {
@@ -220,17 +222,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     writer.close();
   });
 
+  /*
   // シンセサイザ変更
   document.getElementById('synth').addEventListener('change', e => {
     player.stop();
     player.setWebMidiLink(e.target.value, 'wml');
   });
+  */
 
   formLock(false);
 });
 
 /**
  * ファイルを読み込む
+ * @param {File} file
  */
 function handleFile(file) {
   /** @type {HTMLDivElement} */
@@ -370,7 +375,7 @@ async function loadSample(zipfile) {
 /**
  * 選択されたファイルを解凍
  *
- * @returns {void}
+ * @return {void}
  */
 async function handleSelect() {
   /** @type {HTMLSelectElement} */
@@ -509,8 +514,9 @@ function randomArchive() {
 
 /**
  * IFRAMEから送られてくるwindow.postMessageを監視
+ * @param  {MessageEvent} e
  */
-window.onmessage = (/** @type {MessageEvent} */ e) => {
+window.onmessage = e => {
   // console.log(e);
   const event = e.data; // Should work.
   /** @type {HTMLSelectElement} */

@@ -2,194 +2,62 @@
 <html lang="en" data-bs-theme="auto">
   <head>
     <meta charset="utf-8" />
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <meta http-equiv="Access-Control-Allow-Methods" content="GET" />
+    <meta http-equiv="Access-Control-Allow-Headers" content="*" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <meta name="color-scheme" content="light dark" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/@logue/sf2synth@0.5.2/dist/style.min.css"
-      rel="stylesheet"
-    />
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <title>Web Midi Link</title>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-2Y2FW3QEG4"
+    ></script>
     <!-- Google Tag Manager -->
     <script type="module">
       if (import.meta.env.VITE_GOOGLE_ANALYTICS_ID) {
-        (function (w, d, s, l, i) {
-          w[l] = w[l] || [];
-          w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-          var f = d.getElementsByTagName(s)[0],
-            j = d.createElement(s),
-            dl = l != 'dataLayer' ? '&l=' + l : '';
-          j.async = true;
-          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-          f.parentNode.insertBefore(j, f);
-        })(
-          window,
-          document,
-          'script',
-          'dataLayer',
-          import.meta.env.VITE_GOOGLE_ANALYTICS_ID
-        );
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', import.meta.env.VITE_GOOGLE_ANALYTICS_ID);
       }
     </script>
-    <title>Web Midi Link</title>
   </head>
+
   <body>
     <div class="container-fluid">
-      <header>
-        <div class="d-flex justify-content-between">
-          <h1 class="h2">
-            SoundFont:
-            <span id="soundfont"></span>
-          </h1>
-          <div class="form-check form-switch">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              role="switch"
-              id="toggleDarkMode"
-            />
-            <label class="form-check-label" for="toggleDarkMode">
-              Dark Mode
-            </label>
-            &nbsp;
-            <a
-              href="https://github.com/logue/sf2synth.js"
-              target="_blank"
-              class="text-muted"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-github"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
-                />
-              </svg>
-            </a>
-          </div>
-        </div>
-        <p class="text-end">
-          <a href="https://logue.dev/" target="_blank">Logue</a>
-          /
-          <small class="text-muted">
-            Last Modified:
-            <time id="build"></time>
-          </small>
-        </p>
-      </header>
       <main>
         <div id="placeholder"></div>
       </main>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@logue/sf2synth@0.5.2/dist/sf2synth.umd.min.js"></script>
     <script type="module">
+      import SoundFont from '@logue/sf2synth';
+      import '@logue/sf2synth/dist/style.css';
+
       /** sf2synth.js Option */
       const options = {
-        // URL to SoundFont File
-        sf: import.meta.env.VITE_SOUNDFONT_URL,
         // Show Keyboard
-        ui: true,
+        drawSynth: true,
         // Target dom id
         placeholder: 'placeholder',
         // Color Mode (auto, dark, light)
         colorMode: 'auto',
       };
 
+      console.log(options);
+
       document.addEventListener(
         'DOMContentLoaded',
         event => {
-          /** @type {HTMLDivElement} Placeholder */
-          const placeholder = document.getElementById('placeholder');
-          /** @type {HTMLTimeElement} Build Date */
-          const build = document.getElementById('build');
-          /** @type {HTMLInputElement} */
-          const toggleDarkMode = document.getElementById('toggleDarkMode');
-
-          /** @type {string} SoundFont file */
-          const sf = decodeURIComponent(options.sf);
-          document.getElementById('soundfont').innerText = sf;
-
-          // Apply build time
-          build.dateTime = SoundFont.build;
-          build.innerText = new Date(SoundFont.build).toLocaleString();
-
-          if (options.colorMode !== 'auto') {
-            // Apply color mode.
-            setColorMode(options.colorMode);
-          }
-
-          /** WebMidiLink */
+          /** @type {typeof import("./src/wml").WebMidiLink } WebMidiLink */
           const wml = new SoundFont.WebMidiLink(options);
-          wml.setup(sf);
-
-          // Keep an eye out for System Light/Dark Mode Changes
-          const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-          mediaQuery.addListener(() => {
-            // Ignore change if there's an override set
-            if (document.documentElement.getAttribute('data-bs-theme')) {
-              return;
-            }
-
-            // Make sure the checkbox is up-to-date
-            toggleDarkMode.checked = mediaQuery.matches;
-          });
-
-          /** Load sound font
-           * @param {File} file
-           */
-          const handleSoundFont = file => {
-            const reader = new FileReader();
-
-            // wml.cancelLoading();
-
-            reader.readAsArrayBuffer(file);
-
-            reader.onload = e => {
-              document.getElementById('soundfont').innerText = file.name;
-              const data = new Uint8Array(e.target.result);
-              wml.setupByBuffer(data);
-            };
-          };
-          // Toggle Dark mode
-          toggleDarkMode.addEventListener('change', e => {
-            setColorMode(e.target.checked ? 'dark' : 'light');
-          });
+          wml.setup(import.meta.env.VITE_SOUNDFONT_URL);
         },
         false
       );
-
-      /**
-       * Toggle Color Mode.
-       *
-       * @param {<dark|light|auto>} mode
-       */
-      const setColorMode = mode => {
-        // Mode was given
-        if (mode) {
-          // Update data-* attr on html
-          document.documentElement.setAttribute('data-bs-theme', mode);
-          // Persist in local storage
-          window.localStorage.setItem('color-mode', mode);
-          // Make sure the checkbox is up-to-date
-          toggleDarkMode.checked = mode === 'dark';
-        }
-
-        // No mode given (e.g. reset)
-        else {
-          // Remove data-* attr from html
-          document.documentElement.setAttribute('data-bs-theme', 'auto');
-          // Remove entry from local storage
-          window.localStorage.removeItem('color-mode');
-          // Make sure the checkbox is up-to-date, matching the system preferences
-          toggleDarkMode.checked = window.matchMedia(
-            '(prefers-color-scheme: dark)'
-          ).matches;
-        }
-      };
     </script>
   </body>
 </html>

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "mabinogi-mml-player",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Mabinogi MML Web Player",
   "type": "module",
   "keywords": [
@@ -31,10 +31,10 @@
     "MSXSprint.sf2"
   ],
   "engines": {
-    "node": ">=18.15.0",
+    "node": ">=18.16.0",
     "yarn": ">=1.22.19"
   },
-  "packageManager": "yarn@3.4.1",
+  "packageManager": "yarn@3.6.0",
   "sideEffects": false,
   "scripts": {
     "dev": "vite",
@@ -45,35 +45,34 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@logue/smfplayer": "^0.5.0",
-    "@popperjs/core": "^2.11.6",
-    "@zip.js/zip.js": "^2.6.78",
-    "bootstrap": "^5.3.0-alpha1",
-    "bootstrap-icons": "^1.10.3",
+    "@logue/sf2synth": "^0.5.7",
+    "@logue/smfplayer": "^0.5.2",
+    "@popperjs/core": "^2.11.8",
+    "@zip.js/zip.js": "^2.7.16",
+    "bootstrap": "^5.3.0",
+    "bootstrap-icons": "^1.10.5",
     "dseg": "^0.46.0",
     "query-string": "^8.1.0",
     "streamsaver": "^2.0.6"
   },
   "devDependencies": {
-    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
-    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
-    "eslint": "^8.36.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^8.7.0",
+    "eslint": ">=8.42.0",
+    "eslint-config-google": "latest",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jsdoc": "^40.0.3",
+    "eslint-plugin-jsdoc": "^46.2.6",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-tsdoc": "^0.2.17",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.0",
-    "postcss": "^8.4.21",
-    "prettier": "^2.8.4",
-    "rimraf": "^4.4.0",
-    "sass": "^1.59.3",
-    "vite": "^4.1.4",
+    "lint-staged": "^13.2.2",
+    "postcss": "^8.4.24",
+    "prettier": "^2.8.8",
+    "rimraf": "^5.0.1",
+    "sass": "^1.63.4",
+    "vite": "^4.3.9",
     "vite-plugin-banner": "^0.7.0",
-    "vite-plugin-checker": "^0.5.6"
+    "vite-plugin-checker": "^0.6.0"
   },
   "husky": {
     "hooks": {

@@ -1,12 +1,10 @@
+import { fileURLToPath, URL } from 'node:url';
+
 import { checker } from 'vite-plugin-checker';
 import { defineConfig } from 'vite';
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 import banner from 'vite-plugin-banner';
 
-import { fileURLToPath, URL } from 'url';
-
-const pkg = require('./package.json');
+import pkg from './package.json';
 
 // Export vite config
 export default defineConfig(async ({ mode }) => {
@@ -74,14 +72,6 @@ export default defineConfig(async ({ mode }) => {
           index: fileURLToPath(new URL('index.html', import.meta.url)),
           wml: fileURLToPath(new URL('wml.html', import.meta.url)),
         },
-        // Enable esbuild polyfill plugins
-        plugins: [
-          NodeGlobalsPolyfillPlugin({
-            buffer: true,
-            process: true,
-          }),
-          NodeModulesPolyfillPlugin(),
-        ],
       },
       minify: 'esbuild',
     },
