@@ -115,9 +115,10 @@ export default class MabiMml2Flmml {
   mml = '';
 
   /**
-   * Constructor
+   * Constructor.
+   *
    * @param {*} param
-   * @returns
+   * @constructor
    */
   constructor(param) {
     let ret = '';
@@ -155,7 +156,7 @@ export default class MabiMml2Flmml {
    * Convert MML Track
    * @param {string} mml
    * @param {boolean} isDrum
-   * @returns {string}
+   * @return {string}
    */
   flmml_track(mml, isDrum) {
     const offset = 1; // 1オクターブ高くする。
