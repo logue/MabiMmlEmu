@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "mabinogi-mml-player",
-  "version": "3.2.1",
+  "version": "3.3.0",
   "description": "Mabinogi MML Web Player",
   "type": "module",
   "keywords": [
@@ -34,7 +34,7 @@
     "node": ">=18.16.0",
     "yarn": ">=1.22.19"
   },
-  "packageManager": "yarn@3.6.0",
+  "packageManager": "yarn@4.1.0",
   "sideEffects": false,
   "scripts": {
     "dev": "vite",
@@ -45,34 +45,34 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@logue/sf2synth": "^0.5.9",
-    "@logue/smfplayer": "^0.5.3",
+    "@logue/sf2synth": "^0.6.3",
+    "@logue/smfplayer": "^0.5.6",
     "@popperjs/core": "^2.11.8",
-    "@zip.js/zip.js": "^2.7.24",
-    "bootstrap": "^5.3.1",
-    "bootstrap-icons": "^1.10.5",
+    "@zip.js/zip.js": "^2.7.34",
+    "bootstrap": "^5.3.2",
+    "bootstrap-icons": "^1.11.3",
     "dseg": "^0.46.0",
-    "query-string": "^8.1.0",
+    "query-string": "^8.2.0",
     "streamsaver": "^2.0.6"
   },
   "devDependencies": {
-    "eslint": ">=8.46.0",
+    "eslint": ">=8.56.0",
     "eslint-config-google": "latest",
-    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-plugin-import": "^2.28.0",
-    "eslint-plugin-jsdoc": "^46.4.6",
-    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsdoc": "^48.0.6",
+    "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-tsdoc": "^0.2.17",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.2.3",
-    "postcss": "^8.4.27",
-    "prettier": "^3.0.1",
-    "rimraf": "^5.0.1",
-    "sass": "^1.65.1",
-    "vite": "^4.4.9",
-    "vite-plugin-banner": "^0.7.0",
-    "vite-plugin-checker": "^0.6.1"
+    "husky": "^9.0.10",
+    "lint-staged": "^15.2.2",
+    "postcss": "^8.4.35",
+    "prettier": "^3.2.5",
+    "rimraf": "^5.0.5",
+    "sass": "^1.70.0",
+    "vite": "^5.0.12",
+    "vite-plugin-banner": "^0.7.1",
+    "vite-plugin-checker": "^0.6.4"
   },
   "husky": {
     "hooks": {
@@ -85,9 +85,10 @@
     "*": "prettier -w -u"
   },
   "resolutions": {
-    "http-cache-semantics": "^4.1.1",
     "json5": "^2.2.3",
-    "semver": "^7.5.2",
-    "yaml": "^2.2.2"
+    "lodash": ">=4.17.21",
+    "postcss": "^8.4.31",
+    "semver": "^7.5.3",
+    "yaml": "^2.3.2"
   }
 }

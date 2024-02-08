@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html
   lang="en"
   xmlns="http://www.w3.org/1999/xhtml"
@@ -263,10 +263,38 @@
                     >
                       <em class="bi bi-exclamation-octagon"></em>
                     </button>
-                    <!--button type="button" class="btn btn-secondary btn-lg control-btn" id="copy" disabled="disabled"
-                    title="Copy midi URL to clipboard">
-                    <em class="bi bi-share"></em>
-                  </button-->
+                    <!--
+                    <button
+                      type="button"
+                      class="btn btn-secondary btn-lg control-btn"
+                      id="copy"
+                      disabled="disabled"
+                      title="Copy midi URL to clipboard"
+                    >
+                      <em class="bi bi-share"></em>
+                    </button>
+                    -->
+                    <div>
+                      <label for="volume" class="form-label">
+                        Master Volume:
+                        <span id="volume_value" class="badge bg-secondary">
+                          0.5
+                        </span>
+                      </label>
+                      <div class="d-flex">
+                        <div><em class="bi bi-volume-off"></em></div>
+                        <input
+                          id="volume"
+                          type="range"
+                          class="form-range mx-1"
+                          min="0"
+                          max="1"
+                          step="0.01"
+                          value="0.5"
+                        />
+                        <div><em class="bi bi-volume-up"></em></div>
+                      </div>
+                    </div>
                   </div>
                   <!-- time -->
                   <div class="flex-grow-1 mx-3">
@@ -335,30 +363,31 @@
                 <div class="row">
                   <div class="col-md-7 col-xs-12 mb-2">
                     <label class="form-label" for="music_title">Title</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="music_title"
-                      readonly="readonly"
-                    />
+                    <div class="input-group">
+                      <span class="input-group-text">
+                        <i class="bi bi-file-earmark-music"></i>
+                      </span>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="music_title"
+                        readonly="readonly"
+                      />
+                    </div>
                   </div>
                   <div class="col-md-5 col-xs-12 mb-2">
                     <label class="form-label" for="copyright ">Copyright</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="copyright"
-                      readonly="readonly"
-                    />
-                  </div>
-                  <div class="col-12 mb-2">
-                    <label class="form-label" for="text_event">Text</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="text_event"
-                      readonly="readonly"
-                    />
+                    <div class="input-group">
+                      <span class="input-group-text">
+                        <i class="bi bi-c-circle"></i>
+                      </span>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="copyright"
+                        readonly="readonly"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -416,27 +445,6 @@
                           step="0.1"
                           value="1.0"
                         />
-                      </div>
-                    </div>
-                    <div>
-                      <label for="volume" class="form-label">
-                        Master Volume:
-                        <span id="volume_value" class="badge bg-secondary">
-                          0.5
-                        </span>
-                      </label>
-                      <div class="d-flex">
-                        <div><em class="bi bi-volume-off"></em></div>
-                        <input
-                          id="volume"
-                          type="range"
-                          class="form-range mx-1"
-                          min="0"
-                          max="1"
-                          step="0.01"
-                          value="0.5"
-                        />
-                        <div><em class="bi bi-volume-up"></em></div>
                       </div>
                     </div>
                   </div>

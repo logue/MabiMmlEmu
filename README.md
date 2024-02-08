@@ -31,6 +31,6 @@ I would appreciate it if you could cooperate with the development of [sf2synth.j
 
 ## License
 
-&copy; 2006-2013, 2015, 2018, 2019, 2022 by Logue
+&copy; 2006-2013, 2015, 2018, 2019, 2022, 2024 by Logue
 
 [MIT](LICENSE)
