@@ -1,8 +1,9 @@
 import { fileURLToPath, URL } from 'node:url';
 
-import { checker } from 'vite-plugin-checker';
 import { defineConfig } from 'vite';
+
 import banner from 'vite-plugin-banner';
+import { checker } from 'vite-plugin-checker';
 
 import pkg from './package.json';
 
@@ -35,9 +36,7 @@ export default defineConfig(async ({ mode }) => {
       checker({
         typescript: false,
         vueTsc: false,
-        eslint: {
-          lintCommand: `eslint`, // for example, lint .ts & .tsx
-        },
+        // eslint: { lintCommand: `eslint` }, // for example, lint .ts & .tsx
       }),
       // vite-plugin-banner
       // https://github.com/chengpeiquan/vite-plugin-banner

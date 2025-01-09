@@ -140,7 +140,7 @@ export default class MabiMml2Flmml {
       if (inst >= 65) {
         // ドラムの場合、メロディ→和音１という順にMMLが再生される。和音２は無視
         const drumMml = p.mml[0] + p.mml[1];
-        const isDram = inst !== 77 ? true : false;
+        const isDram = inst !== 77;
         ret += `$track${track} ${this.flmml_track(drumMml, isDram)};\n`;
       } else {
         for (let part = 0; part < p.mml.length; part++) {
@@ -173,7 +173,7 @@ export default class MabiMml2Flmml {
       // 命令ごとのループ
       const note = mmlNotes[mnid];
       // 現在のオクターブを取得
-      if (isDrum != 0) {
+      if (isDrum !== 0) {
         if (note.match(/[oO](0|[1-9][0-9]*)/)) {
           flmml[mnid] = '';
         } else if (note.match(/</)) {
@@ -192,7 +192,7 @@ export default class MabiMml2Flmml {
       } else {
         if (note.match(/[oO](0|[1-9][0-9]*)/)) {
           cOctave = parseInt(RegExp.$1) + offset;
-          if (isDrum == 0) {
+          if (isDrum === 0) {
             flmml[mnid] = 'o' + cOctave;
           } else {
             flmml[mnid] = '';
@@ -200,14 +200,14 @@ export default class MabiMml2Flmml {
         } else if (note.match(/</)) {
           // 不等号記号の場合、FLMMLの仕様により、記号をひっくり返す。（#OCTAVE REVERSEを使えば済むけどね）
           cOctave = cOctave - 1;
-          if (isDrum == 0) {
+          if (isDrum === 0) {
             flmml[mnid] = '>';
           } else {
             flmml[mnid] = '';
           }
         } else if (note.match(/>/)) {
           cOctave = cOctave + 1;
-          if (isDrum == 0) {
+          if (isDrum === 0) {
             flmml[mnid] = '<';
           } else {
             flmml[mnid] = '';
@@ -218,12 +218,12 @@ export default class MabiMml2Flmml {
           const Octave = Math.floor(nValue / 12) + offset; // ノート値を12で割った値がオクターブ
           const note = this.noteRevTable[nValue % 12]; // あまりがノート値
           // 上で取得したオクターブが等しければオクターブ命令を省略。
-          if (cOctave == Octave) {
+          if (cOctave === Octave) {
             flmml[mnid] = note;
           } else {
-            if (cOctave == Octave + 1) {
+            if (cOctave === Octave + 1) {
               flmml[mnid] = '>' + note + '<';
-            } else if (cOctave == Octave - 1) {
+            } else if (cOctave === Octave - 1) {
               flmml[mnid] = '<' + note + '>';
             } else {
               flmml[mnid] = 'o' + Octave + note + 'o' + cOctave;
