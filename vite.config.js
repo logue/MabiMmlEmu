@@ -45,7 +45,7 @@ export default defineConfig(async ({ mode }) => {
  *
  * @description ${pkg.description}
  * @author Logue
- * @copyright 2006-2013, 2015, 2018, 2019, 2022-2023 Masashi Yoshikawa
+ * @copyright 2006-2013, 2015, 2018, 2019, 2022-2023, 2026 Masashi Yoshikawa
  * @license ${pkg.license}
  * @version ${pkg.version}
  * @see {@link ${pkg.homepage}}
@@ -53,7 +53,7 @@ export default defineConfig(async ({ mode }) => {
   `),
     ],
     optimizeDeps: {
-      esbuildOptions: {
+      rolldownOptions: {
         // Node.js global to browser globalThis
         define: {
           global: 'globalThis', // <-- AWS SDK
@@ -72,7 +72,7 @@ export default defineConfig(async ({ mode }) => {
           wml: fileURLToPath(new URL('wml.html', import.meta.url)),
         },
       },
-      minify: 'esbuild',
+      minify: 'rollup',
     },
     esbuild: {
       drop: mode === 'serve' ? [] : ['console'],
